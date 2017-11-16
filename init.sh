@@ -4,6 +4,8 @@ set -x
 DOMAIN=`dialog --title "Domain" --inputbox "Enter the domain" 0 0 example.com --stdout`
 # TODO: generate ssh private key, upload to aws, and use in kops. upload to bucket
 # TODO: add cost allocation tags
+# TODO: setup SSL
+
 export NAME=k8a.$DOMAIN
 export KOPS_STATE_STORE=s3://k8.$DOMAIN
 export THE_REGION=`aws configure get aws_default_region`
