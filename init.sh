@@ -1,6 +1,6 @@
 #! /bin/bash
 set -e
-#set -x
+# set -x
 #dialog="docker run --rm -it --entrypoint dialog frapsoft/shell-ui"
 dialog="dialog"
 
@@ -10,9 +10,8 @@ function dlg(){
 
 DEFAULT_DOMAIN=${DOMAIN:-example.com}
 DOMAIN=`dlg --title 'Domain' --inputbox 'Enter the domain' 0 0 $DEFAULT_DOMAIN`
-# TODO: generate ssh private key, upload to aws, and use in kops. upload to bucket
+# TODO: generate user and role for cluster
 # TODO: add cost allocation tags
-# TODO: setup SSL
 
 PREFIX=`dlg --title 'Name' --inputbox 'Enter cluster name' 0 0 k8a`
 export NAME=$PREFIX.$DOMAIN
@@ -42,6 +41,7 @@ env "Generate env file" on \
 dashboard "Deploy Dashboard" on \
 heapster "Deploy Heapster" on \
 ssl "Generate Certificate for *.$Domain" on \
+nodesautoscaling "Node Autoscaling" off
 secrets "Config Secrets" on`
 # upload configuration to S3
 function enabled(){
@@ -60,8 +60,11 @@ fi
 if enabled "ssh"
 then
 	echo -e  'y\n'|ssh-keygen -t rsa -C "admin@$DOMAIN" -f $NAME.rsa -q -N ""
-	$aws s3 cp --region $THE_REGION ./$NAME.rsa $KOPS_STATE_STORE/keys/
-	$aws s3 cp --region $THE_REGION ./$NAME.rsa.pub $KOPS_STATE_STORE/keys/
+	if enabled "savetos3"
+	then
+		$aws s3 cp --region $THE_REGION ./$NAME.rsa $KOPS_STATE_STORE/$NAME/keys/
+		$aws s3 cp --region $THE_REGION ./$NAME.rsa.pub $KOPS_STATE_STORE/$NAME/keys/
+	fi	
 fi
 # Create Cluster
 if enabled "clusters"
@@ -83,35 +86,75 @@ then
 	then
 		FILE_SYSTEM_ID=`$aws efs create-file-system --creation-token $NAME | $jq '.FileSystemId' -r`
 aws efs create-tags --file-system-id $FILE_SYSTEM_ID --tags Value=$NAME,Key=Name
-	fi
-	NFS_SERVER=$FILE_SYSTEM_ID.efs.$THE_REGION.amazonaws.com
+	fi	
+	# TODO: enable access - creating access endpoint in all the relevant subnets.
 fi
 
 if enabled "secrets"
 then
 	# setup secrets and envs
-	$ktmpl /project/secrets.tmpl.yaml --parameter PASSWORD 5 > secrets.yaml
-	# upload secret to s3?
+	$ktmpl /project/templates/secrets.tmpl.yaml --parameter AWS_ACCESS_KEY_ID $AWS_ACCESS_KEY_ID --parameter AWS_SECRET_ACCESS_KEY $AWS_SECRET_ACCESS_KEY > manifests/secrets.yaml	
+	$ktmpl /project/templates/cluster_config.tmpl.yaml --parameter FILE_SYSTEM_ID $FILE_SYSTEM_ID --parameter CLUSTER $NAME --parameter REGION $THE_REGION > manifests/cluster_config.yaml	
+	if enabled "savetos3"
+	then
+		echo Copying configuration to s3 - $KOPS_STATE_STORE
+		$aws s3 cp --region $THE_REGION ./manifests/cluster_config.yaml $KOPS_STATE_STORE/$NAME/config/
+		$aws s3 cp --region $THE_REGION ./manifests/secrets.yaml $KOPS_STATE_STORE/$NAME/secrets/
+	fi
+	$kubectl apply -f manifests/secrets.yaml
+	$kubectl apply -f manifests/cluster_config.yaml
+	# apply
+	if enabled "efs"
+	then
+		$kubectl apply -f manifests/efs.yaml
+		$kubectl apply -f manifests/efs-storage-class.yaml
+		$kubectl apply -f manifests/efs-volume-claim.yaml
+		# apply efs		
+	fi
+fi
+
+if enabled "ssl"
+then
+	CERT_ARN=`$aws acm list-certificates --region $THE_REGION | jq --arg domain "$DOMAIN" '.CertificateSummaryList[] | select(.DomainName == "*." + $domain) | .CertificateArn  ' -r`
+	echo $CERT_ARN
+	if [ "$CERT_ARN" == "null" ]
+	then
+		echo Requesting certificate	
+		CERT_ARN=`$aws acm request-certificate --region $THE_REGION --domain-name *.$DOMAIN --idempotency-token $DOMAIN | jq '.CertificateArn' -r`
+	fi	
+	STATUS=`$aws acm describe-certificate --region $THE_REGION --certificate-arn $CERT_ARN | jq '.Certificate.Status' -r`
+	while [ "$STATUS" == "PENDING_VALIDATION" ];	do
+		dlg --msgbox "Certificate Status: $STATUS.\n Please continue once you confirm the validation" 0 0
+		STATUS=`$aws acm describe-certificate --region $THE_REGION --certificate-arn $CERT_ARN | jq '.Certificate.Status' -r`	
+	done	
+	dlg --msgbox "Certificate Status: $STATUS" 0 0
 fi
 
 if enabled "gitlab"
 then
 	echo Deploying gitlab
+	# claim efs volume
+	# apply gitlab	
 fi
 
 if enabled "heapster"
 then
-	echo Deploying heapster
+	echo Deploying heapster		
+	# https://github.com/kubernetes/heapster/blob/master/docs/influxdb.md
 fi
 
-if enabled "ssl"
+if enabled "nodesautoscaling"
 then
-	echo Requesting certificate
+	$kubectl apply -f manifests/cluster-autoscaler.yaml
+	# https://github.com/kubernetes/heapster/blob/master/docs/influxdb.md
 fi
 
 if enabled "dashboard"
 then
+	#discover existing certs
 	echo Deploying dashboard
+	$kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
+	echo "http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/"
 fi
 
 if enabled "dockerregistry"
@@ -122,17 +165,13 @@ fi
 if enabled "externaldns"
 then
 	echo Deploying external dns
+	$kubectl apply -f manifests/external-dns.yaml
 fi
-
 
 if enabled "env"
 then
 	echo Generating env files
 	# generate env file - aliases and exports (bucket, name)
+	echo "run source $NAME.env"
+	echo "run kubectl proxy"
 fi
-
-if enabled "savetos3"
-then
-	echo Copying configuration to s3 - $KOPS_STATE_STORE
-fi
-

@@ -1,0 +1,52 @@
+---
+kind: "Template"
+apiVersion: "v1"
+metadata:
+  name: "efs-provisioner-template"
+objects:
+  - kind: Deployment
+    apiVersion: extensions/v1beta1
+    metadata:
+      name: efs-provisioner
+    spec:
+      replicas: 1
+      strategy:
+        type: Recreate 
+      template:
+        metadata:
+          labels:
+            app: efs-provisioner
+        spec:
+          containers:
+            - name: efs-provisioner
+              image: quay.io/external_storage/efs-provisioner:latest
+              env:
+                - name: FILE_SYSTEM_ID
+                  value: "$(FILE_SYSTEM_ID)"
+                    configMapKeyRef:
+                      name: ClusterConfiguration
+                      key: file.system.id
+                - name: AWS_REGION
+                  valueFrom:
+                    configMapKeyRef:
+                      name: ClusterConfiguration
+                      key: aws.region
+                - name: PROVISIONER_NAME
+                  value: aws-efs
+              volumeMounts:
+                - name: pv-volume
+                  mountPath: /persistentvolumes
+          volumes:
+            - name: pv-volume
+              nfs:
+                server: "$(FILE_SYSTEM_ID).efs.$(REGION).amazonaws.com"
+                path: /
+parameters:
+  - name: "FILE_SYSTEM_ID"
+    description: "File system id"
+    required: true
+    parameterType: "string"
+  - name: "REGION"
+    description: ""
+    required: true
+    parameterType: "string"
