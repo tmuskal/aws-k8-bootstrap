@@ -39,7 +39,7 @@ spec:
             - name: CLUSTER
               valueFrom:
                 configMapKeyRef:
-                  name: ClusterConfiguration
+                  name: clusterconfiguration
                   key: cluster_name
           volumeMounts:
             - name: ssl-certs

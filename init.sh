@@ -25,8 +25,9 @@ aws="docker run --rm -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} -e AWS_SECRET_ACC
 ZONES_TMP=(`$aws ec2 describe-availability-zones | $jq '.AvailabilityZones[].ZoneName' -r`)
 ZONES=$(printf ",%s" "${ZONES_TMP[@]}")
 ZONES=${ZONES:1}
-kops="docker run --rm -it -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION=$THE_REGION -e KOPS_STATE_STORE -v `pwd`:/tmp2 -v `pwd`/out/:/out/ -v $HOME/.kube/:/root/.kube/ pottava/kops:1.4"
-kubectl="docker run --rm -it -v $HOME/.kube/:/root/.kube/ pottava/kubectl"
+kops="docker run --rm -it -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION=$THE_REGION -e KOPS_STATE_STORE -v `pwd`:/tmp2 -v `pwd`/out/:/out/ -v $HOME/.kube/:/root/.kube/ pottava/kops:1.5"
+kops="kops"
+kubectl="docker run --rm -it -v $HOME/.kube/:/root/.kube/ -v $PWD/manifests/:/manifests/ pottava/kubectl"
 ktmpl="docker run --rm -v $PWD:/project -t inquicker/ktmpl"
 # Setup configuration
 SELECTED_COMPONENTS=`dlg --checklist "Choose the options you want:" 0 0 500  \
@@ -34,6 +35,7 @@ ssh "Generate SSH-Key" on \
 bucket "Generate Bucket" on \
 gitlab "Setup GitLab" on \
 efs "Efs" on \
+externaldns "DNS auto registration" on \
 clusters "Setup cluster" on \
 clusterl "Launch cluster" on \
 savetos3 "Save configuration to S3" on \
@@ -41,7 +43,7 @@ env "Generate env file" on \
 dashboard "Deploy Dashboard" on \
 heapster "Deploy Heapster" on \
 ssl "Generate Certificate for *.$Domain" on \
-nodesautoscaling "Node Autoscaling" off
+nodesautoscaling "Node Autoscaling" on \
 secrets "Config Secrets" on`
 # upload configuration to S3
 function enabled(){
@@ -59,25 +61,78 @@ then
 fi
 if enabled "ssh"
 then
-	echo -e  'y\n'|ssh-keygen -t rsa -C "admin@$DOMAIN" -f $NAME.rsa -q -N ""
+	echo -e  'y\n'|ssh-keygen -t rsa -C "admin@$DOMAIN" -f $NAME.rsa -q -N "" > /dev/null
 	if enabled "savetos3"
 	then
-		$aws s3 cp --region $THE_REGION ./$NAME.rsa $KOPS_STATE_STORE/$NAME/keys/
-		$aws s3 cp --region $THE_REGION ./$NAME.rsa.pub $KOPS_STATE_STORE/$NAME/keys/
+		$aws s3 cp --region $THE_REGION ./$NAME.rsa $KOPS_STATE_STORE/meta/$NAME/keys/ > /dev/null
+		$aws s3 cp --region $THE_REGION ./$NAME.rsa.pub $KOPS_STATE_STORE/meta/$NAME/keys/ > /dev/null
 	fi	
 fi
 # Create Cluster
+
 if enabled "clusters"
 then
-	$kops create cluster \
-	    --zones ${ZONES} \
-	    --ssh-public-key=/tmp2/$NAME.rsa.pub ${NAME}
+	set +e
+	$kops validate cluster $NAME 2>&1 | grep "not found" > /dev/null
+	CLUSTER_NOT_FOUND=$?
+	set -e	
+	if [ $CLUSTER_NOT_FOUND -eq 0 ]
+	then
+		$kops create cluster \
+		    --zones ${ZONES} \
+		    --ssh-public-key=./$NAME.rsa.pub ${NAME}
+	else
+		echo "skipping cluster setup"
+	fi
 fi
 if enabled "clusterl"
 then
-	$kops update cluster ${NAME} --yes
+	set +e
+	$kops validate cluster $NAME 2>&1 | grep "does not exist"	> /dev/null
+	CLUSTER_NOT_EXIST=$?
+	set -e
+	if [ $CLUSTER_NOT_EXIST -eq 0 ]
+	then
+		$kops update cluster ${NAME} --yes
+		echo Launched. sleeping
+		$kops validate cluster
+	else 
+		echo "skipping cluster launch"		
+	fi
+	set +e
+	$kops validate cluster $NAME 2>&1 | grep "dial tcp"	> /dev/null
+	CLUSTER_NOT_READY=$?
+	set -e
+	i=55
+	while [ $CLUSTER_NOT_READY -eq 0 ]
+	do	
+		echo $i | dialog --gauge "Cluster loading" 10 70 0
+		(( i+=5 ))
+		set +e
+		$kops validate cluster $NAME 2>&1 | grep "dial tcp"	> /dev/null
+		CLUSTER_NOT_READY=$?
+		set -e
+		sleep 5
+	done	
+	echo 100 | dialog --gauge "Cluster ready" 10 70 0
 fi
 
+if enabled "secrets"
+then
+	# setup secrets and envs
+	$ktmpl /project/templates/secrets.tmpl.yaml --parameter AWS_ACCESS_KEY_ID $AWS_ACCESS_KEY_ID --parameter AWS_SECRET_ACCESS_KEY $AWS_SECRET_ACCESS_KEY > manifests/secrets.yaml	
+	$ktmpl /project/templates/cluster_config.tmpl.yaml --parameter CLUSTER $NAME --parameter DOMAIN $DOMAIN --parameter REGION $THE_REGION > manifests/cluster_config.yaml	
+	if enabled "savetos3"
+	then
+		echo Copying configuration to s3 - $KOPS_STATE_STORE
+		$aws s3 cp --region $THE_REGION ./manifests/cluster_config.yaml $KOPS_STATE_STORE/meta/$NAME/config/
+		$aws s3 cp --region $THE_REGION ./manifests/secrets.yaml $KOPS_STATE_STORE/meta/$NAME/secrets/
+	fi
+	echo "applying config and secrets"
+	$kubectl apply -f /manifests/secrets.yaml
+	$kubectl apply -f /manifests/cluster_config.yaml
+	# apply
+fi
 
 if enabled "efs"
 then
@@ -87,30 +142,11 @@ then
 		FILE_SYSTEM_ID=`$aws efs create-file-system --creation-token $NAME | $jq '.FileSystemId' -r`
 aws efs create-tags --file-system-id $FILE_SYSTEM_ID --tags Value=$NAME,Key=Name
 	fi	
-	# TODO: enable access - creating access endpoint in all the relevant subnets.
-fi
-
-if enabled "secrets"
-then
-	# setup secrets and envs
-	$ktmpl /project/templates/secrets.tmpl.yaml --parameter AWS_ACCESS_KEY_ID $AWS_ACCESS_KEY_ID --parameter AWS_SECRET_ACCESS_KEY $AWS_SECRET_ACCESS_KEY > manifests/secrets.yaml	
-	$ktmpl /project/templates/cluster_config.tmpl.yaml --parameter FILE_SYSTEM_ID $FILE_SYSTEM_ID --parameter CLUSTER $NAME --parameter REGION $THE_REGION > manifests/cluster_config.yaml	
-	if enabled "savetos3"
-	then
-		echo Copying configuration to s3 - $KOPS_STATE_STORE
-		$aws s3 cp --region $THE_REGION ./manifests/cluster_config.yaml $KOPS_STATE_STORE/$NAME/config/
-		$aws s3 cp --region $THE_REGION ./manifests/secrets.yaml $KOPS_STATE_STORE/$NAME/secrets/
-	fi
-	$kubectl apply -f manifests/secrets.yaml
-	$kubectl apply -f manifests/cluster_config.yaml
-	# apply
-	if enabled "efs"
-	then
-		$kubectl apply -f manifests/efs.yaml
-		$kubectl apply -f manifests/efs-storage-class.yaml
-		$kubectl apply -f manifests/efs-volume-claim.yaml
-		# apply efs		
-	fi
+	# TODO: enable access - creating access endpoint in all the relevant subnets. + sec groups
+	$ktmpl /project/templates/efs.tmpl.yaml --parameter FILE_SYSTEM_ID $FILE_SYSTEM_ID --parameter REGION $THE_REGION > manifests/efs.yaml	
+	$kubectl apply -f /manifests/efs.yaml
+	$kubectl apply -f /manifests/efs-storage-class.yaml
+	$kubectl apply -f /manifests/efs-volume-claim.yaml
 fi
 
 if enabled "ssl"
@@ -127,7 +163,12 @@ then
 		dlg --msgbox "Certificate Status: $STATUS.\n Please continue once you confirm the validation" 0 0
 		STATUS=`$aws acm describe-certificate --region $THE_REGION --certificate-arn $CERT_ARN | jq '.Certificate.Status' -r`	
 	done	
-	dlg --msgbox "Certificate Status: $STATUS" 0 0
+	#dlg --msgbox "Certificate Status: $STATUS" 0 0
+fi
+
+if enabled "dockerregistry"
+then
+	echo Deploying docker registry
 fi
 
 if enabled "gitlab"
@@ -145,7 +186,7 @@ fi
 
 if enabled "nodesautoscaling"
 then
-	$kubectl apply -f manifests/cluster-autoscaler.yaml
+	$kubectl apply -f /manifests/cluster-autoscaler.yaml
 	# https://github.com/kubernetes/heapster/blob/master/docs/influxdb.md
 fi
 
@@ -157,21 +198,20 @@ then
 	echo "http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/"
 fi
 
-if enabled "dockerregistry"
-then
-	echo Deploying docker registry
-fi
-
 if enabled "externaldns"
 then
 	echo Deploying external dns
-	$kubectl apply -f manifests/external-dns.yaml
+	$kubectl apply -f /manifests/external-dns.yaml
 fi
 
 if enabled "env"
 then
 	echo Generating env files
 	# generate env file - aliases and exports (bucket, name)
+	if enabled "savetos3"
+	then
+		echo uploading env to s3
+	fi
 	echo "run source $NAME.env"
 	echo "run kubectl proxy"
 fi

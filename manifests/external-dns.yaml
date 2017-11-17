@@ -17,7 +17,7 @@ spec:
           - name: DOMAIN
             valueFrom:
               configMapKeyRef:
-                name: ClusterConfiguration
+                name: clusterconfiguration
                 key: domain
         args:
         - --source=service

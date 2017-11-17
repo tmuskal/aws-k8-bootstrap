@@ -2,7 +2,7 @@
 kind: "Template"
 apiVersion: "v1"
 metadata:
-  name: "efs-provisioner-template"
+  name: efs-provisioner
 objects:
   - kind: Deployment
     apiVersion: extensions/v1beta1
@@ -22,14 +22,11 @@ objects:
               image: quay.io/external_storage/efs-provisioner:latest
               env:
                 - name: FILE_SYSTEM_ID
-                  value: "$(FILE_SYSTEM_ID)"
-                    configMapKeyRef:
-                      name: ClusterConfiguration
-                      key: file.system.id
+                  value: $(FILE_SYSTEM_ID)
                 - name: AWS_REGION
                   valueFrom:
                     configMapKeyRef:
-                      name: ClusterConfiguration
+                      name: clusterconfiguration
                       key: aws.region
                 - name: PROVISIONER_NAME
                   value: aws-efs
@@ -47,6 +44,6 @@ parameters:
     required: true
     parameterType: "string"
   - name: "REGION"
-    description: ""
+    description: "region"
     required: true
     parameterType: "string"

@@ -2,17 +2,16 @@
 kind: "Template"
 apiVersion: "v1"
 metadata:
-  name: "ClusterConfiguration"
+  name: "clusterconfiguration"
 objects:
   - kind: "ConfigMap"
     apiVersion: "v1"
     metadata:
-      name: "ClusterConfiguration"
+      name: "clusterconfiguration"
     data:
       cluster_name: "$(CLUSTER)"
       domain: "$(DOMAIN)"
       aws.region: "$(REGION)"      
-      efs.filesystem.id: $(FILE_SYSTEM_ID)
 parameters:
   - name: "DOMAIN"
     description: "The domain"
@@ -24,9 +23,5 @@ parameters:
     parameterType: "string"
   - name: "REGION"
     description: "Region"
-    required: true
-    parameterType: "string"
-  - name: "FILE_SYSTEM_ID"
-    description: ""
     required: true
     parameterType: "string"
