@@ -15,27 +15,42 @@ sleep 1.5
 DOMAIN=`dlg --title 'Domain' --inputbox 'Enter the domain' 0 0 $DEFAULT_DOMAIN`
 # TODO: generate aws user and role for cluster
 # TODO: put cluster in subdomain
-# TODO: add route53 tags for gitlab
 # TODO: add autoscaling for pods
-# TODO: add ELB certificate and hook ssl to port 80 with http proto
-# TODO: sizes in gitlab
+# TODO: add ELB certificate and hook ssl to port 80 with http proto - http://kubernetes-on-aws.readthedocs.io/en/latest/user-guide/tls-termination.html
+# TODO: add cnames for services
+# TODO: add hostnames for services - http://kubernetes-on-aws.readthedocs.io/en/latest/user-guide/tls-termination.html
+# TODO: sizes of volumes in gitlab
 # TODO: add cost allocation tags
 # TODO: todo ldap compatible dir
+# TODO: hook LDAP to all services.
 # TODO: https://funktion.fabric8.io/docs/#installing-runtimes-and-connectors
 # TODO: minio - https://docs.minio.io/docs/minio-bucket-notification-guide
 # TODO: ipsilon
 # TODO: freeipa and samba
-# TODO: hook LDAP to all services.
 # TODO: add kibana and integrate 
 # TODO: add monitoring and integrate 
 # TODO: add company logo
 PREFIX=`dlg --title 'Name' --inputbox 'Enter cluster name' 0 0 k8a`
-export NAME=$PREFIX.$DOMAIN
-export KOPS_STATE_STORE=s3://k8.$DOMAIN
-export THE_REGION=`aws configure get aws_default_region`
-export AWS_DEFAULT_REGION=`aws configure get aws_default_region`
-export AWS_ACCESS_KEY_ID=`aws configure get aws_access_key_id`
-export AWS_SECRET_ACCESS_KEY=`aws configure get aws_secret_access_key`
+NAME=$PREFIX.$DOMAIN
+KOPS_STATE_STORE=s3://k8.$DOMAIN
+THE_REGION=`aws configure get aws_default_region`
+AWS_ACCESS_KEY_ID=`aws configure get aws_access_key_id`
+if [ "AWS_ACCESS_KEY_ID" == "" ] 
+then
+	AWS_ACCESS_KEY_ID=`dlg --title 'AWS_ACCESS_KEY_ID' --inputbox 'Enter your AWS_ACCESS_KEY_ID' 0 0 AKXXXX`
+fi
+AWS_SECRET_ACCESS_KEY=`aws configure get aws_secret_access_key`
+if [ "AWS_SECRET_ACCESS_KEY" == "" ] 
+then
+	dlg --clear --insecure --passwordbox "Enter your AWS_SECRET_ACCESS_KEY" 10 50 > tmp
+	AWS_SECRET_ACCESS_KEY=`cat tmp`
+	rm tmp
+fi
+if [ "THE_REGION" == "" ] 
+then
+	THE_REGION=`dlg --title 'Region' --inputbox 'Enter the region' 0 0 us-west-2`
+fi
+AWS_DEFAULT_REGION=$THE_REGION
 jq="jq"
 aws="docker run --rm -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} -e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} -e AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION} -v $PWD:/project mesosphere/aws-cli"
 kops="docker run --rm -it -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION=$THE_REGION -e KOPS_STATE_STORE -v `pwd`:/tmp2 -v `pwd`/out/:/out/ -v $HOME/.kube/:/root/.kube/ pottava/kops:1.5"
@@ -179,7 +194,7 @@ then
 	# dlg --clear --insecure --passwordbox "Enter your gitlab OAUTH Client Secret" 10 50 > tmp
 	# GITHUB_OAUTH_CLIENT_SECRET=`cat tmp`
 	# rm tmp
-	# ~/.fabric8/bin/gofabric8 deploy --package system --http=true --legacy=false -n fabric8 -y
+	# ~/.fabric8/bin/gofabric8 deploy --package system --http=true --legacy=false -n fabric8 -y	
 fi
 
 if enabled "secrets"
@@ -201,13 +216,22 @@ fi
 
 if enabled "efs"
 then
-	FILE_SYSTEM_ID=`aws efs describe-file-systems --creation-token k8a.cybercyder.com | $jq '.FileSystems[0].FileSystemId' -r`
+	FILE_SYSTEM_ID=`aws efs describe-file-systems --creation-token $NAME | $jq '.FileSystems[0].FileSystemId' -r`
 	if [ "$FILE_SYSTEM_ID" == "null" ]
 	then
 		FILE_SYSTEM_ID=`$aws efs create-file-system --creation-token $NAME | $jq '.FileSystemId' -r`
 aws efs create-tags --file-system-id $FILE_SYSTEM_ID --tags Value=$NAME,Key=Name
 	fi	
+	MASTER_SEC_GROUP=`$aws ec2 describe-security-groups | jq --arg name "$NAME" '.SecurityGroups[] | select(.GroupName == "masters." + $name) | .GroupId' -r`
+	SUBNETS=`$aws ec2 describe-subnets | jq --arg name "$NAME" '.Subnets[] | select(.Tags[]? | select(.Key=="KubernetesCluster") | .Value == $name) | .SubnetId' -r`
+	# SUBNETS=$(printf ",%s" "${SUBNETS_TMP[@]}")
+	# SUBNETS=${SUBNETS:1}
 	# TODO: enable access - creating access endpoint in all the relevant subnets. + sec groups
+	MOUNT_TARGETS=`$aws efs describe-mount-targets --file-system-id $FILE_SYSTEM_ID | jq '.MountTargets[].MountTargetId'`
+	if [ "$MOUNT_TARGETS" == "" ]
+	then
+		echo $SUBNETS | xargs -n 1 $aws efs create-mount-target --file-system-id $FILE_SYSTEM_ID --security-groups $MASTER_SEC_GROUP --subnet-id 
+	fi
 	$ktmpl /project/templates/efs.tmpl.yaml --parameter FILE_SYSTEM_ID $FILE_SYSTEM_ID --parameter REGION $THE_REGION > manifests/efs.yaml	
 	$kubectl apply -f /manifests/efs.yaml
 	$kubectl apply -f /manifests/efs-storage-class.yaml
