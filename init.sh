@@ -63,25 +63,25 @@ ktmpl="docker run --rm -v $PWD:/project -t inquicker/ktmpl"
 if [ "$SELECTED_COMPONENTS" == "" ]
 then
 	SELECTED_COMPONENTS=`dlg --checklist "Choose the options you want:" 0 0 500  \
-		ssh "Generate SSH-Key" on \
 		bucket "Generate Bucket" on \
-		gitlab "Setup GitLab" on \
+		ssh "Generate SSH-Key" on \
+		savetos3 "Save configuration to S3" on \
 		efs "Efs" on \
-		externaldns "DNS auto registration" on \
+		ssl "*.$Domain Certificates" on \
 		clusters "Setup cluster" on \
 		clusterl "Launch cluster" on \
-		savetos3 "Save configuration to S3" on \
+		secrets "Config Secrets" on \
 		env "Generate env file" on \
+		helm "Init helm" on \
+		externaldns "DNS auto registration" on \
 		dashboard "Deploy Dashboard" on \
 		heapster "Deploy Heapster" on \
-		ssl "Generate Certificate for *.$Domain" on \
+		gitlab "Setup GitLab" on \
 		nodesautoscaling "Node Autoscaling" on \
-		helm "Init helm" on \
-		fabric8 "fabric8" on \
+		fabric8 "fabric8" off \
 		che "Che" on \
 		taiga "Taiga" on \
-		orion "Orion" on \
-		secrets "Config Secrets" on`
+		orion "Orion" on`
 fi
 
 function enabled(){
