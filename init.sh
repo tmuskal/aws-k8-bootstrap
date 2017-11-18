@@ -9,14 +9,26 @@ function dlg(){
 }
 
 DEFAULT_DOMAIN=${DOMAIN:-example.com}
+clear
+cat logo.txt
+sleep 1.5
 DOMAIN=`dlg --title 'Domain' --inputbox 'Enter the domain' 0 0 $DEFAULT_DOMAIN`
-# TODO: generate user and role for cluster
+# TODO: generate aws user and role for cluster
+# TODO: put cluster in subdomain
+# TODO: add route53 tags for gitlab
+# TODO: add autoscaling for pods
+# TODO: add ELB certificate and hook ssl to port 80 with http proto
+# TODO: sizes in gitlab
 # TODO: add cost allocation tags
 # TODO: todo ldap compatible dir
 # TODO: https://funktion.fabric8.io/docs/#installing-runtimes-and-connectors
+# TODO: minio - https://docs.minio.io/docs/minio-bucket-notification-guide
 # TODO: ipsilon
 # TODO: freeipa and samba
 # TODO: hook LDAP to all services.
+# TODO: add kibana and integrate 
+# TODO: add monitoring and integrate 
+# TODO: add company logo
 PREFIX=`dlg --title 'Name' --inputbox 'Enter cluster name' 0 0 k8a`
 export NAME=$PREFIX.$DOMAIN
 export KOPS_STATE_STORE=s3://k8.$DOMAIN
@@ -26,35 +38,36 @@ export AWS_ACCESS_KEY_ID=`aws configure get aws_access_key_id`
 export AWS_SECRET_ACCESS_KEY=`aws configure get aws_secret_access_key`
 jq="jq"
 aws="docker run --rm -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} -e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} -e AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION} -v $PWD:/project mesosphere/aws-cli"
-ZONES_TMP=(`$aws ec2 describe-availability-zones | $jq '.AvailabilityZones[].ZoneName' -r`)
-ZONES=$(printf ",%s" "${ZONES_TMP[@]}")
-ZONES=${ZONES:1}
 kops="docker run --rm -it -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION=$THE_REGION -e KOPS_STATE_STORE -v `pwd`:/tmp2 -v `pwd`/out/:/out/ -v $HOME/.kube/:/root/.kube/ pottava/kops:1.5"
 kops="kops"
-helm="docker run --rm -it -v $HOME/.kube/:/root/.kube/ linkyard/docker-helm"
+helm="docker run --rm -it -v $HOME/.kube/:/root/.kube/ -v $HOME/.helm/:/root/.helm/ linkyard/docker-helm"
 # helm="helm"
 kubectl="docker run --rm -it -v $HOME/.kube/:/root/.kube/ -v $PWD/manifests/:/manifests/ pottava/kubectl"
 ktmpl="docker run --rm -v $PWD:/project -t inquicker/ktmpl"
 # Setup configuration
-SELECTED_COMPONENTS=`dlg --checklist "Choose the options you want:" 0 0 500  \
-ssh "Generate SSH-Key" on \
-bucket "Generate Bucket" on \
-gitlab "Setup GitLab" on \
-efs "Efs" on \
-externaldns "DNS auto registration" on \
-clusters "Setup cluster" on \
-clusterl "Launch cluster" on \
-savetos3 "Save configuration to S3" on \
-env "Generate env file" on \
-dashboard "Deploy Dashboard" on \
-heapster "Deploy Heapster" on \
-ssl "Generate Certificate for *.$Domain" on \
-nodesautoscaling "Node Autoscaling" on \
-helm "Init helm" on \
-fabric8 "fabric8" on \
-che "Che" on \
-secrets "Config Secrets" on`
-# upload configuration to S3
+if [ "$SELECTED_COMPONENTS" == "" ]
+then
+	SELECTED_COMPONENTS=`dlg --checklist "Choose the options you want:" 0 0 500  \
+		ssh "Generate SSH-Key" on \
+		bucket "Generate Bucket" on \
+		gitlab "Setup GitLab" on \
+		efs "Efs" on \
+		externaldns "DNS auto registration" on \
+		clusters "Setup cluster" on \
+		clusterl "Launch cluster" on \
+		savetos3 "Save configuration to S3" on \
+		env "Generate env file" on \
+		dashboard "Deploy Dashboard" on \
+		heapster "Deploy Heapster" on \
+		ssl "Generate Certificate for *.$Domain" on \
+		nodesautoscaling "Node Autoscaling" on \
+		helm "Init helm" on \
+		fabric8 "fabric8" on \
+		che "Che" on \
+		taiga "Taiga" on \
+		orion "Orion" on \
+		secrets "Config Secrets" on`
+fi
 
 function enabled(){
 	case "${SELECTED_COMPONENTS=[@]}" in  *"$1"*) return 0;; esac
@@ -71,13 +84,19 @@ then
 fi
 if enabled "ssh"
 then
-	echo -e  'y\n'|ssh-keygen -t rsa -C "admin@$DOMAIN" -f $NAME.rsa -q -N "" > /dev/null
+	set +e
+	echo -e  'n\n'|ssh-keygen -t rsa -C "admin@$DOMAIN" -f $NAME.rsa -q -N "" > /dev/null
+	set -e
 	if enabled "savetos3"
 	then
 		$aws s3 cp --region $THE_REGION ./$NAME.rsa $KOPS_STATE_STORE/meta/$NAME/keys/ > /dev/null
 		$aws s3 cp --region $THE_REGION ./$NAME.rsa.pub $KOPS_STATE_STORE/meta/$NAME/keys/ > /dev/null
 	fi	
 fi
+ZONES_TMP=(`$aws ec2 describe-availability-zones | $jq '.AvailabilityZones[].ZoneName' -r`)
+ZONES=$(printf ",%s" "${ZONES_TMP[@]}")
+ZONES=${ZONES:1}
+
 # Create Cluster
 if enabled "clusters"
 then
@@ -88,7 +107,7 @@ then
 	if [ $CLUSTER_NOT_FOUND -eq 0 ]
 	then
 		$kops create cluster \
-		    --zones ${ZONES} \
+		    --zones ${ZONES} --node-count 4 --cloud-labels "K8Cluster=$NAME" \
 		    --ssh-public-key=./$NAME.rsa.pub ${NAME}
 	else
 		echo "skipping cluster setup"
@@ -122,6 +141,8 @@ then
 		set -e
 		sleep 5
 	done	
+	echo 90 | dialog --gauge "Cluster almost ready" 10 70 0
+	sleep 1
 	echo 100 | dialog --gauge "Cluster ready" 10 70 0
 fi
 
@@ -132,7 +153,16 @@ fi
 
 if enabled "che"
 then
-	$kubectl apply -f http://central.maven.org/maven2/io/fabric8/online/apps/che/1.0.54/che-1.0.54-kubernetes.yml
+	$kubectl apply -f http://central.maven.org/maven2/io/fabric8/online/apps/che/1.0.54/che-1.0.54-kubernetes.yml	
+fi
+
+if enabled "taiga"
+then	
+	$kubectl apply -f http://central.maven.org/maven2/io/fabric8/devops/apps/taiga/2.2.327/taiga-2.2.327-kubernetes.yml
+fi
+
+if enabled "orion"
+then	
 	$kubectl apply -f http://central.maven.org/maven2/io/fabric8/devops/apps/orion/2.2.327/orion-2.2.327-kubernetes.yml 
 fi
  
@@ -141,13 +171,15 @@ then
 	set +e
 	$kubectl delete namespace fabric8
 	set -e
-	curl -sS https://get.fabric8.io/download.txt | bash	
-	dlg --clear --insecure --passwordbox "Enter your github OAUTH Client ID" 10 50 > tmp
-	GITHUB_OAUTH_CLIENT_ID=`cat tmp`
-	dlg --clear --insecure --passwordbox "Enter your gitlab OAUTH Client Secret" 10 50 > tmp
-	GITHUB_OAUTH_CLIENT_SECRET=`cat tmp`
-	rm tmp
-	~/.fabric8/bin/gofabric8 deploy --package system --http=true --legacy=false -n fabric8 -y
+	$helm repo add fabric8 https://fabric8.io/helm
+	$helm install fabric8/fabric8-platform
+	# curl -sS https://get.fabric8.io/download.txt | bash	
+	# dlg --clear --insecure --passwordbox "Enter your github OAUTH Client ID" 10 50 > tmp
+	# GITHUB_OAUTH_CLIENT_ID=`cat tmp`
+	# dlg --clear --insecure --passwordbox "Enter your gitlab OAUTH Client Secret" 10 50 > tmp
+	# GITHUB_OAUTH_CLIENT_SECRET=`cat tmp`
+	# rm tmp
+	# ~/.fabric8/bin/gofabric8 deploy --package system --http=true --legacy=false -n fabric8 -y
 fi
 
 if enabled "secrets"
@@ -186,16 +218,30 @@ if enabled "ssl"
 then
 	CERT_ARN=`$aws acm list-certificates --region $THE_REGION | jq --arg domain "$DOMAIN" '.CertificateSummaryList[] | select(.DomainName == "*." + $domain) | .CertificateArn  ' -r`
 	echo $CERT_ARN
-	if [ "$CERT_ARN" == "null" ]
+	if [ "$CERT_ARN" == "" ]
 	then
 		echo Requesting certificate	
-		CERT_ARN=`$aws acm request-certificate --region $THE_REGION --domain-name *.$DOMAIN --idempotency-token $DOMAIN | jq '.CertificateArn' -r`
+		CERT_ARN=`$aws acm request-certificate --region $THE_REGION --domain-name *.$DOMAIN --idempotency-token $PREFIX | jq '.CertificateArn' -r`
 	fi	
 	STATUS=`$aws acm describe-certificate --region $THE_REGION --certificate-arn $CERT_ARN | jq '.Certificate.Status' -r`
 	while [ "$STATUS" == "PENDING_VALIDATION" ];	do
 		dlg --msgbox "Certificate Status: $STATUS.\n Please continue once you confirm the validation" 0 0
 		STATUS=`$aws acm describe-certificate --region $THE_REGION --certificate-arn $CERT_ARN | jq '.Certificate.Status' -r`	
 	done	
+
+	CERT_ARN_GITLAB=`$aws acm list-certificates --region $THE_REGION | jq --arg domain "gitlab.$DOMAIN" '.CertificateSummaryList[] | select(.DomainName == "*." + $domain) | .CertificateArn  ' -r`	
+	echo CERT_ARN_GITLAB $CERT_ARN_GITLAB
+	if [ "$CERT_ARN_GITLAB" == "" ]
+	then
+		echo Requesting certificate	
+		CERT_ARN_GITLAB=`$aws acm request-certificate --region $THE_REGION --domain-name *.gitlab.$DOMAIN --idempotency-token gitlab$PREFIX | jq '.CertificateArn' -r`
+	fi	
+	STATUS=`$aws acm describe-certificate --region $THE_REGION --certificate-arn $CERT_ARN_GITLAB | jq '.Certificate.Status' -r`
+	while [ "$STATUS" == "PENDING_VALIDATION" ];	do
+		dlg --msgbox "Certificate Status: $STATUS.\n Please continue once you confirm the validation" 0 0
+		STATUS=`$aws acm describe-certificate --region $THE_REGION --certificate-arn $CERT_ARN_GITLAB | jq '.Certificate.Status' -r`	
+	done	
+
 	#dlg --msgbox "Certificate Status: $STATUS" 0 0
 fi
 
@@ -215,17 +261,74 @@ then
 	$kubectl apply -f http://central.maven.org/maven2/io/fabric8/devops/apps/letschat/2.2.327/letschat-2.2.327-kubernetes.yml
 fi
 
+function setRoute53() {
+	record_name=$1
+	record_value=$2
+
+	[[ -z $record_name  ]] && echo "record_name is: $record_name" && exit 1
+	[[ -z $record_value ]] && echo "record_value is: $record_value" && exit 1
+
+	## set some defaults if variables haven't been overridden on script execute
+	zone_name=${zone_name:-$3}
+	action=${action:-CREATE}
+	record_type=${record_type:-A}
+	ttl=${ttl:-300}
+	wait_for_sync=${wait_for_sync:-false}
+
+	change_id=$(submit_resource_record_change_set $record_name $record_value) || exit 1
+	echo "Record change submitted! Change Id: $change_id"
+	if $wait_for_sync; then
+		echo -n "Waiting for all Route53 DNS to be in sync..."
+		until [[ $(get_change_status $change_id) == "INSYNC" ]]; do
+		 	echo -n "."
+		 	sleep 5
+		done
+		echo "!"
+		echo "Your record change has now propogated."
+	fi	
+}
+
+function change_batch() {
+	$jq -c -n "{\"Changes\": [{\"Action\": \"UPSERT\", \"ResourceRecordSet\": {\"Name\": \"$1\", \"Type\": \"CNAME\", \"TTL\": 300, \"ResourceRecords\": [{\"Value\": \"$2\"} ] } } ] }"
+}
+
+function get_change_status() {
+	$aws route53 get-change --id $1 | jq -r '.ChangeInfo.Status'
+}
+
+function hosted_zone_id() {
+   $aws route53 list-hosted-zones | jq -r ".HostedZones[] | select(.Name == \"${zone_name}\") | .Id" | cut -d'/' -f3
+}
+
+function submit_resource_record_change_set() {
+	$aws route53 change-resource-record-sets --hosted-zone-id $(hosted_zone_id) --change-batch $(change_batch $1 $2) | jq -r '.ChangeInfo.Id' | cut -d'/' -f3
+}
+
 if enabled "gitlab"
-then
+then	
+	$helm repo add gitlab https://charts.gitlab.io
 	echo Deploying gitlab	
-	set +e
+	set +e	
 	$helm del --purge gitlab
 	set -e
 	dlg --clear --insecure --passwordbox "Enter your gitlab root password" 10 50 > gitlab.passwd.tmp
 	PASSWD=`cat gitlab.passwd.tmp`
 	rm gitlab.passwd.tmp	
-	$helm install --name gitlab --set gitlabRootPassword="$PASSWD",externalUrl=http://gitlab.cybercyder.com/ stable/gitlab-ce
-	$kubectl get svc --namespace default gitlab-gitlab-ce -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
+	# EMAIL=`dlg --title 'Email' --inputbox 'Enter your email' 0 0 admin@$DOMAIN`
+	EMAIL=admin@$DOMAIN
+	$helm install --name gitlab --set legoEmail=$EMAIL,provider=,gitlabRootPassword="$PASSWD",baseDomain=gitlab.$DOMAIN gitlab/gitlab-omnibus
+	sleep 10
+	GITLAB_LB_HOSTNAME=`$kubectl get svc --namespace nginx-ingress nginx  -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'`	
+
+	# set wildcard alias in route53 for *.gitlab.$DOMAIN -> LB
+	setRoute53 '*.gitlab.'$DOMAIN $GITLAB_LB_HOSTNAME $DOMAIN.
+
+	# attach CERT_ARN_GITLAB certificate to ELB
+
+
+	# $kubectl get svc --namespace default gitlab-gitlab-ce -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
+	
+	# $helm install --name gitlab-runner --set runnerRegistrationToken="$PASSWD",gitlabURL=http://gitlab.$DOMAIN/ gitlab/gitlab-runner
 	# claim efs volume
 	# set cname
 	# apply gitlab	

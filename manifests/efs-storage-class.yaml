@@ -4,3 +4,12 @@ apiVersion: storage.k8s.io/v1beta1
 metadata:
   name: aws-efs
 provisioner: aws-efs/aws-efs
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1beta1
+metadata:
+  name: standard
+provisioner: aws-efs/aws-efs
+parameters: 
+  type: "gp2"
+  
