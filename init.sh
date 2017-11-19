@@ -12,8 +12,13 @@ DEFAULT_DOMAIN=${DOMAIN:-example.com}
 clear
 cat logo.txt
 sleep 1.5
-DOMAIN=`dlg --title 'Domain' --inputbox 'Enter the domain' 0 0 $DEFAULT_DOMAIN`
-# TODO: generate aws user and role for cluster
+
+if [ "DOMAIN" == "" ] 
+then
+	DOMAIN=`dlg --title 'Domain' --inputbox 'Enter the domain' 0 0 $DEFAULT_DOMAIN`
+fi
+
+# TODO: generate aws user and role for cluster - use this key and add to policy to nodes and master
 # TODO: put cluster in subdomain
 # TODO: add autoscaling for pods
 # TODO: add ELB certificate and hook ssl to port 80 with http proto - http://kubernetes-on-aws.readthedocs.io/en/latest/user-guide/tls-termination.html
@@ -30,23 +35,32 @@ DOMAIN=`dlg --title 'Domain' --inputbox 'Enter the domain' 0 0 $DEFAULT_DOMAIN`
 # TODO: add kibana and integrate 
 # TODO: add monitoring and integrate 
 # TODO: add company logo
-PREFIX=`dlg --title 'Name' --inputbox 'Enter cluster name' 0 0 k8a`
+# TODO: add navigator docker
+# TODO: add email server and workspace
+
+# TODO: s3 email integration
+
+if [ "$PREFIX" == "" ] 
+then
+	PREFIX=`dlg --title 'Name' --inputbox 'Enter cluster name' 0 0 k8a`
+fi
+
 NAME=$PREFIX.$DOMAIN
 KOPS_STATE_STORE=s3://k8.$DOMAIN
 THE_REGION=`aws configure get aws_default_region`
 AWS_ACCESS_KEY_ID=`aws configure get aws_access_key_id`
-if [ "AWS_ACCESS_KEY_ID" == "" ] 
+if [ "$AWS_ACCESS_KEY_ID" == "" ] 
 then
 	AWS_ACCESS_KEY_ID=`dlg --title 'AWS_ACCESS_KEY_ID' --inputbox 'Enter your AWS_ACCESS_KEY_ID' 0 0 AKXXXX`
 fi
 AWS_SECRET_ACCESS_KEY=`aws configure get aws_secret_access_key`
-if [ "AWS_SECRET_ACCESS_KEY" == "" ] 
+if [ "$AWS_SECRET_ACCESS_KEY" == "" ] 
 then
 	dlg --clear --insecure --passwordbox "Enter your AWS_SECRET_ACCESS_KEY" 10 50 > tmp
 	AWS_SECRET_ACCESS_KEY=`cat tmp`
 	rm tmp
 fi
-if [ "THE_REGION" == "" ] 
+if [ "$THE_REGION" == "" ] 
 then
 	THE_REGION=`dlg --title 'Region' --inputbox 'Enter the region' 0 0 us-west-2`
 fi
@@ -78,10 +92,12 @@ then
 		heapster "Deploy Heapster" on \
 		gitlab "Setup GitLab" on \
 		nodesautoscaling "Node Autoscaling" on \
-		fabric8 "fabric8" off \
-		che "Che" on \
-		taiga "Taiga" on \
-		orion "Orion" on`
+		fabric8 "fabric8" on`
+		# che "Che" on \
+		# letschat "letschat" on \		
+		# taiga "Taiga" on \
+		# orion "Orion" on \
+		# nexus "Sonatype Nexus Repo" on`
 fi
 
 function enabled(){
@@ -122,6 +138,7 @@ then
 	if [ $CLUSTER_NOT_FOUND -eq 0 ]
 	then
 		$kops create cluster \
+			--kubernetes-version 1.8.3 \
 		    --zones ${ZONES} --node-count 4 --cloud-labels "K8Cluster=$NAME" \
 		    --ssh-public-key=./$NAME.rsa.pub ${NAME}
 	else
@@ -180,27 +197,11 @@ if enabled "orion"
 then	
 	$kubectl apply -f http://central.maven.org/maven2/io/fabric8/devops/apps/orion/2.2.327/orion-2.2.327-kubernetes.yml 
 fi
- 
-if enabled "fabric8"
-then
-	set +e
-	$kubectl delete namespace fabric8
-	set -e
-	$helm repo add fabric8 https://fabric8.io/helm
-	$helm install fabric8/fabric8-platform
-	# curl -sS https://get.fabric8.io/download.txt | bash	
-	# dlg --clear --insecure --passwordbox "Enter your github OAUTH Client ID" 10 50 > tmp
-	# GITHUB_OAUTH_CLIENT_ID=`cat tmp`
-	# dlg --clear --insecure --passwordbox "Enter your gitlab OAUTH Client Secret" 10 50 > tmp
-	# GITHUB_OAUTH_CLIENT_SECRET=`cat tmp`
-	# rm tmp
-	# ~/.fabric8/bin/gofabric8 deploy --package system --http=true --legacy=false -n fabric8 -y	
-fi
 
 if enabled "secrets"
 then
 	# setup secrets and envs
-	$ktmpl /project/templates/secrets.tmpl.yaml --parameter AWS_ACCESS_KEY_ID $AWS_ACCESS_KEY_ID --parameter AWS_SECRET_ACCESS_KEY $AWS_SECRET_ACCESS_KEY > manifests/secrets.yaml	
+	$ktmpl /project/templates/secrets.tmpl.yaml --parameter AWS_ACCESS_KEY_ID `echo -n $AWS_ACCESS_KEY_ID | base64` --parameter AWS_SECRET_ACCESS_KEY `echo -n $AWS_SECRET_ACCESS_KEY | base64` > manifests/secrets.yaml
 	$ktmpl /project/templates/cluster_config.tmpl.yaml --parameter CLUSTER $NAME --parameter DOMAIN $DOMAIN --parameter REGION $THE_REGION > manifests/cluster_config.yaml	
 	if enabled "savetos3"
 	then
@@ -215,7 +216,7 @@ then
 fi
 
 if enabled "efs"
-then
+then	
 	FILE_SYSTEM_ID=`aws efs describe-file-systems --creation-token $NAME | $jq '.FileSystems[0].FileSystemId' -r`
 	if [ "$FILE_SYSTEM_ID" == "null" ]
 	then
@@ -234,7 +235,14 @@ aws efs create-tags --file-system-id $FILE_SYSTEM_ID --tags Value=$NAME,Key=Name
 	fi
 	$ktmpl /project/templates/efs.tmpl.yaml --parameter FILE_SYSTEM_ID $FILE_SYSTEM_ID --parameter REGION $THE_REGION > manifests/efs.yaml	
 	$kubectl apply -f /manifests/efs.yaml
+	$kubectl delete storageclass default		
 	$kubectl apply -f /manifests/efs-storage-class.yaml
+	$kubectl patch storageclass default -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+	set +e
+	$kubectl patch storageclass gp2 -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+	$kubectl delete storageclass gp2 
+	set -e
+	$kubectl patch storageclass default -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 	$kubectl apply -f /manifests/efs-volume-claim.yaml
 fi
 
@@ -253,17 +261,17 @@ then
 		STATUS=`$aws acm describe-certificate --region $THE_REGION --certificate-arn $CERT_ARN | jq '.Certificate.Status' -r`	
 	done	
 
-	CERT_ARN_GITLAB=`$aws acm list-certificates --region $THE_REGION | jq --arg domain "gitlab.$DOMAIN" '.CertificateSummaryList[] | select(.DomainName == "*." + $domain) | .CertificateArn  ' -r`	
-	echo CERT_ARN_GITLAB $CERT_ARN_GITLAB
-	if [ "$CERT_ARN_GITLAB" == "" ]
+	CERT_ARN_CI=`$aws acm list-certificates --region $THE_REGION | jq --arg domain "ci.$DOMAIN" '.CertificateSummaryList[] | select(.DomainName == "*." + $domain) | .CertificateArn  ' -r`	
+	echo CERT_ARN_CI $CERT_ARN_CI
+	if [ "$CERT_ARN_CI" == "" ]
 	then
 		echo Requesting certificate	
-		CERT_ARN_GITLAB=`$aws acm request-certificate --region $THE_REGION --domain-name *.gitlab.$DOMAIN --idempotency-token gitlab$PREFIX | jq '.CertificateArn' -r`
+		CERT_ARN_CI=`$aws acm request-certificate --region $THE_REGION --domain-name *.ci.$DOMAIN --idempotency-token ci$PREFIX | jq '.CertificateArn' -r`
 	fi	
-	STATUS=`$aws acm describe-certificate --region $THE_REGION --certificate-arn $CERT_ARN_GITLAB | jq '.Certificate.Status' -r`
+	STATUS=`$aws acm describe-certificate --region $THE_REGION --certificate-arn $CERT_ARN_CI | jq '.Certificate.Status' -r`
 	while [ "$STATUS" == "PENDING_VALIDATION" ];	do
 		dlg --msgbox "Certificate Status: $STATUS.\n Please continue once you confirm the validation" 0 0
-		STATUS=`$aws acm describe-certificate --region $THE_REGION --certificate-arn $CERT_ARN_GITLAB | jq '.Certificate.Status' -r`	
+		STATUS=`$aws acm describe-certificate --region $THE_REGION --certificate-arn $CERT_ARN_CI | jq '.Certificate.Status' -r`	
 	done	
 
 	#dlg --msgbox "Certificate Status: $STATUS" 0 0
@@ -317,11 +325,11 @@ function change_batch() {
 }
 
 function get_change_status() {
-	$aws route53 get-change --id $1 | jq -r '.ChangeInfo.Status'
+	$aws route53 get-change --id $1 | $jq -r '.ChangeInfo.Status'
 }
 
 function hosted_zone_id() {
-   $aws route53 list-hosted-zones | jq -r ".HostedZones[] | select(.Name == \"${zone_name}\") | .Id" | cut -d'/' -f3
+   $aws route53 list-hosted-zones | $jq -r ".HostedZones[] | select(.Name == \"${zone_name}\") | .Id" | cut -d'/' -f3
 }
 
 function submit_resource_record_change_set() {
@@ -340,15 +348,18 @@ then
 	rm gitlab.passwd.tmp	
 	# EMAIL=`dlg --title 'Email' --inputbox 'Enter your email' 0 0 admin@$DOMAIN`
 	EMAIL=admin@$DOMAIN
-	$helm install --name gitlab --set legoEmail=$EMAIL,provider=,gitlabRootPassword="$PASSWD",baseDomain=gitlab.$DOMAIN gitlab/gitlab-omnibus
+	$helm install --name gitlab --set gitlabDataStorageClass=standard,gitlabRegistryStorageClass=standard,gitlabConfigStorageClass=standard,postgresStorageClass=standard,redisStorageClass=standard,legoEmail=$EMAIL,provider=,gitlabRootPassword="$PASSWD",baseDomain=ci.$DOMAIN gitlab/gitlab-omnibus
 	sleep 10
 	GITLAB_LB_HOSTNAME=`$kubectl get svc --namespace nginx-ingress nginx  -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'`	
 
 	# set wildcard alias in route53 for *.gitlab.$DOMAIN -> LB
-	setRoute53 '*.gitlab.'$DOMAIN $GITLAB_LB_HOSTNAME $DOMAIN.
+	setRoute53 '*.ci.'$DOMAIN $GITLAB_LB_HOSTNAME $DOMAIN.
 
 	# attach CERT_ARN_GITLAB certificate to ELB
 
+	# TODO: enable auto devops
+	# TODO: email intergration 
+	# TODO: taiga intergration	
 
 	# $kubectl get svc --namespace default gitlab-gitlab-ce -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
 	
@@ -375,13 +386,48 @@ then
 	#discover existing certs
 	echo Deploying dashboard
 	$kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
-	echo "http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/"
+	$kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard-head.yaml
+	echo "http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard-head:/proxy/"
 fi
 
 if enabled "externaldns"
 then
 	echo Deploying external dns
 	$kubectl apply -f /manifests/external-dns.yaml
+fi
+
+if enabled "fabric8"
+then
+	set +e
+	$kubectl delete namespace fabric8
+	set -e
+	curl -sS https://get.fabric8.io/download.txt | bash
+	# $helm repo add fabric8 https://fabric8.io/helm
+	# $helm install fabric8/fabric8-platform	
+	# rm tmp
+	# ~/.fabric8/bin/gofabric8 deploy --package system --http=true --legacy=false -n fabric8 -y	
+	if [ "$GITHUB_OAUTH_CLIENT_ID" == "" ] 
+	then
+		GITHUB_OAUTH_CLIENT_ID=`dlg --title 'GITHUB_OAUTH_CLIENT_ID' --inputbox 'Enter your GITHUB_OAUTH_CLIENT_ID' 0 0 AKXXXX`
+	fi	
+	if [ "$GITHUB_OAUTH_CLIENT_SECRET" == "" ] 
+	then
+		dlg --clear --insecure --passwordbox "Enter your GITHUB_OAUTH_CLIENT_SECRET" 10 50 > tmp
+		GITHUB_OAUTH_CLIENT_SECRET=`cat tmp`
+		rm tmp
+	fi	
+	wget http://central.maven.org/maven2/io/fabric8/platform/packages/fabric8-full/4.0.208/fabric8-full-4.0.208-k8s-template.yml
+	~/.fabric8/bin/gofabric8 deploy --github-client-id $GITHUB_OAUTH_CLIENT_ID --github-client-secret $GITHUB_OAUTH_CLIENT_SECRET --domain=ci.$DOMAIN --ingress=false --namespace fabric8 --package fabric8-full-4.0.208-k8s-template.yml --http=true --legacy=false -n fabric8 -y
+	wget http://central.maven.org/maven2/io/fabric8/platform/packages/social/4.0.208/social-4.0.208-kubernetes.yml
+	~/.fabric8/bin/gofabric8 deploy --namespace fabric8 --package social-4.0.208-kubernetes.yml -y
+	wget http://central.maven.org/maven2/io/fabric8/platform/packages/funktion-platform/2.4.24/funktion-platform-2.4.24-kubernetes.yml
+	~/.fabric8/bin/gofabric8 deploy --namespace fabric8 --package funktion-platform-2.4.24-kubernetes.yml -y
+	wget http://central.maven.org/maven2/io/fabric8/platform/packages/management/4.0.208/management-4.0.208-kubernetes.yml
+	~/.fabric8/bin/gofabric8 deploy --namespace fabric8 --package management-4.0.208-kubernetes.yml -y
+	HOSTNAME=`$kubectl get svc --namespace nginx-ingress nginx  -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'`	
+
+	# set wildcard alias in route53 for *.gitlab.$DOMAIN -> LB
+	setRoute53 '*.ci.'$DOMAIN $HOSTNAME $DOMAIN.	
 fi
 
 if enabled "env"

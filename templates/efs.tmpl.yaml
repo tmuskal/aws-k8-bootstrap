@@ -21,6 +21,16 @@ objects:
             - name: efs-provisioner
               image: quay.io/external_storage/efs-provisioner:latest
               env:
+                - name: AWS_ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: secrets
+                      key: AWS_ACCESS_KEY_ID
+                - name: AWS_SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: secrets
+                      key: AWS_SECRET_ACCESS_KEY                
                 - name: FILE_SYSTEM_ID
                   value: $(FILE_SYSTEM_ID)
                 - name: AWS_REGION
@@ -29,7 +39,7 @@ objects:
                       name: clusterconfiguration
                       key: aws.region
                 - name: PROVISIONER_NAME
-                  value: aws-efs
+                  value: "aws-efs/aws-efs"
               volumeMounts:
                 - name: pv-volume
                   mountPath: /persistentvolumes
