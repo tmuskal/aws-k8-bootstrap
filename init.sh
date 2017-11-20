@@ -119,6 +119,7 @@ then
 		social "Social components" on \
 		sugarcrm "sugarcrm" on \
 		che "Che" on \
+		airflow "Airflow" on \
 		fabric8 "fabric8" off`
 		# taiga "Taiga" on \
 		# letschat "letschat" on \		
@@ -339,6 +340,11 @@ fi
 if enabled "che"
 then
 	$kubectl apply -f http://central.maven.org/maven2/io/fabric8/online/apps/che/1.0.54/che-1.0.54-kubernetes.yml	
+fi
+
+if enabled "airflow"
+then
+	$kubectl apply -f manifests/airflow.all.yaml
 fi
 
 
