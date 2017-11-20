@@ -38,6 +38,8 @@ fi
 # TODO: add navigator docker
 # TODO: add email server and workspace
 # TODO: s3 email integration
+# TODO: email server and web client
+# TODO: multiple clusters: https://medium.com/@alejandro.ramirez.ch/reserving-a-kubernetes-node-for-specific-nodes-e75dc8297076
 
 if [ "$PREFIX" == "" ] 
 then
@@ -325,6 +327,7 @@ then
 	$helm install --name kube2iam stable/kube2iam
 	$helm install --set awsRegion=$THE_REGION --name fluentd-cloudwatch incubator/fluentd-cloudwatch
 	$helm install stable/cluster-autoscaler --name awsautoscaler --set "autoscalingGroups[0].name=nodes.$NAME,autoscalingGroups[0].maxSize=10,autoscalingGroups[0].minSize=4"
+	$kubectl apply -f manifests/kube-node-labeller.ds.yaml
 fi
 
 if enabled "grafana"
