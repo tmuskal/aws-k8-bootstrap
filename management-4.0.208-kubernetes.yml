@@ -1,0 +1,616 @@
+---
+apiVersion: v1
+kind: List
+items:
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    labels:
+      provider: fabric8
+      project: fluentd
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: fluentd
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    labels:
+      app: prometheus
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: prometheus
+    namespace: fabric8-metrics
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/elasticsearch
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/elasticsearch
+      fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/elasticsearch/src/main/fabric8/icon.png
+      fabric8.io/git-branch: release-v2.2.335
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/elasticsearch
+      fabric8.io/scm-tag: fabric8-devops-2.0.1
+    labels:
+      provider: fabric8
+      expose: "true"
+      project: elasticsearch
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: elasticsearch
+  spec:
+    ports:
+    - name: http
+      port: 9200
+      protocol: TCP
+      targetPort: 9200
+    selector:
+      project: elasticsearch
+      provider: fabric8
+      group: io.fabric8.devops.apps
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/elasticsearch
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/elasticsearch
+      fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/elasticsearch/src/main/fabric8/icon.png
+      fabric8.io/git-branch: release-v2.2.335
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/elasticsearch
+      fabric8.io/scm-tag: fabric8-devops-2.0.1
+    labels:
+      provider: fabric8
+      project: elasticsearch
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: elasticsearch-masters
+  spec:
+    clusterIP: None
+    ports:
+    - name: discovery
+      port: 9300
+      protocol: TCP
+      targetPort: 9300
+    selector:
+      project: elasticsearch
+      provider: fabric8
+      group: io.fabric8.devops.apps
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/app-menu: management
+      fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/kibana
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/kibana
+      fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/kibana/src/main/fabric8/icon.svg
+      fabric8.io/git-branch: release-v2.2.335
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/kibana
+      fabric8.io/scm-tag: fabric8-devops-2.0.1
+    labels:
+      provider: fabric8
+      expose: "true"
+      project: kibana
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: kibana
+  spec:
+    ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 5601
+    selector:
+      project: kibana
+      provider: fabric8
+      group: io.fabric8.devops.apps
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+      fabric8.io/git-branch: release-v4.0.208
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/prometheus
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/prometheus
+      fabric8.io/scm-tag: app-console-2.0.1
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/prometheus
+    labels:
+      expose: "true"
+      app: prometheus
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: prometheus
+    namespace: fabric8-metrics
+  spec:
+    ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 9090
+    selector:
+      app: prometheus
+      provider: fabric8
+      group: io.fabric8.platform.apps
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    labels:
+      provider: fabric8
+      project: elasticsearch
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: es-data
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 10Gi
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    labels:
+      app: prometheus
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: prometheus
+    namespace: fabric8-metrics
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    labels:
+      app: prometheus
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: prometheus
+    namespace: fabric8-metrics
+  data:
+    prometheus.yml: |
+      # A scrape configuration for running Prometheus on a Kubernetes cluster.
+      # This uses separate scrape configs for cluster components (i.e. API server, node)
+      # and services to allow each to use different authentication configs.
+      #
+      # Kubernetes labels will be added as Prometheus labels on metrics via the
+      # `labelmap` relabeling action.
+      # Scrape config for API servers.
+      #
+      # Kubernetes exposes API servers as endpoints to the default/kubernetes
+      # service so this uses `endpoints` role and uses relabelling to only keep
+      # the endpoints associated with the default/kubernetes service using the
+      # default named port `https`. This works for single API server deployments as
+      # well as HA API server deployments.
+      scrape_configs:
+      - job_name: 'kubernetes-apiservers'
+        kubernetes_sd_configs:
+        - role: endpoints
+        # Default to scraping over https. If required, just disable this or change to
+        # `http`.
+        scheme: https
+        # This TLS & bearer token file config is used to connect to the actual scrape
+        # endpoints for cluster components. This is separate to discovery auth
+        # configuration because discovery & scraping are two separate concerns in
+        # Prometheus. The discovery auth config is automatic if Prometheus runs inside
+        # the cluster. Otherwise, more config options have to be provided within the
+        # <kubernetes_sd_config>.
+        tls_config:
+          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          # If your node certificates are self-signed or use a different CA to the
+          # master CA, then disable certificate verification below. Note that
+          # certificate verification is an integral part of a secure infrastructure
+          # so this should only be disabled in a controlled environment. You can
+          # disable certificate verification by uncommenting the line below.
+          #
+          # insecure_skip_verify: true
+        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+        # Keep only the default/kubernetes service endpoints for the https port. This
+        # will add targets for each API server which Kubernetes adds an endpoint to
+        # the default/kubernetes service.
+        relabel_configs:
+        - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+          action: keep
+          regex: default;kubernetes;https
+      - job_name: 'kubernetes-nodes'
+        # Default to scraping over https. If required, just disable this or change to
+        # `http`.
+        scheme: https
+        # This TLS & bearer token file config is used to connect to the actual scrape
+        # endpoints for cluster components. This is separate to discovery auth
+        # configuration because discovery & scraping are two separate concerns in
+        # Prometheus. The discovery auth config is automatic if Prometheus runs inside
+        # the cluster. Otherwise, more config options have to be provided within the
+        # <kubernetes_sd_config>.
+        tls_config:
+          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          # If your node certificates are self-signed or use a different CA to the
+          # master CA, then disable certificate verification below. Note that
+          # certificate verification is an integral part of a secure infrastructure
+          # so this should only be disabled in a controlled environment. You can
+          # disable certificate verification by uncommenting the line below.
+          #
+          # insecure_skip_verify: true
+        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+        kubernetes_sd_configs:
+        - role: node
+        relabel_configs:
+        - action: labelmap
+          regex: __meta_kubernetes_node_label_(.+)
+      # Scrape config for service endpoints.
+      #
+      # The relabeling allows the actual service scrape endpoint to be configured
+      # via the following annotations:
+      #
+      # * `prometheus.io/scrape`: Only scrape services that have a value of `true`
+      # * `prometheus.io/scheme`: If the metrics endpoint is secured then you will need
+      # to set this to `https` & most likely set the `tls_config` of the scrape config.
+      # * `prometheus.io/path`: If the metrics path is not `/metrics` override this.
+      # * `prometheus.io/port`: If the metrics are exposed on a different port to the
+      # service then set this appropriately.
+      - job_name: 'kubernetes-service-endpoints'
+        kubernetes_sd_configs:
+        - role: endpoints
+        relabel_configs:
+        - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
+          action: keep
+          regex: true
+        - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scheme]
+          action: replace
+          target_label: __scheme__
+          regex: (https?)
+        - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_path]
+          action: replace
+          target_label: __metrics_path__
+          regex: (.+)
+        - source_labels: [__address__, __meta_kubernetes_service_annotation_prometheus_io_port]
+          action: replace
+          target_label: __address__
+          regex: (.+)(?::\d+);(\d+)
+          replacement: $1:$2
+        - action: labelmap
+          regex: __meta_kubernetes_service_label_(.+)
+        - source_labels: [__meta_kubernetes_namespace]
+          action: replace
+          target_label: kubernetes_namespace
+        - source_labels: [__meta_kubernetes_service_name]
+          action: replace
+          target_label: kubernetes_name
+      # Scrape config for pods
+      #
+      # The relabeling allows the actual pod scrape endpoint to be configured via the
+      # following annotations:
+      #
+      # * `prometheus.io/scrape`: Only scrape pods that have a value of `true`
+      # * `prometheus.io/port`: Scrape the pod on the indicated port instead of the default of `9102`.
+      - job_name: 'kubernetes-pods'
+
+        kubernetes_sd_configs:
+        - role: pod
+
+        relabel_configs:
+        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+          action: keep
+          regex: true
+        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scheme]
+          action: replace
+          target_label: __scheme__
+          regex: (https?)
+        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+          action: replace
+          target_label: __metrics_path__
+          regex: (.+)
+        - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+          action: replace
+          regex: (.+):(?:\d+);(\d+)
+          replacement: ${1}:${2}
+          target_label: __address__
+        - action: labelmap
+          regex: __meta_kubernetes_pod_label_(.+)
+- apiVersion: extensions/v1beta1
+  kind: DaemonSet
+  metadata:
+    annotations:
+      fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=fluentd&var-version=2.2.335
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/fluentd
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/fluentd
+      fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/fluentd/src/main/fabric8/icon.png
+      fabric8.io/git-branch: release-v2.2.335
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/fluentd
+      fabric8.io/scm-tag: fabric8-devops-2.0.1
+    labels:
+      provider: fabric8
+      project: fluentd
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: fluentd
+  spec:
+    selector:
+      matchLabels:
+        project: fluentd
+        provider: fabric8
+        group: io.fabric8.devops.apps
+    template:
+      metadata:
+        annotations:
+          prometheus.io/scrape: "true"
+        labels:
+          provider: fabric8
+          project: fluentd
+          version: 2.2.335
+          group: io.fabric8.devops.apps
+      spec:
+        containers:
+        - env:
+          - name: ELASTICSEARCH_HOST
+            value: elasticsearch
+          - name: ELASTICSEARCH_PORT
+            value: "9200"
+          image: fabric8/fluentd-kubernetes:v1.19
+          name: fluentd
+          ports:
+          - containerPort: 24231
+            name: scrape
+          resources:
+            limits:
+              cpu: 100m
+          securityContext:
+            privileged: true
+          volumeMounts:
+          - mountPath: /var/log
+            name: varlog
+          - mountPath: /var/lib/docker/containers
+            name: defaultdocker
+            readOnly: true
+          - mountPath: /mnt/ephemeral/docker/containers
+            name: awsdocker
+            readOnly: true
+          - mountPath: /mnt/sda1/var/lib/docker/containers
+            name: minikubedocker
+            readOnly: true
+        serviceAccountName: fluentd
+        volumes:
+        - hostPath:
+            path: /var/log
+          name: varlog
+        - hostPath:
+            path: /var/lib/docker/containers
+          name: defaultdocker
+        - hostPath:
+            path: /mnt/ephemeral/docker/containers
+          name: awsdocker
+        - hostPath:
+            path: /mnt/sda1/var/lib/docker/containers
+          name: minikubedocker
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=elasticsearch&var-version=2.2.335
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/elasticsearch
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/elasticsearch
+      fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/elasticsearch/src/main/fabric8/icon.png
+      fabric8.io/git-branch: release-v2.2.335
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/elasticsearch
+      fabric8.io/scm-tag: fabric8-devops-2.0.1
+    labels:
+      provider: fabric8
+      project: elasticsearch
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: elasticsearch
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        project: elasticsearch
+        provider: fabric8
+        group: io.fabric8.devops.apps
+    template:
+      metadata:
+        annotations:
+          fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=elasticsearch&var-version=2.2.335
+          fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/elasticsearch
+          pod.alpha.kubernetes.io/init-containers: '[{"image":"busybox","imagePullPolicy":"IfNotPresent","name":"fmp-volume-permission","command":["chmod","777","/usr/share/elasticsearch/data"],"volumeMounts":[{"mountPath":"/usr/share/elasticsearch/data","name":"data"}]}]'
+          fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/elasticsearch
+          fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/elasticsearch/src/main/fabric8/icon.png
+          fabric8.io/git-branch: release-v2.2.335
+          fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/elasticsearch
+          fabric8.io/scm-tag: fabric8-devops-2.0.1
+          maven.fabric8.io/source-url: jar:file:/home/jenkins/.mvnrepository/io/fabric8/devops/apps/elasticsearch/2.2.335/elasticsearch-2.2.335.jar!/META-INF/fabric8/kubernetes.yml
+        labels:
+          provider: fabric8
+          project: elasticsearch
+          version: 2.2.335
+          group: io.fabric8.devops.apps
+      spec:
+        containers:
+        - env:
+          - name: SERVICE
+            value: elasticsearch-masters
+          - name: KUBERNETES_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          image: fabric8/elasticsearch-k8s:2.3.4
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            initialDelaySeconds: 30
+            tcpSocket:
+              port: 9300
+          name: elasticsearch
+          readinessProbe:
+            httpGet:
+              path: /_template/logstash
+              port: 9200
+            initialDelaySeconds: 5
+          securityContext:
+            privileged: false
+          volumeMounts:
+          - mountPath: /usr/share/elasticsearch/data
+            name: data
+        - image: fabric8/elasticsearch-logstash-template:2.2.335
+          name: logstash-template
+        volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: es-data
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=kibana&var-version=2.2.335
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/kibana
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/kibana
+      fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/kibana/src/main/fabric8/icon.svg
+      fabric8.io/git-branch: release-v2.2.335
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/kibana
+      fabric8.io/scm-tag: fabric8-devops-2.0.1
+    labels:
+      provider: fabric8
+      project: kibana
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: kibana
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        project: kibana
+        provider: fabric8
+        group: io.fabric8.devops.apps
+    template:
+      metadata:
+        annotations:
+          fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=kibana&var-version=2.2.335
+          fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/kibana
+          fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/kibana
+          fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/kibana/src/main/fabric8/icon.svg
+          fabric8.io/git-branch: release-v2.2.335
+          fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/kibana
+          fabric8.io/scm-tag: fabric8-devops-2.0.1
+          maven.fabric8.io/source-url: jar:file:/home/jenkins/.mvnrepository/io/fabric8/devops/apps/kibana/2.2.335/kibana-2.2.335.jar!/META-INF/fabric8/kubernetes.yml
+        labels:
+          provider: fabric8
+          project: kibana
+          version: 2.2.335
+          group: io.fabric8.devops.apps
+      spec:
+        containers:
+        - env:
+          - name: ELASTICSEARCH_URL
+            value: http://elasticsearch:9200
+          - name: KUBERNETES_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          image: fabric8/kibana4:v4.5.3
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            initialDelaySeconds: 60
+            tcpSocket:
+              port: 5601
+          name: kibana
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5601
+            initialDelaySeconds: 5
+          securityContext:
+            privileged: false
+        - env:
+          - name: ELASTICSEARCH_URL
+            value: http://elasticsearch:9200
+          image: fabric8/kibana-config:2.2.335
+          name: logstash-template
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      configmap.fabric8.io/update-on-change: prometheus
+      fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=prometheus&var-version=4.0.208
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/prometheus
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/prometheus
+      fabric8.io/git-branch: release-v4.0.208
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/prometheus
+      fabric8.io/scm-tag: app-console-2.0.1
+    labels:
+      app: prometheus
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: prometheus
+    namespace: fabric8-metrics
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 2
+    selector:
+      matchLabels:
+        app: prometheus
+        provider: fabric8
+        group: io.fabric8.platform.apps
+    template:
+      metadata:
+        annotations:
+          fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=prometheus&var-version=4.0.208
+          fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/prometheus
+          fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/prometheus
+          configmap.fabric8.io/update-on-change: prometheus
+          fabric8.io/git-branch: release-v4.0.208
+          fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/prometheus
+          fabric8.io/scm-tag: app-console-2.0.1
+          maven.fabric8.io/source-url: jar:file:/home/jenkins/workspace/8io_fabric8-platform_master-4P5FOSFKYBLAPGDO7GHHNEOGKKERYH26KXBFORI5V7MRVJFY3QWA/apps/prometheus/target/prometheus-4.0.208.jar!/META-INF/fabric8/kubernetes.yml
+        labels:
+          app: prometheus
+          provider: fabric8
+          version: 4.0.208
+          group: io.fabric8.platform.apps
+      spec:
+        containers:
+        - args:
+          - -storage.local.retention=6h
+          - -storage.local.memory-chunks=500000
+          - -config.file=/etc/prometheus/prometheus.yml
+          image: prom/prometheus:latest
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 9090
+            initialDelaySeconds: 60
+            timeoutSeconds: 10
+          name: prometheus
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 9090
+            initialDelaySeconds: 10
+            timeoutSeconds: 10
+          volumeMounts:
+          - mountPath: /etc/prometheus
+            name: prometheus-config
+          - mountPath: /prometheus
+            name: prometheus-data
+        serviceAccount: prometheus
+        serviceAccountName: prometheus
+        volumes:
+        - configMap:
+            defaultMode: 420
+            name: prometheus
+          name: prometheus-config
+        - emptyDir: {}
+          name: prometheus-data

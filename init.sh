@@ -37,7 +37,6 @@ fi
 # TODO: add company logo
 # TODO: add navigator docker
 # TODO: add email server and workspace
-
 # TODO: s3 email integration
 
 if [ "$PREFIX" == "" ] 
@@ -64,6 +63,15 @@ if [ "$THE_REGION" == "" ]
 then
 	THE_REGION=`dlg --title 'Region' --inputbox 'Enter the region' 0 0 us-west-2`
 fi
+
+if [ "$PASSWD" == "" ] 
+then
+	dlg --clear --insecure --passwordbox "Enter your root password" 10 50 > passwd.tmp
+	PASSWD=`cat passwd.tmp`
+fi
+
+
+
 AWS_DEFAULT_REGION=$THE_REGION
 jq="jq"
 aws="docker run --rm -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} -e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} -e AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION} -v $PWD:/project mesosphere/aws-cli"
@@ -89,15 +97,30 @@ then
 		helm "Init helm" on \
 		externaldns "DNS auto registration" on \
 		dashboard "Deploy Dashboard" on \
+		metabase "metabase" on \
+		orangehrm "Orange HRM" on \
 		heapster "Deploy Heapster" on \
 		gitlab "Setup GitLab" on \
+		freeipa "FreeIPA" on \
+		chartmuseum "chartmuseum" on \
 		nodesautoscaling "Node Autoscaling" on \
-		fabric8 "fabric8" on`
-		# che "Che" on \
-		# letschat "letschat" on \		
+		phabricator "Phabricator" on \
+		owncloud "Owncloud" on \
+		wiki "Mediawiki" on \
+		kubeaws "k8 aws extensions" on \
+		nexus "Sonatype Nexus Repo" on \
+		testing "Testing tools" on \
+		minio "minio" on \
+		wordpress "wordpress" on \
+		artifactory "artifactory" on \
+		hadoop "hadoop" on \
+		social "Social components" on \
+		sugarcrm "sugarcrm" on \
+		che "Che" on \
+		fabric8 "fabric8" off`
 		# taiga "Taiga" on \
+		# letschat "letschat" on \		
 		# orion "Orion" on \
-		# nexus "Sonatype Nexus Repo" on`
 fi
 
 function enabled(){
@@ -139,7 +162,7 @@ then
 	then
 		$kops create cluster \
 			--kubernetes-version 1.8.3 \
-		    --zones ${ZONES} --node-count 4 --cloud-labels "K8Cluster=$NAME" \
+		    --zones ${ZONES} --node-count 6 --cloud-labels "K8Cluster=$NAME" \
 		    --ssh-public-key=./$NAME.rsa.pub ${NAME}
 	else
 		echo "skipping cluster setup"
@@ -180,23 +203,15 @@ fi
 
 if enabled "helm"
 then
-	helm init
+	$helm init
+	$helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com/
 fi
 
-if enabled "che"
-then
-	$kubectl apply -f http://central.maven.org/maven2/io/fabric8/online/apps/che/1.0.54/che-1.0.54-kubernetes.yml	
-fi
 
-if enabled "taiga"
-then	
-	$kubectl apply -f http://central.maven.org/maven2/io/fabric8/devops/apps/taiga/2.2.327/taiga-2.2.327-kubernetes.yml
-fi
-
-if enabled "orion"
-then	
-	$kubectl apply -f http://central.maven.org/maven2/io/fabric8/devops/apps/orion/2.2.327/orion-2.2.327-kubernetes.yml 
-fi
+# if enabled "orion"
+# then	
+# 	$kubectl apply -f http://central.maven.org/maven2/io/fabric8/devops/apps/orion/2.2.327/orion-2.2.327-kubernetes.yml 
+# fi
 
 if enabled "secrets"
 then
@@ -274,24 +289,150 @@ then
 		STATUS=`$aws acm describe-certificate --region $THE_REGION --certificate-arn $CERT_ARN_CI | jq '.Certificate.Status' -r`	
 	done	
 
+	# CERT_ARN_FAB=`$aws acm list-certificates --region $THE_REGION | jq --arg domain "fabric8.$DOMAIN" '.CertificateSummaryList[] | select(.DomainName == "*." + $domain) | .CertificateArn  ' -r`	
+	# echo CERT_ARN_FAB $CERT_ARN_FAB
+	# if [ "$CERT_ARN_FAB" == "" ]
+	# then
+	# 	echo Requesting certificate	
+	# 	CERT_ARN_FAV=`$aws acm request-certificate --region $THE_REGION --domain-name *.fabric8.$DOMAIN --idempotency-token fabric8$PREFIX | jq '.CertificateArn' -r`
+	# fi	
+	# STATUS=`$aws acm describe-certificate --region $THE_REGION --certificate-arn $CERT_ARN_FAB | jq '.Certificate.Status' -r`
+	# while [ "$STATUS" == "PENDING_VALIDATION" ];	do
+	# 	dlg --msgbox "Certificate Status: $STATUS.\n Please continue once you confirm the validation" 0 0
+	# 	STATUS=`$aws acm describe-certificate --region $THE_REGION --certificate-arn $CERT_ARN_FAB | jq '.Certificate.Status' -r`	
+	# done		
+
 	#dlg --msgbox "Certificate Status: $STATUS" 0 0
 fi
 
-if enabled "dockerregistry"
+set +e
+if enabled "owncloud"
 then
-	echo Deploying docker registry
-	$kubectl apply -f http://central.maven.org/maven2/io/fabric8/devops/apps/nexus3/2.2.327/nexus3-2.2.327-kubernetes.yml 
+	$helm install --name owncloud --set owncloudUsername=admin,owncloudPassword="$PASSWD",owncloudHost=owncloud.$DOMAIN stable/owncloud
 fi
+
+if enabled "phabricator"
+then
+	$helm install  --name phabricator --set phabricatorPassword="$PASSWD",phabricatorHost=phabricator.$DOMAIN stable/phabricator
+fi
+
+if enabled "wiki"
+then
+	$helm install --name wiki --set mediawikiPassword="$PASSWD" stable/mediawiki
+fi
+if enabled "kubeaws"
+then	
+	$helm install --name kube2iam stable/kube2iam
+	$helm install --set awsRegion=$THE_REGION --name fluentd-cloudwatch incubator/fluentd-cloudwatch
+	$helm install stable/cluster-autoscaler --name awsautoscaler --set "autoscalingGroups[0].name=nodes.$NAME,autoscalingGroups[0].maxSize=10,autoscalingGroups[0].minSize=4"
+fi
+
+if enabled "grafana"
+then
+	$helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
+	$helm install --name grafana --set server.adminPassword="$PASSWD" incubator/grafana
+fi
+
+if enabled "che"
+then
+	$kubectl apply -f http://central.maven.org/maven2/io/fabric8/online/apps/che/1.0.54/che-1.0.54-kubernetes.yml	
+fi
+
+
+if enabled "artifactory"
+then
+	echo Deploying artifactory
+	$helm install --name artifactory --set database.env.pass="$PASSWD",artifactory.image.repository=docker.bintray.io/jfrog/artifactory-oss stable/artifactory
+fi
+
+if enabled "hadoop"
+then
+	$helm install --name hadoop $(stable/hadoop/tools/calc_resources.sh 50) \
+	  --set persistence.nameNode.enabled=true \
+	  --set persistence.nameNode.storageClass=standard \
+	  --set persistence.dataNode.enabled=true \
+	  --set persistence.dataNode.storageClass=standard \
+	  stable/hadoop
+
+	$helm install --name zeppelin --set hadoop.useConfigMap=true stable/zeppelin
+	# $helm install --name spark stable/spark
+fi
+
+if enabled "sugarcrm"
+then
+	echo deploying sugarcrm
+	$helm install --name sugarcrm --set sugarcrmPassword="$PASSWD",sugarcrmHost=sugarcrm.$DOMAIN stable/sugarcrm
+fi
+
+
 if enabled "nexus"
 then
 	echo deploying nexus3
-	$kubectl apply -f http://central.maven.org/maven2/io/fabric8/devops/apps/nexus3/2.2.327/nexus3-2.2.327-kubernetes.yml 
+	$helm install --name nexus stable/sonatype-nexus
 fi
-if enabled "letschat"
+
+if enabled "orangehrm"
 then
-	echo deploying letschat
-	$kubectl apply -f http://central.maven.org/maven2/io/fabric8/devops/apps/letschat/2.2.327/letschat-2.2.327-kubernetes.yml
+	echo deploying orangehrm
+	$helm install --name orangehrm stable/orangehrm
 fi
+
+if enabled "testing"
+then	
+	$helm install --name selenium stable/selenium
+	$helm install --name testlink --set testlinkPassword="$PASSWD" stable/testlink
+fi
+
+if enabled "wordpress"
+then		
+	$helm install --set wordpressPassword="$PASSWD" --name wordpress stable/wordpress
+fi
+
+if enabled "minio"
+then		
+	$helm install --name minio --set mode=distributed,accessKey=$AWS_ACCESS_KEY_ID,secretKey=$AWS_SECRET_ACCESS_KEY stable/minio
+fi
+
+if enabled "phpbb"
+then		
+	$helm install --set phpbbPassword="$PASSWD" --name phpbb stable/phpbb
+fi
+
+if enabled "social"
+then
+	$kubectl apply -f http://central.maven.org/maven2/io/fabric8/platform/packages/social/2.4.24/social-2.4.24-kubernetes.yml 
+fi
+
+if enabled "taiga"
+then			
+	$kubectl apply -f http://central.maven.org/maven2/io/fabric8/devops/apps/taiga/2.2.327/taiga-2.2.327-kubernetes.yml 
+fi
+
+if enabled "chartmuseum"
+then
+	$helm install --name=chartmuseum incubator/chartmuseum
+	# https://github.com/kubernetes/heapster/blob/master/docs/influxdb.md
+fi
+
+
+if enabled "dashboard"
+then
+	#discover existing certs
+	echo Deploying dashboard
+	$kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
+	$kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard-head.yaml
+	$helm install --name=kube-ops-view stable/kube-ops-view
+	echo "http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard-head:/proxy/"
+fi
+
+if enabled "metabase"
+then
+	#discover existing certs
+	echo Deploying metabase
+	$helm install --name metabase --set service.type=LoadBalancer stable/metabase
+fi
+
+set -e
 
 function setRoute53() {
 	record_name=$1
@@ -341,14 +482,13 @@ then
 	$helm repo add gitlab https://charts.gitlab.io
 	echo Deploying gitlab	
 	set +e	
-	$helm del --purge gitlab
-	set -e
-	dlg --clear --insecure --passwordbox "Enter your gitlab root password" 10 50 > gitlab.passwd.tmp
-	PASSWD=`cat gitlab.passwd.tmp`
-	rm gitlab.passwd.tmp	
+	# $helm del --purge gitlab
+	set -e		
 	# EMAIL=`dlg --title 'Email' --inputbox 'Enter your email' 0 0 admin@$DOMAIN`
 	EMAIL=admin@$DOMAIN
+	set +e	
 	$helm install --name gitlab --set gitlabDataStorageClass=standard,gitlabRegistryStorageClass=standard,gitlabConfigStorageClass=standard,postgresStorageClass=standard,redisStorageClass=standard,legoEmail=$EMAIL,provider=,gitlabRootPassword="$PASSWD",baseDomain=ci.$DOMAIN gitlab/gitlab-omnibus
+	set -e
 	sleep 10
 	GITLAB_LB_HOSTNAME=`$kubectl get svc --namespace nginx-ingress nginx  -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'`	
 
@@ -381,14 +521,16 @@ then
 	# https://github.com/kubernetes/heapster/blob/master/docs/influxdb.md
 fi
 
-if enabled "dashboard"
+
+if enabled "freeipa"
 then
-	#discover existing certs
-	echo Deploying dashboard
-	$kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
-	$kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard-head.yaml
-	echo "http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard-head:/proxy/"
+	$helm repo add cnct http://atlas.cnct.io
+	$helm install --name openldap --set OpenLdap.AdminPassword=$PASSWD,OpenLdap.Domain=$DOMAIN cnct/openldap
+
+	$kubectl apply -f /manifests/freeipa.yaml
+	# https://github.com/kubernetes/heapster/blob/master/docs/influxdb.md
 fi
+
 
 if enabled "externaldns"
 then
@@ -399,7 +541,7 @@ fi
 if enabled "fabric8"
 then
 	set +e
-	$kubectl delete namespace fabric8
+	# $kubectl delete namespace fabric8
 	set -e
 	curl -sS https://get.fabric8.io/download.txt | bash
 	# $helm repo add fabric8 https://fabric8.io/helm
@@ -416,18 +558,20 @@ then
 		GITHUB_OAUTH_CLIENT_SECRET=`cat tmp`
 		rm tmp
 	fi	
-	wget http://central.maven.org/maven2/io/fabric8/platform/packages/fabric8-full/4.0.208/fabric8-full-4.0.208-k8s-template.yml
-	~/.fabric8/bin/gofabric8 deploy --github-client-id $GITHUB_OAUTH_CLIENT_ID --github-client-secret $GITHUB_OAUTH_CLIENT_SECRET --domain=ci.$DOMAIN --ingress=false --namespace fabric8 --package fabric8-full-4.0.208-k8s-template.yml --http=true --legacy=false -n fabric8 -y
-	wget http://central.maven.org/maven2/io/fabric8/platform/packages/social/4.0.208/social-4.0.208-kubernetes.yml
-	~/.fabric8/bin/gofabric8 deploy --namespace fabric8 --package social-4.0.208-kubernetes.yml -y
-	wget http://central.maven.org/maven2/io/fabric8/platform/packages/funktion-platform/2.4.24/funktion-platform-2.4.24-kubernetes.yml
-	~/.fabric8/bin/gofabric8 deploy --namespace fabric8 --package funktion-platform-2.4.24-kubernetes.yml -y
-	wget http://central.maven.org/maven2/io/fabric8/platform/packages/management/4.0.208/management-4.0.208-kubernetes.yml
-	~/.fabric8/bin/gofabric8 deploy --namespace fabric8 --package management-4.0.208-kubernetes.yml -y
-	HOSTNAME=`$kubectl get svc --namespace nginx-ingress nginx  -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'`	
+	# wget http://central.maven.org/maven2/io/fabric8/platform/packages/fabric8-full/4.0.208/fabric8-full-4.0.208-k8s-template.yml
+	# wget http://central.maven.org/maven2/io/fabric8/platform/packages/social/4.0.208/social-4.0.208-kubernetes.yml
+	# wget http://central.maven.org/maven2/io/fabric8/platform/packages/funktion-platform/2.4.24/funktion-platform-2.4.24-kubernetes.yml
+	# wget http://central.maven.org/maven2/io/fabric8/platform/packages/management/4.0.208/management-4.0.208-kubernetes.yml
+	set +e
+	~/.fabric8/bin/gofabric8 deploy --github-client-id $GITHUB_OAUTH_CLIENT_ID --github-client-secret $GITHUB_OAUTH_CLIENT_SECRET --domain=$DOMAIN --ingress=true --namespace fabric8 --package fabric8-full-4.0.208-k8s-template.yml --http=true --legacy=true -n fabric8 -y
+	~/.fabric8/bin/gofabric8 deploy --domain=$DOMAIN --namespace fabric8 --package social-4.0.208-kubernetes.yml -y --ingress=true --http=true --legacy=true
+	~/.fabric8/bin/gofabric8 deploy --domain=$DOMAIN --namespace fabric8 --package funktion-platform-2.4.24-kubernetes.yml -y --ingress=true --http=true --legacy=true
+	~/.fabric8/bin/gofabric8 deploy --domain=$DOMAIN --namespace fabric8 --package management-4.0.208-kubernetes.yml -y --ingress=true --http=true --legacy=true
+	set -e
+	HOSTNAME=`$kubectl get svc --namespace nginx-ingress nginx-ingress  -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'`	
 
 	# set wildcard alias in route53 for *.gitlab.$DOMAIN -> LB
-	setRoute53 '*.ci.'$DOMAIN $HOSTNAME $DOMAIN.	
+	setRoute53 '*.fabric8.'$DOMAIN $HOSTNAME $DOMAIN.	
 fi
 
 if enabled "env"

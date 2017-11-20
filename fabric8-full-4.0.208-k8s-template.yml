@@ -1,0 +1,4474 @@
+---
+apiVersion: v1
+kind: Template
+metadata:
+  labels:
+    app: fabric8-full
+    provider: fabric8
+    version: 4.0.208
+    group: io.fabric8.platform.packages
+  name: fabric8-full
+objects:
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    labels:
+      app: init-tenant
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: f8tenant
+  data:
+    postgres.database: cG9zdGdyZXM=
+    postgres.host: aW5pdC10ZW5hbnQtZGI=
+    postgres.port: NTQzMg==
+    postgres.user: cG9zdGdyZXM=
+    postgres.password: bXlzZWNyZXRwYXNzd29yZA==
+    template.recommender.api.token: Zm9v
+  type: Opaque
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    labels:
+      provider: fabric8
+      project: keycloak
+      version: 1.0.8
+      group: io.fabric8.apps
+    name: keycloak
+  data:
+    db.name: a2V5Y2xvYWsK
+    db.user: a2V5Y2xvYWsK
+    db.password: a2V5Y2xvYWsK
+    kc.user: YWRtaW4K
+    kc.password: YWRtaW4K
+    kc.clientid.secret: Yjc4NzNmODAtNmFkNy00NGE1LTk3Y2ItYmQyMTA3ODllYjQx
+    kc.private.key: TUlJQ1dnSUJBQUtCZ0VqbFpOMVE3d2c1UU9IelhHcXlOZi9xL1ZIUTBvSjJOZGVPRHMxOHh1WkpHSkxEZVA4ZU5QY2trbGdWb1RJaFZzOTlaNXRMTTFoUCs5R213ODI1dVVXRnZsNHg1MGoyYW0yNUFIOGlpUGhreUw2aEx6dThzYnd3clU5R1RpcllqRVM5RlNRVWF6TmlWMVhYSGR5TGRvRm03dzMzZDVobFdpT1M4NmNmRnNGN0FnTUJBQUVDZ1lBUE5NTDRvOVJwQzhCc0lkN3FadWg2elNNd3VQWGd2eFgyTkMwRVVuNFBOYnBKaXpzblJMN1p1eWhIOWFNZG1QVEo3YWY2TGhLMDNtSnlWbTVMOE8wanlYQ2JzaWdkTVUxSDF4UmZiZ1JOUTViRHpHZUJzYTlFSHlpa2dDbkVTNXRZcFVKQnRzNjdKOVNYTU56VTFDckliM2JPQUhsaXp2aWozaE9KS0plQWlRSkJBSkJzVEd2VmtYZzFTZ0l2bk42dXlIU0h3V0hLaVhFOVdCQ1VQTkZrMklyNmtDYUlEeTB4MHlHbklBcVA3SmdJeE1lR0M1Njl4VmZEcEYvZnIyaTFvQjhDUVFDQk5xSTF3TlZvczVlTGhKcXdGNThLWURLbWZlRjY2QkJXblBJQ01UMFVaL1lCTFc1UlRCbzUvVDlnemxLQk1LUmVRanp6K1ZaQ0F2cHdhb09FUWNNbEFrQnFyc1VvNXVNRk5BQU9hMU5xbnh2T0VMWUY0ZEh6UjBnMVB2dEtCajk3TWltbmZOd1JHM3dGb09tblE3ZVdldXU1STBpVUkwU1NWeCtsL3BzWk13a3JBa0JBTDQ1Mld6cm5qc2JKNUc0ZTZTejByNEtabDlCcENGd05XbHNSWWJvd3A4L1pGK05EK1NUU0I0M3pIYXA0U0Z4dUFrTmJBbEdwNnViUzd1WXp6YU1OQWtCRFRvSXQxL1FHUExBM2JaVzV1YTdLZ3VtdzFtMjF5Y1BmdUFkYklpclhMdE16SGR3dXFuQkFMbElJOXBFZU4xTEttNzR1cGswZDluTitxS05lT2RQSA==
+    kc.public.key: TUlHZU1BMEdDU3FHU0liM0RRRUJBUVVBQTRHTUFEQ0JpQUtCZ0VqbFpOMVE3d2c1UU9IelhHcXlOZi9xL1ZIUTBvSjJOZGVPRHMxOHh1WkpHSkxEZVA4ZU5QY2trbGdWb1RJaFZzOTlaNXRMTTFoUCs5R213ODI1dVVXRnZsNHg1MGoyYW0yNUFIOGlpUGhreUw2aEx6dThzYnd3clU5R1RpcllqRVM5RlNRVWF6TmlWMVhYSGR5TGRvRm03dzMzZDVobFdpT1M4NmNmRnNGN0FnTUJBQUU9
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    labels:
+      app: mattermost
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: mattermost
+  data:
+    mm-datasource: cG9zdGdyZXM6Ly9tbXVzZXI6bW11c2VyX3Bhc3N3b3JkQG1hdHRlcm1vc3QtZGI6NTQzMi9tYXR0ZXJtb3N0P3NzbG1vZGU9ZGlzYWJsZSZjb25uZWN0X3RpbWVvdXQ9MTA=
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    labels:
+      app: wit
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: wit
+  data:
+    db.user: cG9zdGdyZXM=
+    db.password: bXlzZWNyZXRwYXNzd29yZA==
+    keycloak.realm: ZmFicmljOA==
+    keycloak.secret: Yjc4NzNmODAtNmFkNy00NGE1LTk3Y2ItYmQyMTA3ODllYjQx
+    token.publickey: LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlHZU1BMEdDU3FHU0liM0RRRUJBUVVBQTRHTUFEQ0JpQUtCZ0VqbFpOMVE3d2c1UU9IelhHcXlOZi9xL1ZIUTBvSjJOZGVPRHMxOHh1WkpHSkxEZVA4ZU5QY2trbGdWb1RJaFZzOTlaNXRMTTFoUCs5R213ODI1dVVXRnZsNHg1MGoyYW0yNUFIOGlpUGhreUw2aEx6dThzYnd3clU5R1RpcllqRVM5RlNRVWF6TmlWMVhYSGR5TGRvRm03dzMzZDVobFdpT1M4NmNmRnNGN0FnTUJBQUU9Ci0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQo=
+    tenantsvc.url: aHR0cDovL2Y4dGVuYW50Ojgw
+  type: Opaque
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    labels:
+      provider: fabric8
+      project: chaos-monkey
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: chaos-monkey
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    labels:
+      app: configmapcontroller
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: configmapcontroller
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    labels:
+      provider: fabric8
+      project: exposecontroller-app
+      version: 3.0.7
+      group: io.fabric8.apps
+    name: exposecontroller
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    labels:
+      provider: fabric8
+      project: fluentd
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: fluentd
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    labels:
+      app: init-tenant
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: init-tenant
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      api.service.kubernetes.io/path: /api/
+      service.alpha.openshift.io/dependencies: '[{"name":"wit-db","namespace":"","kind":"Service"}]'
+      fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+      fabric8.io/git-branch: release-v4.0.208
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/wit
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/wit
+      fabric8.io/scm-tag: app-console-2.0.1
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/wit
+    labels:
+      service: api
+      expose: "true"
+      app: wit
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: api
+  spec:
+    ports:
+    - name: "8080"
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      service: wit
+      app: wit
+      provider: fabric8
+      group: io.fabric8.platform.apps
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/chaos-monkey
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/chaos-monkey
+      fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/chaos-monkey/src/main/fabric8/icon.png
+      fabric8.io/git-branch: release-v2.2.335
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/chaos-monkey
+      fabric8.io/scm-tag: fabric8-devops-2.0.1
+    labels:
+      provider: fabric8
+      project: chaos-monkey
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: chaos-monkey
+  spec:
+    ports:
+    - name: jolokia
+      port: 8778
+      protocol: TCP
+      targetPort: 8778
+    selector:
+      project: chaos-monkey
+      provider: fabric8
+      group: io.fabric8.devops.apps
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+      fabric8.io/git-branch: release-v4.0.208
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/che-starter
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/che-starter
+      fabric8.io/scm-tag: app-console-2.0.1
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/che-starter
+    labels:
+      app: che-starter
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: che-starter
+  spec:
+    ports:
+    - name: 10000-tcp
+      port: 10000
+      protocol: TCP
+      targetPort: 10000
+    selector:
+      app: che-starter
+      provider: fabric8
+      group: io.fabric8.platform.apps
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/elasticsearch
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/elasticsearch
+      fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/elasticsearch/src/main/fabric8/icon.png
+      fabric8.io/git-branch: release-v2.2.335
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/elasticsearch
+      fabric8.io/scm-tag: fabric8-devops-2.0.1
+    labels:
+      provider: fabric8
+      expose: "true"
+      project: elasticsearch
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: elasticsearch
+  spec:
+    ports:
+    - name: http
+      port: 9200
+      protocol: TCP
+      targetPort: 9200
+    selector:
+      project: elasticsearch
+      provider: fabric8
+      group: io.fabric8.devops.apps
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/elasticsearch
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/elasticsearch
+      fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/elasticsearch/src/main/fabric8/icon.png
+      fabric8.io/git-branch: release-v2.2.335
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/elasticsearch
+      fabric8.io/scm-tag: fabric8-devops-2.0.1
+    labels:
+      provider: fabric8
+      project: elasticsearch
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: elasticsearch-masters
+  spec:
+    clusterIP: None
+    ports:
+    - name: discovery
+      port: 9300
+      protocol: TCP
+      targetPort: 9300
+    selector:
+      project: elasticsearch
+      provider: fabric8
+      group: io.fabric8.devops.apps
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      service.alpha.openshift.io/dependencies: '[{"name":"init-tenant-db","namespace":"","kind":"Service"}]'
+      fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+      fabric8.io/git-branch: release-v4.0.208
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/init-tenant
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/init-tenant
+      fabric8.io/scm-tag: app-console-2.0.1
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/init-tenant
+    labels:
+      service: init-tenant
+      expose: "true"
+      app: init-tenant
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: f8tenant
+  spec:
+    ports:
+    - name: "8080"
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      service: init-tenant
+      app: init-tenant
+      provider: fabric8
+      group: io.fabric8.platform.apps
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/app-menu: development
+      service.alpha.openshift.io/dependencies: '[{"name":"forge","namespace":"","kind":"Service"}]'
+      fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/fabric8
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/fabric8
+      fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-platform/master/apps/fabric8/src/main/fabric8/icon.svg
+      fabric8.io/git-branch: release-v4.0.208
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/fabric8
+      fabric8.io/scm-tag: app-console-2.0.1
+    labels:
+      expose: "true"
+      app: fabric8
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: fabric8
+  spec:
+    ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: fabric8
+      provider: fabric8
+      group: io.fabric8.platform.apps
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+      fabric8.io/git-branch: release-v4.0.208
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/forge
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/forge
+      fabric8.io/scm-tag: app-console-2.0.1
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/forge
+    labels:
+      expose: "true"
+      app: forge
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: forge
+  spec:
+    ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: forge
+      provider: fabric8
+      group: io.fabric8.platform.apps
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/git-collector
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/git-collector
+      fabric8.io/iconUrl: data:image/svg+xml;charset=UTF-8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE2LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHdpZHRoPSI5N3B4IiBoZWlnaHQ9Ijk3cHgiIHZpZXdCb3g9IjAgMCA5NyA5NyIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgOTcgOTciIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8Zz4KCTxwYXRoIGZpbGw9IiNGMDUxMzMiIGQ9Ik05Mi43MSw0NC40MDhMNTIuNTkxLDQuMjkxYy0yLjMxLTIuMzExLTYuMDU3LTIuMzExLTguMzY5LDBsLTguMzMsOC4zMzJMNDYuNDU5LDIzLjE5CgkJYzIuNDU2LTAuODMsNS4yNzItMC4yNzMsNy4yMjksMS42ODVjMS45NjksMS45NywyLjUyMSw0LjgxLDEuNjcsNy4yNzVsMTAuMTg2LDEwLjE4NWMyLjQ2NS0wLjg1LDUuMzA3LTAuMyw3LjI3NSwxLjY3MQoJCWMyLjc1LDIuNzUsMi43NSw3LjIwNiwwLDkuOTU4Yy0yLjc1MiwyLjc1MS03LjIwOCwyLjc1MS05Ljk2MSwwYy0yLjA2OC0yLjA3LTIuNTgtNS4xMS0xLjUzMS03LjY1OGwtOS41LTkuNDk5djI0Ljk5NwoJCWMwLjY3LDAuMzMyLDEuMzAzLDAuNzc0LDEuODYxLDEuMzMyYzIuNzUsMi43NSwyLjc1LDcuMjA2LDAsOS45NTljLTIuNzUsMi43NDktNy4yMDksMi43NDktOS45NTcsMGMtMi43NS0yLjc1NC0yLjc1LTcuMjEsMC05Ljk1OQoJCWMwLjY4LTAuNjc5LDEuNDY3LTEuMTkzLDIuMzA3LTEuNTM3VjM2LjM2OWMtMC44NC0wLjM0NC0xLjYyNS0wLjg1My0yLjMwNy0xLjUzN2MtMi4wODMtMi4wODItMi41ODQtNS4xNC0xLjUxNi03LjY5OAoJCUwzMS43OTgsMTYuNzE1TDQuMjg4LDQ0LjIyMmMtMi4zMTEsMi4zMTMtMi4zMTEsNi4wNiwwLDguMzcxbDQwLjEyMSw0MC4xMThjMi4zMSwyLjMxMSw2LjA1NiwyLjMxMSw4LjM2OSwwTDkyLjcxLDUyLjc3OQoJCUM5NS4wMjEsNTAuNDY4LDk1LjAyMSw0Ni43MTksOTIuNzEsNDQuNDA4eiIvPgo8L2c+Cjwvc3ZnPgo=
+      fabric8.io/git-branch: release-v2.2.335
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/git-collector
+      fabric8.io/scm-tag: fabric8-devops-2.0.1
+    labels:
+      provider: fabric8
+      project: git-collector
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: git-collector
+  spec:
+    ports:
+    - name: jolokia
+      port: 8778
+      protocol: TCP
+      targetPort: 8778
+    selector:
+      project: git-collector
+      provider: fabric8
+      group: io.fabric8.devops.apps
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/app-menu: development
+      fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/hubot-mattermost
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/hubot-mattermost
+      fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/hubot-mattermost/src/main/fabric8/icon.png
+      fabric8.io/git-branch: release-v2.2.335
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/hubot-mattermost
+      fabric8.io/scm-tag: fabric8-devops-2.0.1
+    labels:
+      provider: fabric8
+      expose: "true"
+      project: hubot-mattermost
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: hubot
+  spec:
+    ports:
+    - port: 80
+      targetPort: 8080
+    selector:
+      name: hubot-mattermost
+      project: hubot-mattermost
+      provider: fabric8
+      group: io.fabric8.devops.apps
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/hubot-notifier
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/hubot-notifier
+      fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/hubot-notifier/src/main/fabric8/icon.png
+      fabric8.io/git-branch: release-v2.2.335
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/hubot-notifier
+      fabric8.io/scm-tag: fabric8-devops-2.0.1
+    labels:
+      provider: fabric8
+      project: hubot-notifier
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: hubot-notifier
+  spec:
+    ports:
+    - name: jolokia
+      port: 8778
+      protocol: TCP
+      targetPort: 8778
+    selector:
+      project: hubot-notifier
+      provider: fabric8
+      group: io.fabric8.devops.apps
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+      fabric8.io/git-branch: release-v4.0.208
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/init-tenant
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/init-tenant
+      fabric8.io/scm-tag: app-console-2.0.1
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/init-tenant
+    labels:
+      service: init-tenant-db
+      app: init-tenant
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: init-tenant-db
+  spec:
+    ports:
+    - name: postgres
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+    selector:
+      service: init-tenant-db
+      app: init-tenant
+      provider: fabric8
+      group: io.fabric8.platform.apps
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      service.alpha.openshift.io/dependencies: '[{"name":"keycloak-db","namespace":"","kind":"Service"}]'
+      fabric8.io/git-commit: d4290605871d7b4bf131fee69c6c536374f9f4bc
+      fabric8.io/git-branch: release-v1.0.8
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8-apps/keycloak-app.git/keycloak
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8-apps/keycloak-app.git/keycloak
+      fabric8.io/scm-tag: keycloak-app-1.0.0
+      fabric8.io/scm-url: http://github.com/fabric8-apps/keycloak-app/keycloak
+    labels:
+      expose: "true"
+      provider: fabric8
+      project: keycloak
+      version: 1.0.8
+      group: io.fabric8.apps
+    name: keycloak
+  spec:
+    ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      project: keycloak
+      provider: fabric8
+      group: io.fabric8.apps
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/git-commit: d4290605871d7b4bf131fee69c6c536374f9f4bc
+      fabric8.io/git-branch: release-v1.0.8
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8-apps/keycloak-app.git/keycloak-db
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8-apps/keycloak-app.git/keycloak-db
+      fabric8.io/scm-tag: keycloak-app-1.0.0
+      fabric8.io/scm-url: http://github.com/fabric8-apps/keycloak-app/keycloak-db
+    labels:
+      service: keycloak-db
+      provider: fabric8
+      project: keycloak-db
+      version: 1.0.8
+      group: io.fabric8.apps
+    name: keycloak-db
+  spec:
+    ports:
+    - name: postgres
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+    selector:
+      service: keycloak-db
+      project: keycloak-db
+      provider: fabric8
+      group: io.fabric8.apps
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/app-menu: management
+      fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/kibana
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/kibana
+      fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/kibana/src/main/fabric8/icon.svg
+      fabric8.io/git-branch: release-v2.2.335
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/kibana
+      fabric8.io/scm-tag: fabric8-devops-2.0.1
+    labels:
+      provider: fabric8
+      expose: "true"
+      project: kibana
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: kibana
+  spec:
+    ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 5601
+    selector:
+      project: kibana
+      provider: fabric8
+      group: io.fabric8.devops.apps
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      service.alpha.openshift.io/dependencies: '[{"name":"mattermost-db","namespace":"","kind":"Service"}]'
+      fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+      fabric8.io/git-branch: release-v4.0.208
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/mattermost
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/mattermost
+      fabric8.io/scm-tag: app-console-2.0.1
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/mattermost
+    labels:
+      expose: "true"
+      app: mattermost
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: mattermost
+  spec:
+    ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8065
+    selector:
+      app: mattermost
+      provider: fabric8
+      group: io.fabric8.platform.apps
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+      fabric8.io/git-branch: release-v4.0.208
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/mattermost-db
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/mattermost-db
+      fabric8.io/scm-tag: app-console-2.0.1
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/mattermost-db
+    labels:
+      service: mattermost-db
+      app: mattermost-db
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: mattermost-db
+  spec:
+    ports:
+    - name: postgres
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+    selector:
+      service: mattermost-db
+      app: mattermost-db
+      provider: fabric8
+      group: io.fabric8.platform.apps
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/app-menu: development
+      fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/nexus/src/main/fabric8/icon.png
+      fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/nexus
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/nexus
+      fabric8.io/git-branch: release-v2.2.335
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/nexus
+      fabric8.io/scm-tag: fabric8-devops-2.0.1
+    labels:
+      provider: fabric8
+      project: nexus
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+      expose: "true"
+    name: nexus
+  spec:
+    ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 8081
+    selector:
+      project: nexus
+      provider: fabric8
+      group: io.fabric8.devops.apps
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/app-menu: development
+      fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/sonarqube
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/sonarqube
+      fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/sonarqube/src/main/fabric8/icon.svg
+      fabric8.io/git-branch: release-v2.2.335
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/sonarqube
+      fabric8.io/scm-tag: fabric8-devops-2.0.1
+    labels:
+      provider: fabric8
+      expose: "true"
+      project: sonarqube
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: sonarqube
+  spec:
+    ports:
+    - port: 9000
+      protocol: TCP
+      targetPort: 9000
+    selector:
+      name: sonarqube
+      project: sonarqube
+      provider: fabric8
+      group: io.fabric8.devops.apps
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/target-platform: kubernetes
+      service.alpha.openshift.io/dependencies: '[{"name":"init-tenant-db","namespace":"","kind":"Service"}]'
+      fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+      fabric8.io/git-branch: release-v4.0.208
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/init-tenant
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/init-tenant
+      fabric8.io/scm-tag: app-console-2.0.1
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/init-tenant
+    labels:
+      service: init-tenant
+      expose: "true"
+      app: init-tenant
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: sso
+  spec:
+    ports:
+    - name: "8080"
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      service: init-tenant
+      app: init-tenant
+      provider: fabric8
+      group: io.fabric8.platform.apps
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      api.service.kubernetes.io/path: /api/
+      service.alpha.openshift.io/dependencies: '[{"name":"wit-db","namespace":"","kind":"Service"}]'
+      fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+      fabric8.io/git-branch: release-v4.0.208
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/wit
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/wit
+      fabric8.io/scm-tag: app-console-2.0.1
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/wit
+    labels:
+      service: wit
+      expose: "true"
+      app: wit
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: wit
+  spec:
+    ports:
+    - name: "8080"
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      service: wit
+      app: wit
+      provider: fabric8
+      group: io.fabric8.platform.apps
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+      fabric8.io/git-branch: release-v4.0.208
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/wit
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/wit
+      fabric8.io/scm-tag: app-console-2.0.1
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/wit
+    labels:
+      service: wit-db
+      app: wit
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: wit-db
+  spec:
+    ports:
+    - name: postgres
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+    selector:
+      service: wit-db
+      app: wit
+      provider: fabric8
+      group: io.fabric8.platform.apps
+    type: ClusterIP
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    labels:
+      provider: fabric8
+      project: elasticsearch
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: es-data
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 10Gi
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    labels:
+      app: init-tenant
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: init-tenant-postgresql-data
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    labels:
+      provider: fabric8
+      project: keycloak-db
+      version: 1.0.8
+      group: io.fabric8.apps
+    name: keycloak-db-postgresql-data
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    labels:
+      app: mattermost
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: mattermost-data
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    labels:
+      app: mattermost-db
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: mattermost-db-postgresql-data
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    labels:
+      provider: fabric8
+      project: nexus
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: nexus-storage
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 100Mi
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    labels:
+      app: wit
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: wit-postgresql-data
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    annotations:
+      fabric8.chaos-monkey/summary: Kills random pods for chaos fun!
+      description: Randomly kills pods to help check your environment can withstand
+        failures
+      fabric8.chaos-monkey/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/chaos-monkey/src/main/fabric8/icon.png
+      fabric8.io/json-schema: |-
+        {
+          "type" : "object",
+          "properties" : {
+            "CHAOS_MONKEY_INCLUDES" : {
+              "type" : "string",
+              "description" : "Comma separated list of patterns for pods which should be considered for deletion",
+              "default" : "*"
+            },
+            "CHAOS_MONKEY_EXCLUDES" : {
+              "type" : "string",
+              "description" : "Comma separated list of patterns for pods which should not be deleted",
+              "default" : "letschat*,gogs*"
+            },
+            "CHAOS_MONKEY_ROOM" : {
+              "type" : "string",
+              "description" : "The chat room to talk to",
+              "default" : "#fabric8_${namespace}"
+            },
+            "CHAOS_MONKEY_KILL_FREQUENCY_SECONDS" : {
+              "type" : "string",
+              "description" : "The number of seconds between a kill",
+              "default" : "60"
+            }
+          }
+        }
+    labels:
+      provider: fabric8
+      project: chaos-monkey
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: chaos-monkey
+  data:
+    chaos-monkey-kill-frequency-seconds: "60"
+    chaos-monkey-excludes: letschat*,gogs*
+    chaos-monkey-room: '#fabric8_${namespace}'
+    chaos-monkey-includes: '*'
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    annotations:
+      expose.config.fabric8.io/apiserver-key: oso.address
+    labels:
+      app: che-starter
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: che-starter
+  data:
+    oso.domain.name: localhost
+    oso.address: localhost:8443
+    oso.tokenurl: http://keycloak/auth/realms/fabric8/broker/openshift-v3/token
+    github.tokenurl: http://keycloak/auth/realms/fabric8/broker/github/token
+    fabric8.dev.mode: "true"
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    labels:
+      provider: fabric8
+      project: exposecontroller-app
+      version: 3.0.7
+      group: io.fabric8.apps
+    name: exposecontroller
+  data:
+    config.yml: |-
+      apiserver: ${APISERVER_HOSTPORT}
+      node-ip: ${NODE_IP}
+      exposer: ${EXPOSER}
+      domain: ${DOMAIN}
+      watch-current-namespace: true
+      http: ${HTTP}
+      tls-acme: ${TLS_ACME}
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    annotations:
+      fabric8.io/target-platform: kubernetes
+      expose.service-key.config.fabric8.io/keycloak: keycloak.url
+      expose.service-key.config.fabric8.io/wit: wit.url
+    labels:
+      app: init-tenant
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: f8tenant
+  data:
+    keycloak.url: http://keycloak
+    wit.url: http://wit
+    openshift.tenant.masterurl: https://kubernetes.default:443
+    openshift.use.current.cluster: "true"
+    api.server.insecure.skip.tls.verify: "true"
+    postgres.connection.maxidle: "90"
+    postgres.connection.maxopen: "90"
+    template.domain: d800.free-int.openshiftapps.com
+    template.recommender.external.name: recommender.api.prod-preview.openshift.io
+    keycloak.skip.host.verify: "true"
+    disable.oso.quotas: "true"
+    kubernetes.mode: "true"
+    tenant.exposer: Ingress
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    annotations:
+      expose.config.fabric8.io/url-key: apiserver.url
+      expose.config.fabric8.io/host-key: apiserver.host
+      expose.config.fabric8.io/console-url-key: openshift.console.url
+      expose.config.fabric8.io/apiserver-url-key: proxy.pass.url
+      expose.config.fabric8.io/apiserver-key: ws.apiserver.host
+      expose-full.service-key.config.fabric8.io/sso: keycloak.url
+      expose-full.service-key.config.fabric8.io/wit: wit.api.url
+      expose-full.service-key.config.fabric8.io/f8tenant: f8tenant.api.url
+      expose.service-key.config.fabric8.io/forge: forge.api.url
+      expose.config.fabric8.io/url-protocol: apiserver.protocol
+    labels:
+      app: fabric8
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: fabric8
+  data:
+    apiserver.host: kubernetes
+    apiserver.url: http://kubernetes
+    apiserver.base.path: /_p/oso
+    ws.apiserver.host: kubernetes
+    ws.apiserver.base.path: ""
+    ws.apiserver.protocol: wss
+    proxy.pass.server: ""
+    proxy.pass.url: ""
+    apiserver.protocol: http
+    keycloak.url: http://keycloak
+    forge.api.url: http://generator-backend
+    wit.api.url: http://wit
+    f8tenant.api.url: http://f8tenant
+    openshift.console.url: ""
+    recommender.api.url: ""
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    labels:
+      fabric8.io/kind: package
+      provider: fabric8.io
+      version: 4.0.208
+      app: fabric8-full
+      group: io.fabric8.platform.packages
+    name: fabric8-full
+  data:
+    metadata-url: http://central.maven.org/maven2/io/fabric8/full/packages/fabric8-full/maven-metadata.xml
+    package-url-prefix: http://central.maven.org/maven2/io/fabric8/full/packages/fabric8-full/%[1]s/fabric8-full-%[1]s-
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    annotations:
+      fabric8.io/target-platform: kubernetes
+      expose.config.fabric8.io/apiserver-url-key: apiserver.url
+    labels:
+      app: forge
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: forge
+  data:
+    keycloak.url: http://f8tenant
+    wit.url: http://wit
+    apiserver.url: http://kubernetes
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    labels:
+      provider: fabric8
+      project: hubot-mattermost
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: hubot-mattermost
+  data:
+    hubot-jenkins-url: http://jenkins/
+    hubot-grafana-host: http://grafana/
+    hubot-grafana-api-key: ${HUBOT_SLACK_GRAFANA_API_KEY}
+    hubot-mattermost_endpoint: ${MATTERMOST_ENDPOINT}
+    hubot-mattermost_channel: ${MATTERMOST_CHANNEL}
+    hubot-mattermost_income_url: ${MATTERMOST_INCOME_URL}
+    hubot-mattermost_token: ${MATTERMOST_TOKEN}
+    hubot-mattermost_icon_url: ${MATTERMOST_ICON_URL}
+    hubot-mattermost_hubot_username: ${MATTERMOST_HUBOT_USERNAME}
+    hubot-mattermost_selfsigned_cert: ${MATTERMOST_SELFSIGNED_CERT}
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    annotations:
+      fabric8.hubot-notifier/summary: Watches the OpenShift environment and notifies
+        Hubot of events such as builds completing or failing
+      description: Watches the OpenShift environment and notifies Hubot of events
+        such as builds completing or failing.
+      fabric8.hubot-notifier/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/hubot-notifier/src/main/fabric8/icon.png
+      fabric8.io/json-schema: |-
+        {
+          "type" : "object",
+          "properties" : {
+            "HUBOT_USERNAME" : {
+              "type" : "string",
+              "description" : "The username for Hubot to login to the chat service",
+              "default" : "fabric8"
+            },
+            "KUBERNETES_DNS_DOMAIN" : {
+              "type" : "string",
+              "description" : "The DNS domain added to the serviceName.namespace.svc. to make the DNS name",
+              "default" : "cluster.local"
+            },
+            "HUBOT_PASSWORD" : {
+              "type" : "string",
+              "description" : "The password for Hubot to login to the chat service",
+              "default" : "RedHat$1"
+            }
+          }
+        }
+    labels:
+      provider: fabric8
+      project: hubot-notifier
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: hubot-notifier
+  data:
+    hubot-password: RedHat$1
+    kubernetes-dns-domain: cluster.local
+    hubot-username: fabric8
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    annotations:
+      expose.config.fabric8.io/apiserver-url-key: apiserver.url
+      expose.service-key.config.fabric8.io/fabric8: fabric8.url
+      expose.service-key.config.fabric8.io/keycloak: keycloak.url
+      expose.service-key.config.fabric8.io/jenkins: jenkins.url
+      expose-full.service-key.config.fabric8.io/wit: wit.api.url
+      expose-no-path.service-key.config.fabric8.io/auth: auth.url
+    labels:
+      provider: fabric8
+      project: keycloak
+      version: 1.0.8
+      group: io.fabric8.apps
+    name: keycloak
+  data:
+    db.url: keycloak-db
+    db.port: "5432"
+    apiserver.url: http://kubernetes
+    fabric8.url: http://fabric8
+    jenkins.url: http://jenkins
+    keycloak.url: http://keycloak
+    auth.api.url: http://auth
+    wit.api.url: http://wit
+    fabric8-realm.json: |-
+      {
+        "realm": "fabric8",
+        "enabled": true,
+        "loginTheme": "fabric8",
+        "privateKey": "${KEYCLOAK_PRIVATEKEY}",
+        "publicKey": "${KEYCLOAK_PUBLICKEY}",
+        "sslRequired": "external",
+        "accessTokenLifespan": 2592000,
+        "accessTokenLifespanForImplicitFlow": 1296000,
+        "ssoSessionIdleTimeout": 2592000,
+        "accessCodeLifespanUserAction": 36000,
+        "accessCodeLifespanLogin": 2592000,
+        "ssoSessionMaxLifespan": 2592000,
+        "offlineSessionIdleTimeout": 2592000,
+        "accessCodeLifespan": 60,
+        "clients": [
+          {
+            "clientId": "fabric8-online-platform",
+            "enabled": true,
+            "standardFlowEnabled": true,
+            "implicitFlowEnabled": false,
+            "directAccessGrantsEnabled": true,
+            "authorizationServicesEnabled": true,
+            "fullScopeAllowed": true,
+            "serviceAccountsEnabled": true,
+            "clientAuthenticatorType": "client-secret",
+            "secret": "${KEYCLOAK_CLIENTID_SECRET}",
+            "publicClient": true,
+            "adminUrl": "",
+            "baseUrl": "",
+            "redirectUris": [
+              "http://localhost:8080/api/login/*",
+              "${AUTH_URL}*",
+              "${WIT_URL}*",
+              "${JENKINS_URL}/securityRealm/finishLogin",
+              "${KEYCLOAK_URL}/*"
+            ],
+            "webOrigins": [
+              "*"
+            ],
+            "defaultRoles": [
+              "uma_protection"
+            ],
+            "authorizationSettings": {
+              "allowRemoteResourceManagement": true,
+              "policyEnforcementMode": "ENFORCING",
+              "scopes": [
+                {
+                  "name": "read:space"
+                },
+                {
+                  "name": "admin:space"
+                }
+              ]
+            },
+            "protocolMappers": [
+              {
+                "id": "0dc3e03b-f0c3-4e7e-b0c9-d99c46ba9161",
+                "name": "Approved",
+                "protocol": "openid-connect",
+                "protocolMapper": "oidc-usermodel-attribute-mapper",
+                "consentRequired": false,
+                "config": {
+                  "userinfo.token.claim": "true",
+                  "user.attribute": "approved",
+                  "id.token.claim": "false",
+                  "access.token.claim": "true",
+                  "claim.name": "approved",
+                  "jsonType.label": "boolean"
+                }
+              },
+              {
+                "id" : "5f949838-20b6-4544-998c-96d066298b3d",
+                "name" : "email",
+                "protocol" : "openid-connect",
+                "protocolMapper" : "oidc-usermodel-property-mapper",
+                "consentRequired" : true,
+                "consentText" : "${email}",
+                "config" : {
+                  "userinfo.token.claim" : "true",
+                  "user.attribute" : "email",
+                  "id.token.claim" : "true",
+                  "access.token.claim" : "true",
+                  "claim.name" : "email",
+                  "jsonType.label" : "String"
+                }
+              }, {
+                "id" : "7bd87e1c-76a7-4856-ab58-a49d15ccdad8",
+                "name" : "given name",
+                "protocol" : "openid-connect",
+                "protocolMapper" : "oidc-usermodel-property-mapper",
+                "consentRequired" : true,
+                "consentText" : "${givenName}",
+                "config" : {
+                  "userinfo.token.claim" : "true",
+                  "user.attribute" : "firstName",
+                  "id.token.claim" : "true",
+                  "access.token.claim" : "true",
+                  "claim.name" : "given_name",
+                  "jsonType.label" : "String"
+                }
+              }, {
+                "id" : "fd7a276f-12bf-4cb9-86a5-d91dd00518e7",
+                "name" : "username",
+                "protocol" : "openid-connect",
+                "protocolMapper" : "oidc-usermodel-property-mapper",
+                "consentRequired" : true,
+                "consentText" : "${username}",
+                "config" : {
+                  "userinfo.token.claim" : "true",
+                  "user.attribute" : "username",
+                  "id.token.claim" : "true",
+                  "access.token.claim" : "true",
+                  "claim.name" : "preferred_username",
+                  "jsonType.label" : "String"
+                }
+              }, {
+                "id" : "a7fd0801-be94-4540-af9f-45f0f8914224",
+                "name" : "role list",
+                "protocol" : "saml",
+                "protocolMapper" : "saml-role-list-mapper",
+                "consentRequired" : false,
+                "config" : {
+                  "single" : "false",
+                  "attribute.nameformat" : "Basic",
+                  "attribute.name" : "Role"
+                }
+              }, {
+                "id" : "fbf2ac93-fb3b-4e15-afc8-585e5e8e1049",
+                "name" : "full name",
+                "protocol" : "openid-connect",
+                "protocolMapper" : "oidc-full-name-mapper",
+                "consentRequired" : true,
+                "consentText" : "${fullName}",
+                "config" : {
+                  "id.token.claim" : "true",
+                  "access.token.claim" : "true",
+                  "userinfo.token.claim" : "true"
+                }
+              }, {
+                "id" : "3d6c2c1f-f048-45b1-b1cf-a0774397ad7f",
+                "name" : "Client IP Address",
+                "protocol" : "openid-connect",
+                "protocolMapper" : "oidc-usersessionmodel-note-mapper",
+                "consentRequired" : false,
+                "consentText" : "",
+                "config" : {
+                  "user.session.note" : "clientAddress",
+                  "userinfo.token.claim" : "true",
+                  "id.token.claim" : "true",
+                  "access.token.claim" : "true",
+                  "claim.name" : "clientAddress",
+                  "jsonType.label" : "String"
+                }
+              }, {
+                "id" : "57ec513a-aa97-46b8-b888-4c2f9197d6db",
+                "name" : "family name",
+                "protocol" : "openid-connect",
+                "protocolMapper" : "oidc-usermodel-property-mapper",
+                "consentRequired" : true,
+                "consentText" : "${familyName}",
+                "config" : {
+                  "userinfo.token.claim" : "true",
+                  "user.attribute" : "lastName",
+                  "id.token.claim" : "true",
+                  "access.token.claim" : "true",
+                  "claim.name" : "family_name",
+                  "jsonType.label" : "String"
+                }
+              }, {
+                "id" : "bdc1ad99-471f-4c83-aa2e-03fbcf620954",
+                "name" : "Client ID",
+                "protocol" : "openid-connect",
+                "protocolMapper" : "oidc-usersessionmodel-note-mapper",
+                "consentRequired" : false,
+                "consentText" : "",
+                "config" : {
+                  "user.session.note" : "clientId",
+                  "userinfo.token.claim" : "true",
+                  "id.token.claim" : "true",
+                  "access.token.claim" : "true",
+                  "claim.name" : "clientId",
+                  "jsonType.label" : "String"
+                }
+              }, {
+                "id" : "1fa76490-354b-4b62-a6d0-b767a165d2a1",
+                "name" : "Client Host",
+                "protocol" : "openid-connect",
+                "protocolMapper" : "oidc-usersessionmodel-note-mapper",
+                "consentRequired" : false,
+                "consentText" : "",
+                "config" : {
+                  "user.session.note" : "clientHost",
+                  "userinfo.token.claim" : "true",
+                  "id.token.claim" : "true",
+                  "access.token.claim" : "true",
+                  "claim.name" : "clientHost",
+                  "jsonType.label" : "String"
+                }
+              }
+            ]
+          },
+          {
+            "clientId": "che",
+            "enabled": true,
+            "redirectUris": [
+              "*"
+            ],
+            "implicitFlowEnabled": false,
+            "directAccessGrantsEnabled": true,
+            "publicClient": true,
+            "protocol": "openid-connect",
+            "fullScopeAllowed": true
+          }
+        ],
+        "users": [
+          {
+            "username": "service-account-fabric8-online-platform",
+            "enabled": true,
+            "totp": false,
+            "emailVerified": false,
+            "email": "service-account-fabric8-online-platform@placeholder.org",
+            "serviceAccountClientId": "fabric8-online-platform",
+            "credentials": [],
+            "disableableCredentialTypes": [],
+            "requiredActions": [],
+            "realmRoles": [
+              "offline_access",
+              "uma_authorization"
+            ],
+            "clientRoles": {
+              "realm-management": [
+                "view-users",
+                "manage-authorization"
+              ],
+              "broker": [
+                "read-token"
+              ],
+              "fabric8-online-platform": [
+                "uma_protection"
+              ],
+              "account": [
+                "manage-account",
+                "view-profile"
+              ]
+            },
+            "groups": []
+          }
+        ],
+        "clientScopeMappings": {
+          "realm-management": [
+            {
+              "client": "fabric8-online-platform",
+              "roles": [
+                "view-users"
+              ]
+            },
+            {
+              "client": "fabric8-online-platform",
+              "roles": [
+                "manage-authorization"
+              ]
+            }
+          ],
+          "broker": [
+            {
+              "client": "fabric8-online-platform",
+              "roles": [
+                "read-token"
+              ]
+            }
+          ]
+        },
+        "roles": {
+          "realm": [
+            {
+              "name": "read:space",
+              "description": "Read space"
+            },
+            {
+              "name": "admin:space",
+              "description": "Admin space"
+            }
+          ]
+        },
+        "identityProviders": [
+          {
+            "alias": "openshift-v3",
+            "providerId": "openshift-v3",
+            "enabled": true,
+            "updateProfileFirstLogin": "true",
+            "storeToken": "true",
+            "addReadTokenRoleOnCreate": true,
+            "config": {
+              "hideOnLoginPage": "${HIDE_OPENSHIFT_BTN}",
+              "baseUrl": "${K8S_API_SERVER}",
+              "clientId": "fabric8-online-platform",
+              "defaultScope": "user:full",
+              "clientSecret": "fabric8"
+            }
+          },
+          {
+            "alias": "github",
+            "providerId": "github",
+            "enabled": true,
+            "updateProfileFirstLogin": "true",
+            "storeToken": "true",
+            "trustEmail": true,
+            "addReadTokenRoleOnCreate": true,
+            "config": {
+              "hideOnLoginPage": "${HIDE_GITHUB_BTN}",
+              "clientSecret": "${GITHUB_OAUTH_CLIENT_SECRET}",
+              "clientId": "${GITHUB_OAUTH_CLIENT_ID}",
+              "defaultScope": "admin:repo_hook read:org repo user gist",
+              "useJwksUrl": "true"
+            }
+          }
+        ],
+        "identityProviderMappers": [
+          {
+            "name": "approved",
+            "identityProviderAlias": "openshift-v3",
+            "identityProviderMapper": "hardcoded-attribute-idp-mapper",
+            "config": {
+              "attribute.value": "true",
+              "attribute": "approved"
+            }
+          },
+          {
+            "name": "approved",
+            "identityProviderAlias": "github",
+            "identityProviderMapper": "hardcoded-attribute-idp-mapper",
+            "config": {
+              "attribute.value": "true",
+              "attribute": "approved"
+            }
+          }
+        ]
+      }
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    labels:
+      app: mattermost
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: mattermost
+  data:
+    config.json: |-
+      {
+          "ServiceSettings": {
+              "SiteURL": "",
+              "LicenseFileLocation": "",
+              "ListenAddress": ":8065",
+              "ConnectionSecurity": "",
+              "TLSCertFile": "",
+              "TLSKeyFile": "",
+              "UseLetsEncrypt": false,
+              "LetsEncryptCertificateCacheFile": "./config/letsencrypt.cache",
+              "Forward80To443": false,
+              "ReadTimeout": 300,
+              "WriteTimeout": 300,
+              "MaximumLoginAttempts": 10,
+              "GoroutineHealthThreshold": -1,
+              "GoogleDeveloperKey": "",
+              "EnableOAuthServiceProvider": false,
+              "EnableIncomingWebhooks": true,
+              "EnableOutgoingWebhooks": true,
+              "EnableCommands": true,
+              "EnableOnlyAdminIntegrations": true,
+              "EnablePostUsernameOverride": false,
+              "EnablePostIconOverride": false,
+              "EnableLinkPreviews": false,
+              "EnableTesting": false,
+              "EnableDeveloper": false,
+              "EnableSecurityFixAlert": true,
+              "EnableInsecureOutgoingConnections": false,
+              "EnableMultifactorAuthentication": false,
+              "EnforceMultifactorAuthentication": false,
+              "AllowCorsFrom": "",
+              "SessionLengthWebInDays": 30,
+              "SessionLengthMobileInDays": 30,
+              "SessionLengthSSOInDays": 30,
+              "SessionCacheInMinutes": 10,
+              "WebsocketSecurePort": 443,
+              "WebsocketPort": 80,
+              "WebserverMode": "gzip",
+              "EnableCustomEmoji": false,
+              "RestrictCustomEmojiCreation": "all",
+              "RestrictPostDelete": "all",
+              "AllowEditPost": "always",
+              "PostEditTimeLimit": 300,
+              "TimeBetweenUserTypingUpdatesMilliseconds": 5000,
+              "EnablePostSearch": true,
+              "EnableUserTypingMessages": true,
+              "EnableUserStatuses": true,
+              "ClusterLogTimeoutMilliseconds": 2000
+          },
+          "ElasticSearchSettings": {
+              "ConnectionUrl": "http://dockerhost:9200",
+              "Username": "elastic",
+              "Password": "changeme",
+              "EnableIndexing": false,
+              "EnableSearching": false,
+              "Sniff": true
+          },
+          "TeamSettings": {
+              "SiteName": "Mattermost",
+              "MaxUsersPerTeam": 50,
+              "EnableTeamCreation": true,
+              "EnableUserCreation": true,
+              "EnableOpenServer": false,
+              "RestrictCreationToDomains": "",
+              "EnableCustomBrand": false,
+              "CustomBrandText": "",
+              "CustomDescriptionText": "",
+              "RestrictDirectMessage": "any",
+              "RestrictTeamInvite": "all",
+              "RestrictPublicChannelManagement": "all",
+              "RestrictPrivateChannelManagement": "all",
+              "RestrictPublicChannelCreation": "all",
+              "RestrictPrivateChannelCreation": "all",
+              "RestrictPublicChannelDeletion": "all",
+              "RestrictPrivateChannelDeletion": "all",
+              "RestrictPrivateChannelManageMembers": "all",
+              "UserStatusAwayTimeout": 300,
+              "MaxChannelsPerTeam": 2000,
+              "MaxNotificationsPerChannel": 1000
+          },
+          "SqlSettings": {
+              "DriverName": "postgres",
+              "DataSource": "postgres://dummy:dummy@mattermost-db:5432/mattermost?sslmode=disable&connect_timeout=10",
+              "DataSourceReplicas": [],
+              "DataSourceSearchReplicas": [],
+              "MaxIdleConns": 20,
+              "MaxOpenConns": 300,
+              "Trace": false,
+              "AtRestEncryptKey": "",
+              "QueryTimeout": 30
+          },
+          "LogSettings": {
+              "EnableConsole": true,
+              "ConsoleLevel": "INFO",
+              "EnableFile": true,
+              "FileLevel": "INFO",
+              "FileFormat": "",
+              "FileLocation": "",
+              "EnableWebhookDebugging": true,
+              "EnableDiagnostics": true
+          },
+          "PasswordSettings": {
+              "MinimumLength": 5,
+              "Lowercase": false,
+              "Number": false,
+              "Uppercase": false,
+              "Symbol": false
+          },
+          "FileSettings": {
+              "EnableFileAttachments": true,
+              "MaxFileSize": 52428800,
+              "DriverName": "local",
+              "Directory": "./data/",
+              "EnablePublicLink": false,
+              "PublicLinkSalt": "",
+              "ThumbnailWidth": 120,
+              "ThumbnailHeight": 100,
+              "PreviewWidth": 1024,
+              "PreviewHeight": 0,
+              "ProfileWidth": 128,
+              "ProfileHeight": 128,
+              "InitialFont": "luximbi.ttf",
+              "AmazonS3AccessKeyId": "",
+              "AmazonS3SecretAccessKey": "",
+              "AmazonS3Bucket": "",
+              "AmazonS3Region": "us-east-1",
+              "AmazonS3Endpoint": "s3.amazonaws.com",
+              "AmazonS3SSL": true,
+              "AmazonS3SignV2": false
+          },
+          "EmailSettings": {
+              "EnableSignUpWithEmail": true,
+              "EnableSignInWithEmail": true,
+              "EnableSignInWithUsername": true,
+              "SendEmailNotifications": false,
+              "RequireEmailVerification": false,
+              "FeedbackName": "",
+              "FeedbackEmail": "",
+              "FeedbackOrganization": "",
+              "SMTPUsername": "",
+              "SMTPPassword": "",
+              "SMTPServer": "",
+              "SMTPPort": "",
+              "ConnectionSecurity": "",
+              "InviteSalt": "",
+              "SendPushNotifications": false,
+              "PushNotificationServer": "",
+              "PushNotificationContents": "generic",
+              "EnableEmailBatching": false,
+              "EmailBatchingBufferSize": 256,
+              "EmailBatchingInterval": 30,
+              "SkipServerCertificateVerification": false
+          },
+          "RateLimitSettings": {
+              "Enable": false,
+              "PerSec": 10,
+              "MaxBurst": 100,
+              "MemoryStoreSize": 10000,
+              "VaryByRemoteAddr": true,
+              "VaryByHeader": ""
+          },
+          "PrivacySettings": {
+              "ShowEmailAddress": true,
+              "ShowFullName": true
+          },
+          "SupportSettings": {
+              "TermsOfServiceLink": "https://about.mattermost.com/default-terms/",
+              "PrivacyPolicyLink": "https://about.mattermost.com/default-privacy-policy/",
+              "AboutLink": "https://about.mattermost.com/default-about/",
+              "HelpLink": "https://about.mattermost.com/default-help/",
+              "ReportAProblemLink": "https://about.mattermost.com/default-report-a-problem/",
+              "SupportEmail": "feedback@mattermost.com"
+          },
+          "AnnouncementSettings": {
+              "EnableBanner": false,
+              "BannerText": "",
+              "BannerColor": "#f2a93b",
+              "BannerTextColor": "#333333",
+              "AllowBannerDismissal": true
+          },
+          "GitLabSettings": {
+              "Enable": false,
+              "Secret": "",
+              "Id": "",
+              "Scope": "",
+              "AuthEndpoint": "",
+              "TokenEndpoint": "",
+              "UserApiEndpoint": ""
+          },
+          "GoogleSettings": {
+              "Enable": false,
+              "Secret": "",
+              "Id": "",
+              "Scope": "profile email",
+              "AuthEndpoint": "https://accounts.google.com/o/oauth2/v2/auth",
+              "TokenEndpoint": "https://www.googleapis.com/oauth2/v4/token",
+              "UserApiEndpoint": "https://www.googleapis.com/plus/v1/people/me"
+          },
+          "Office365Settings": {
+              "Enable": false,
+              "Secret": "",
+              "Id": "",
+              "Scope": "User.Read",
+              "AuthEndpoint": "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+              "TokenEndpoint": "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+              "UserApiEndpoint": "https://graph.microsoft.com/v1.0/me"
+          },
+          "LdapSettings": {
+              "Enable": false,
+              "LdapServer": "",
+              "LdapPort": 389,
+              "ConnectionSecurity": "",
+              "BaseDN": "",
+              "BindUsername": "",
+              "BindPassword": "",
+              "UserFilter": "",
+              "FirstNameAttribute": "",
+              "LastNameAttribute": "",
+              "EmailAttribute": "",
+              "UsernameAttribute": "",
+              "NicknameAttribute": "",
+              "IdAttribute": "",
+              "PositionAttribute": "",
+              "SyncIntervalMinutes": 60,
+              "SkipCertificateVerification": false,
+              "QueryTimeout": 60,
+              "MaxPageSize": 0,
+              "LoginFieldName": ""
+          },
+          "ComplianceSettings": {
+              "Enable": false,
+              "Directory": "./data/",
+              "EnableDaily": false
+          },
+          "LocalizationSettings": {
+              "DefaultServerLocale": "en",
+              "DefaultClientLocale": "en",
+              "AvailableLocales": ""
+          },
+          "SamlSettings": {
+              "Enable": false,
+              "Verify": true,
+              "Encrypt": true,
+              "IdpUrl": "",
+              "IdpDescriptorUrl": "",
+              "AssertionConsumerServiceURL": "",
+              "IdpCertificateFile": "",
+              "PublicCertificateFile": "",
+              "PrivateKeyFile": "",
+              "FirstNameAttribute": "",
+              "LastNameAttribute": "",
+              "EmailAttribute": "",
+              "UsernameAttribute": "",
+              "NicknameAttribute": "",
+              "LocaleAttribute": "",
+              "PositionAttribute": "",
+              "LoginButtonText": "With SAML"
+          },
+          "NativeAppSettings": {
+              "AppDownloadLink": "https://about.mattermost.com/downloads/",
+              "AndroidAppDownloadLink": "https://about.mattermost.com/mattermost-android-app/",
+              "IosAppDownloadLink": "https://about.mattermost.com/mattermost-ios-app/"
+          },
+          "ClusterSettings": {
+              "Enable": false,
+              "InterNodeListenAddress": ":8075",
+              "InterNodeUrls": []
+          },
+          "MetricsSettings": {
+              "Enable": false,
+              "BlockProfileRate": 0,
+              "ListenAddress": ":8067"
+          },
+          "AnalyticsSettings": {
+              "MaxUsersForStatistics": 2500
+          },
+          "WebrtcSettings": {
+              "Enable": false,
+              "GatewayWebsocketUrl": "",
+              "GatewayAdminUrl": "",
+              "GatewayAdminSecret": "",
+              "StunURI": "",
+              "TurnURI": "",
+              "TurnUsername": "",
+              "TurnSharedKey": ""
+          },
+          "DataRetentionSettings": {
+              "Enable": false
+          }
+      }
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    labels:
+      provider: fabric8
+      project: sonarqube
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: sonarqube
+  data:
+    sonar.properties: |-
+      # Property values can:
+      # - reference an environment variable, for example sonar.jdbc.url= ${env:SONAR_JDBC_URL}
+      # - be encrypted. See http://redirect.sonarsource.com/doc/settings-encryption.html
+
+      #--------------------------------------------------------------------------------------------------
+      # DATABASE
+      #
+      # IMPORTANT: the embedded H2 database is used by default. It is recommended for tests but not for
+      # production use. Supported databases are MySQL, Oracle, PostgreSQL and Microsoft SQLServer.
+
+      # User credentials.
+      # Permissions to create tables, indices and triggers must be granted to JDBC user.
+      # The schema must be created first.
+      #sonar.jdbc.username=
+      #sonar.jdbc.password=
+
+      #----- Embedded Database (default)
+      # H2 embedded database server listening port, defaults to 9092
+      #sonar.embeddedDatabase.port=9092
+      #----- MySQL 5.6 or greater
+      # Only InnoDB storage engine is supported (not myISAM).
+      # Only the bundled driver is supported. It can not be changed.
+      #sonar.jdbc.url=jdbc:mysql://localhost:3306/sonar?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useConfigs=maxPerformance
+
+
+      #----- Oracle 11g/12c
+      # - Only thin client is supported
+      # - Only versions 11.2.x and 12.x of Oracle JDBC driver are supported
+      # - The JDBC driver must be copied into the directory extensions/jdbc-driver/oracle/
+      # - If you need to set the schema, please refer to http://jira.sonarsource.com/browse/SONAR-5000
+      #sonar.jdbc.url=jdbc:oracle:thin:@localhost:1521/XE
+
+
+      #----- PostgreSQL 8.x/9.x
+      # If you don't use the schema named "public", please refer to http://jira.sonarsource.com/browse/SONAR-5000
+      #sonar.jdbc.url=jdbc:postgresql://localhost/sonar
+
+
+      #----- Microsoft SQLServer 2012/2014 and SQL Azure
+      # A database named sonar must exist and its collation must be case-sensitive (CS) and accent-sensitive (AS)
+      # Use the following connection string if you want to use integrated security with Microsoft Sql Server
+      # Do not set sonar.jdbc.username or sonar.jdbc.password property if you are using Integrated Security
+      # For Integrated Security to work, you have to download the Microsoft SQL JDBC driver package from
+      # http://www.microsoft.com/en-us/download/details.aspx?displaylang=en&id=11774
+      # and copy sqljdbc_auth.dll to your path. You have to copy the 32 bit or 64 bit version of the dll
+      # depending upon the architecture of your server machine.
+      # This version of SonarQube has been tested with Microsoft SQL JDBC version 4.1
+      #sonar.jdbc.url=jdbc:sqlserver://localhost;databaseName=sonar;integratedSecurity=true
+
+      # Use the following connection string if you want to use SQL Auth while connecting to MS Sql Server.
+      # Set the sonar.jdbc.username and sonar.jdbc.password appropriately.
+      #sonar.jdbc.url=jdbc:sqlserver://localhost;databaseName=sonar
+
+
+      #----- Connection pool settings
+      # The maximum number of active connections that can be allocated
+      # at the same time, or negative for no limit.
+      # The recommended value is 1.2 * max sizes of HTTP pools. For example if HTTP ports are
+      # enabled with default sizes (50, see property sonar.web.http.maxThreads)
+      # then sonar.jdbc.maxActive should be 1.2 * 50 = 60.
+      #sonar.jdbc.maxActive=60
+
+      # The maximum number of connections that can remain idle in the
+      # pool, without extra ones being released, or negative for no limit.
+      #sonar.jdbc.maxIdle=5
+
+      # The minimum number of connections that can remain idle in the pool,
+      # without extra ones being created, or zero to create none.
+      #sonar.jdbc.minIdle=2
+
+      # The maximum number of milliseconds that the pool will wait (when there
+      # are no available connections) for a connection to be returned before
+      # throwing an exception, or <= 0 to wait indefinitely.
+      #sonar.jdbc.maxWait=5000
+
+      #sonar.jdbc.minEvictableIdleTimeMillis=600000
+      #sonar.jdbc.timeBetweenEvictionRunsMillis=30000
+
+
+
+      #--------------------------------------------------------------------------------------------------
+      # WEB SERVER
+      # Web server is executed in a dedicated Java process. By default heap size is 512Mb.
+      # Use the following property to customize JVM options.
+      #    Recommendations:
+      #
+      #    The HotSpot Server VM is recommended. The property -server should be added if server mode
+      #    is not enabled by default on your environment:
+      #    http://docs.oracle.com/javase/8/docs/technotes/guides/vm/server-class.html
+      #
+      #    Startup can be long if entropy source is short of entropy. Adding
+      #    -Djava.security.egd=file:/dev/./urandom is an option to resolve the problem.
+      #    See https://wiki.apache.org/tomcat/HowTo/FasterStartUp#Entropy_Source
+      #
+      #sonar.web.javaOpts=-Xmx512m -Xms128m -XX:+HeapDumpOnOutOfMemoryError
+
+      # Same as previous property, but allows to not repeat all other settings like -Xmx
+      #sonar.web.javaAdditionalOpts=
+
+      # Binding IP address. For servers with more than one IP address, this property specifies which
+      # address will be used for listening on the specified ports.
+      # By default, ports will be used on all IP addresses associated with the server.
+      #sonar.web.host=0.0.0.0
+
+      # Web context. When set, it must start with forward slash (for example /sonarqube).
+      # The default value is root context (empty value).
+      #sonar.web.context=
+      # TCP port for incoming HTTP connections. Default value is 9000.
+      #sonar.web.port=9000
+
+
+      # The maximum number of connections that the server will accept and process at any given time.
+      # When this number has been reached, the server will not accept any more connections until
+      # the number of connections falls below this value. The operating system may still accept connections
+      # based on the sonar.web.connections.acceptCount property. The default value is 50.
+      #sonar.web.http.maxThreads=50
+
+      # The minimum number of threads always kept running. The default value is 5.
+      #sonar.web.http.minThreads=5
+
+      # The maximum queue length for incoming connection requests when all possible request processing
+      # threads are in use. Any requests received when the queue is full will be refused.
+      # The default value is 25.
+      #sonar.web.http.acceptCount=25
+
+      # By default users are logged out and sessions closed when server is restarted.
+      # If you prefer keeping user sessions open, a secret should be defined. Value is
+      # HS256 key encoded with base64. It must be unique for each installation of SonarQube.
+      # Example of command-line:
+      # echo -n "type_what_you_want" | openssl dgst -sha256 -hmac "key" -binary | base64
+      #sonar.auth.jwtBase64Hs256Secret=
+
+      # The inactivity timeout duration of user sessions, in minutes. After the configured
+      # period of time, the user is logged out.
+      # The default value is set to 3 days (4320 minutes)
+      # and cannot be greater than 3 months. Value must be strictly positive.
+      #sonar.web.sessionTimeoutInMinutes=4320
+
+
+      #--------------------------------------------------------------------------------------------------
+      # SSO AUTHENTICATION
+
+      # Enable authentication using HTTP headers
+      #sonar.web.sso.enable=false
+
+      # Name of the header to get the user login.
+      # Only alphanumeric, '.' and '@' characters are allowed
+      #sonar.web.sso.loginHeader=X-Forwarded-Login
+
+      # Name of the header to get the user name
+      #sonar.web.sso.nameHeader=X-Forwarded-Name
+
+      # Name of the header to get the user email (optional)
+      #sonar.web.sso.emailHeader=X-Forwarded-Email
+
+      # Name of the header to get the list of user groups, separated by comma (optional).
+      # If the sonar.sso.groupsHeader is set, the user will belong to those groups if groups exist in SonarQube.
+      # If none of the provided groups exists in SonarQube, the user won't belong to any group.
+      # Note that the default group will NOT be automatically added when using SSO, it should be provided in the groups list, if needed.
+      #sonar.web.sso.groupsHeader=X-Forwarded-Groups
+
+      # Interval used to know when to refresh name, email and groups.
+      # During this interval, if for instance the name of the user is changed in the header, it will only be updated after X minutes.
+      #sonar.web.sso.refreshIntervalInMinutes=5
+
+
+      #--------------------------------------------------------------------------------------------------
+      # COMPUTE ENGINE
+      # The Compute Engine is responsible for processing background tasks.
+      # Compute Engine is executed in a dedicated Java process. Default heap size is 512Mb.
+      # Use the following property to customize JVM options.
+      #    Recommendations:
+      #
+      #    The HotSpot Server VM is recommended. The property -server should be added if server mode
+      #    is not enabled by default on your environment:
+      #    http://docs.oracle.com/javase/8/docs/technotes/guides/vm/server-class.html
+      #
+      #sonar.ce.javaOpts=-Xmx512m -Xms128m -XX:+HeapDumpOnOutOfMemoryError
+
+      # Same as previous property, but allows to not repeat all other settings like -Xmx
+      #sonar.ce.javaAdditionalOpts=
+      # The number of workers in the Compute Engine. Value must be greater than zero.
+      # By default the Compute Engine uses a single worker and therefore processes tasks one at a time.
+      #    Recommendations:
+      #
+      #    Using N workers will require N times as much Heap memory (see property
+      #    sonar.ce.javaOpts to tune heap) and produce N times as much IOs on disk, database and
+      #    Elasticsearch. The number of workers must suit your environment.
+      #sonar.ce.workerCount=1
+
+
+      #--------------------------------------------------------------------------------------------------
+      # ELASTICSEARCH
+      # Elasticsearch is used to facilitate fast and accurate information retrieval.
+      # It is executed in a dedicated Java process. Default heap size is 1Gb.
+
+      # JVM options of Elasticsearch process
+      #    Recommendations:
+      #
+      #    Use HotSpot Server VM. The property -server should be added if server mode
+      #    is not enabled by default on your environment:
+      #    http://docs.oracle.com/javase/8/docs/technotes/guides/vm/server-class.html
+      #
+      #sonar.search.javaOpts=-Xmx1G -Xms256m -Xss256k -Djna.nosys=true \
+      #  -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=75 \
+      #  -XX:+UseCMSInitiatingOccupancyOnly -XX:+HeapDumpOnOutOfMemoryError
+
+      # Same as previous property, but allows to not repeat all other settings like -Xmx
+      #sonar.search.javaAdditionalOpts=
+
+      # Elasticsearch port. Default is 9001. Use 0 to get a free port.
+      # As a security precaution, should be blocked by a firewall and not exposed to the Internet.
+      sonar.search.port=9200
+
+      # Elasticsearch host. The search server will bind this address and the search client will connect to it.
+      # Default is 127.0.0.1.
+      # As a security precaution, should NOT be set to a publicly available address.
+      sonar.search.host=elasticsearch
+
+
+      #--------------------------------------------------------------------------------------------------
+      # UPDATE CENTER
+
+      # Update Center requires an internet connection to request https://update.sonarsource.org
+      # It is enabled by default.
+      #sonar.updatecenter.activate=true
+
+      # HTTP proxy (default none)
+      #http.proxyHost=
+      #http.proxyPort=
+      # HTTPS proxy (defaults are values of http.proxyHost and http.proxyPort)
+      #https.proxyHost=
+      #https.proxyPort=
+
+      # NT domain name if NTLM proxy is used
+      #http.auth.ntlm.domain=
+
+      # SOCKS proxy (default none)
+      #socksProxyHost=
+      #socksProxyPort=
+
+      # Proxy authentication (used for HTTP, HTTPS and SOCKS proxies)
+      #http.proxyUser=
+      #http.proxyPassword=
+
+
+      #--------------------------------------------------------------------------------------------------
+      # LOGGING
+
+      # SonarQube produces logs in 4 logs files located in the same directory (see property sonar.path.logs below),
+      # one per process:
+      #   Main process (aka. App) logs in sonar.log
+      #   Web Server (aka. Web) logs in web.log
+      #   Compute Engine (aka. CE) logs in ce.log
+      #   Elasticsearch (aka. ES) logs in es.log
+      #
+      # All 4 files follow the same rolling policy (see sonar.log.rollingPolicy and sonar.log.maxFiles) but it applies
+      # individually (eg. if sonar.log.maxFiles=4, there can be at most 4 of each files, ie. 16 files in total).
+      #
+      # All 4 files have logs in the same format:
+      #           1           2    3           4                       5                                                   6
+      # |-----------------| |---| |-|--------------------||------------------------------| |------------------------------------------------------------------------------------------------------------------------------|
+      # 2016.11.16 16:47:00 INFO  ce[AVht0dNXFcyiYejytc3m][o.s.s.c.t.CeWorkerCallableImpl] Executed task | project=org.sonarqube:example-java-maven | type=REPORT | id=AVht0dNXFcyiYejytc3m | submitter=admin | time=1699ms
+      #
+      # 1: timestamp. Format is YYYY.MM.DD HH:MM:SS
+      #    YYYY: year on 4 digits
+      #    MM: month on 2 digits
+      #    DD: day on 2 digits
+      #    HH: hour of day on 2 digits in 24 hours format
+      #    MM: minutes on 2 digits
+      #    SS: seconds on 2 digits
+      # 2: log level.
+      #    Possible values (in order of descending criticality): ERROR, WARN, INFO, DEBUG and TRACE
+      # 3: process identifier. Possible values: app (main), web (Web Server), ce (Compute Engine) and es (Elasticsearch)
+      # 4: SQ thread identifier. Can be empty.
+      #    In the Web Server, if present, it will be the HTTP request ID.
+      #    In the Compute Engine, if present, it will be the task ID.
+      # 5: logger name. Usually a class canonical name.
+      #    Package names are truncated to keep the whole field to 20 characters max
+      # 6: log payload. Content of this field does not follow any specific format, can vary in length and include line returns.
+      #    Some logs, however, will follow the convention to provide data in payload in the format " | key=value"
+      #    Especially, log of profiled pieces of code will end with " | time=XXXXms".
+
+      # Global level of logs (applies to all 4 processes).
+      # Supported values are INFO (default), DEBUG and TRACE
+      #sonar.log.level=INFO
+
+      # Level of logs of each process can be controlled individually with their respective properties.
+      # When specified, they overwrite the level defined at global level.
+      # Supported values are INFO, DEBUG and TRACE
+      #sonar.log.level.app=INFO
+      #sonar.log.level.web=INFO
+      #sonar.log.level.ce=INFO
+      #sonar.log.level.es=INFO
+
+      # Path to log files. Can be absolute or relative to installation directory.
+      # Default is <installation home>/logs
+      #sonar.path.logs=logs
+
+      # Rolling policy of log files
+      #    - based on time if value starts with "time:", for example by day ("time:yyyy-MM-dd")
+      #      or by month ("time:yyyy-MM")
+      #    - based on size if value starts with "size:", for example "size:10MB"
+      #    - disabled if value is "none".  That needs logs to be managed by an external system like logrotate.
+      #sonar.log.rollingPolicy=time:yyyy-MM-dd
+
+      # Maximum number of files to keep if a rolling policy is enabled.
+      #    - maximum value is 20 on size rolling policy
+      #    - unlimited on time rolling policy. Set to zero to disable old file purging.
+      #sonar.log.maxFiles=7
+
+      # Access log is the list of all the HTTP requests received by server. If enabled, it is stored
+      # in the file {sonar.path.logs}/access.log. This file follows the same rolling policy as other log file
+      # (see sonar.log.rollingPolicy and sonar.log.maxFiles).
+      #sonar.web.accessLogs.enable=true
+
+      # Format of access log. It is ignored if sonar.web.accessLogs.enable=false. Possible values are:
+      #    - "common" is the Common Log Format, shortcut to: %h %l %u %user %date "%r" %s %b
+      #    - "combined" is another format widely recognized, shortcut to: %h %l %u [%t] "%r" %s %b "%i{Referer}" "%i{User-Agent}"
+      #    - else a custom pattern. See http://logback.qos.ch/manual/layouts.html#AccessPatternLayout.
+      # The login of authenticated user is not implemented with "%u" but with "%reqAttribute{LOGIN}" (since version 6.1).
+      # The value displayed for anonymous users is "-".
+      # The SonarQube's HTTP request ID can be added to the pattern with "%reqAttribute{ID}" (since version 6.2).
+      # If SonarQube is behind a reverse proxy, then the following value allows to display the correct remote IP address:
+      #sonar.web.accessLogs.pattern=%i{X-Forwarded-For} %l %u [%t] "%r" %s %b "%i{Referer}" "%i{User-Agent}" "%reqAttribute{ID}"
+      # Default value (which was "combined" before version 6.2) is equivalent to "combined + SQ HTTP request ID":
+      #sonar.web.accessLogs.pattern=%h %l %u [%t] "%r" %s %b "%i{Referer}" "%i{User-Agent}" "%reqAttribute{ID}"
+
+
+      #--------------------------------------------------------------------------------------------------
+      # OTHERS
+
+      # Delay in seconds between processing of notification queue. Default is 60 seconds.
+      #sonar.notifications.delay=60
+
+      # Paths to persistent data files (embedded database and search index) and temporary files.
+      # Can be absolute or relative to installation directory.
+      # Defaults are respectively <installation home>/data and <installation home>/temp
+      #sonar.path.data=data
+      #sonar.path.temp=temp
+
+
+      #--------------------------------------------------------------------------------------------------
+      # DEVELOPMENT - only for developers
+      # The following properties MUST NOT be used in production environments.
+
+      # Dev mode allows to reload web sources on changes and to restart server when new versions
+      # of plugins are deployed.
+      #sonar.web.dev=false
+
+      # Path to webapp sources for hot-reloading of Ruby on Rails, JS and CSS (only core,
+      # plugins not supported).
+      #sonar.web.dev.sources=/path/to/server/sonar-web/src/main/webapp
+
+      # Elasticsearch HTTP connector, for example for KOPF:
+      # http://lmenezes.com/elasticsearch-kopf/?location=http://localhost:9010
+      #sonar.search.httpPort=-1
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    annotations:
+      fabric8.io/target-platform: kubernetes
+      expose-full.service-key.config.fabric8.io/f8tenant: keycloak.url
+    labels:
+      app: fabric8
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: sso
+  data:
+    keycloak.url: http://init-tenant
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    annotations:
+      expose.service-key.config.fabric8.io/keycloak: keycloak.url
+      expose-no-path.service-key.config.fabric8.io/auth: auth.url
+    labels:
+      app: wit
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: wit
+  data:
+    db.host: wit-db
+    db.port: "5432"
+    auth_notapproved_redirect: ""
+    chestarter.url: http://che-starter:10000
+    auth.url: http://auth
+    authz.enabled: "true"
+    keycloak.url: http://keycloak
+    openshift.tenant.masterurl: http://kubernetes.default/
+    postgres.connection.maxidle: "90"
+    postgres.connection.maxopen: "90"
+    postgres.sslmode: disable
+    redirect.valid: .*
+    tenant.serviceurl: http://kubernetes.default/
+- apiVersion: extensions/v1beta1
+  kind: DaemonSet
+  metadata:
+    annotations:
+      fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=fluentd&var-version=2.2.335
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/fluentd
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/fluentd
+      fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/fluentd/src/main/fabric8/icon.png
+      fabric8.io/git-branch: release-v2.2.335
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/fluentd
+      fabric8.io/scm-tag: fabric8-devops-2.0.1
+    labels:
+      provider: fabric8
+      project: fluentd
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: fluentd
+  spec:
+    selector:
+      matchLabels:
+        project: fluentd
+        provider: fabric8
+        group: io.fabric8.devops.apps
+    template:
+      metadata:
+        annotations:
+          prometheus.io/scrape: "true"
+        labels:
+          provider: fabric8
+          project: fluentd
+          version: 2.2.335
+          group: io.fabric8.devops.apps
+      spec:
+        containers:
+        - env:
+          - name: ELASTICSEARCH_HOST
+            value: elasticsearch
+          - name: ELASTICSEARCH_PORT
+            value: "9200"
+          image: fabric8/fluentd-kubernetes:v1.19
+          name: fluentd
+          ports:
+          - containerPort: 24231
+            name: scrape
+          resources:
+            limits:
+              cpu: 100m
+          securityContext:
+            privileged: true
+          volumeMounts:
+          - mountPath: /var/log
+            name: varlog
+          - mountPath: /var/lib/docker/containers
+            name: defaultdocker
+            readOnly: true
+          - mountPath: /mnt/ephemeral/docker/containers
+            name: awsdocker
+            readOnly: true
+          - mountPath: /mnt/sda1/var/lib/docker/containers
+            name: minikubedocker
+            readOnly: true
+        serviceAccountName: fluentd
+        volumes:
+        - hostPath:
+            path: /var/log
+          name: varlog
+        - hostPath:
+            path: /var/lib/docker/containers
+          name: defaultdocker
+        - hostPath:
+            path: /mnt/ephemeral/docker/containers
+          name: awsdocker
+        - hostPath:
+            path: /mnt/sda1/var/lib/docker/containers
+          name: minikubedocker
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/chaos-monkey/src/main/fabric8/icon.png
+      fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=chaos-monkey&var-version=2.2.335
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/chaos-monkey
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/chaos-monkey
+      fabric8.io/git-branch: release-v2.2.335
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/chaos-monkey
+      fabric8.io/scm-tag: fabric8-devops-2.0.1
+    labels:
+      provider: fabric8
+      project: chaos-monkey
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: chaos-monkey
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        provider: fabric8
+        project: chaos-monkey
+        group: io.fabric8.devops.apps
+    template:
+      metadata:
+        annotations:
+          fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=chaos-monkey&var-version=2.2.335
+          fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/chaos-monkey
+          fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/chaos-monkey
+          fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/chaos-monkey/src/main/fabric8/icon.png
+          fabric8.io/git-branch: release-v2.2.335
+          fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/chaos-monkey
+          fabric8.io/scm-tag: fabric8-devops-2.0.1
+          maven.fabric8.io/source-url: jar:file:/home/jenkins/.mvnrepository/io/fabric8/devops/apps/chaos-monkey/2.2.335/chaos-monkey-2.2.335.jar!/META-INF/fabric8/kubernetes.yml
+        labels:
+          provider: fabric8
+          project: chaos-monkey
+          version: 2.2.335
+          group: io.fabric8.devops.apps
+      spec:
+        containers:
+        - env:
+          - name: CHAOS_MONKEY_INCLUDES
+            valueFrom:
+              configMapKeyRef:
+                key: chaos-monkey-includes
+                name: chaos-monkey
+          - name: CHAOS_MONKEY_EXCLUDES
+            valueFrom:
+              configMapKeyRef:
+                key: chaos-monkey-excludes
+                name: chaos-monkey
+          - name: CHAOS_MONKEY_ROOM
+            valueFrom:
+              configMapKeyRef:
+                key: chaos-monkey-room
+                name: chaos-monkey
+          - name: CHAOS_MONKEY_KILL_FREQUENCY_SECONDS
+            valueFrom:
+              configMapKeyRef:
+                key: chaos-monkey-kill-frequency-seconds
+                name: chaos-monkey
+          - name: KUBERNETES_MASTER
+            value: https://kubernetes.default.svc
+          - name: KUBERNETES_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: HUBOT_USERNAME
+            value: ""
+          - name: HUBOT_BUILD_ROOM
+            value: '#fabric8_${namespace}'
+          - name: HUBOT_PASSWORD
+            value: ""
+          image: fabric8/chaos-monkey:2.2.335
+          imagePullPolicy: IfNotPresent
+          name: chaos-monkey
+          ports:
+          - containerPort: 8778
+            name: jolokia
+          resources:
+            limits:
+              cpu: "0"
+              memory: "0"
+            requests:
+              cpu: "0"
+              memory: "0"
+          securityContext:
+            privileged: false
+        serviceAccountName: chaos-monkey
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=che-starter&var-version=4.0.208
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/che-starter
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/che-starter
+      fabric8.io/git-branch: release-v4.0.208
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/che-starter
+      fabric8.io/scm-tag: app-console-2.0.1
+    labels:
+      app: che-starter
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: che-starter
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 2
+    selector:
+      matchLabels:
+        app: che-starter
+        provider: fabric8
+        group: io.fabric8.platform.apps
+    template:
+      metadata:
+        annotations:
+          fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=che-starter&var-version=4.0.208
+          fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/che-starter
+          fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/che-starter
+          fabric8.io/git-branch: release-v4.0.208
+          fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/che-starter
+          fabric8.io/scm-tag: app-console-2.0.1
+          maven.fabric8.io/source-url: jar:file:/home/jenkins/workspace/8io_fabric8-platform_master-4P5FOSFKYBLAPGDO7GHHNEOGKKERYH26KXBFORI5V7MRVJFY3QWA/apps/che-starter/target/che-starter-4.0.208.jar!/META-INF/fabric8/kubernetes.yml
+        labels:
+          app: che-starter
+          provider: fabric8
+          version: 4.0.208
+          group: io.fabric8.platform.apps
+      spec:
+        containers:
+        - env:
+          - name: GITHUB_TOKEN_URL
+            valueFrom:
+              configMapKeyRef:
+                key: github.tokenurl
+                name: che-starter
+          - name: OPENSHIFT_TOKEN_URL
+            valueFrom:
+              configMapKeyRef:
+                key: oso.tokenurl
+                name: che-starter
+          - name: OSO_ADDRESS
+            valueFrom:
+              configMapKeyRef:
+                key: oso.address
+                name: che-starter
+          - name: OSO_DOMAIN_NAME
+            valueFrom:
+              configMapKeyRef:
+                key: oso.domain.name
+                name: che-starter
+          - name: FABRIC8_PLATFORM_DEV_MODE
+            valueFrom:
+              configMapKeyRef:
+                key: fabric8.dev.mode
+                name: che-starter
+          image: rhche/che-starter:7a6345
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /status
+              port: 10000
+              scheme: HTTP
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: che-starter
+          ports:
+          - containerPort: 10000
+            name: ndmp
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /status
+              port: 10000
+              scheme: HTTP
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          volumeMounts:
+          - mountPath: /tmp
+            name: che-starter-volume-1
+        volumes:
+        - emptyDir: {}
+          name: che-starter-volume-1
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=configmapcontroller&var-version=4.0.208
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/configmapcontroller
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/configmapcontroller
+      fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-platform/master/apps/configmapcontroller/src/main/fabric8/icon.png
+      fabric8.io/git-branch: release-v4.0.208
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/configmapcontroller
+      fabric8.io/scm-tag: app-console-2.0.1
+    labels:
+      app: configmapcontroller
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: configmapcontroller
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 2
+    selector:
+      matchLabels:
+        app: configmapcontroller
+        provider: fabric8
+        group: io.fabric8.platform.apps
+    template:
+      metadata:
+        annotations:
+          fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=configmapcontroller&var-version=4.0.208
+          fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/configmapcontroller
+          fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/configmapcontroller
+          fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-platform/master/apps/configmapcontroller/src/main/fabric8/icon.png
+          fabric8.io/git-branch: release-v4.0.208
+          fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/configmapcontroller
+          fabric8.io/scm-tag: app-console-2.0.1
+          maven.fabric8.io/source-url: jar:file:/home/jenkins/workspace/8io_fabric8-platform_master-4P5FOSFKYBLAPGDO7GHHNEOGKKERYH26KXBFORI5V7MRVJFY3QWA/apps/configmapcontroller/target/configmapcontroller-4.0.208.jar!/META-INF/fabric8/kubernetes.yml
+        labels:
+          app: configmapcontroller
+          provider: fabric8
+          version: 4.0.208
+          group: io.fabric8.platform.apps
+      spec:
+        containers:
+        - env:
+          - name: KUBERNETES_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          image: fabric8/configmapcontroller:2.3.7
+          name: configmapcontroller
+        serviceAccountName: configmapcontroller
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=elasticsearch&var-version=2.2.335
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/elasticsearch
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/elasticsearch
+      fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/elasticsearch/src/main/fabric8/icon.png
+      fabric8.io/git-branch: release-v2.2.335
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/elasticsearch
+      fabric8.io/scm-tag: fabric8-devops-2.0.1
+    labels:
+      provider: fabric8
+      project: elasticsearch
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: elasticsearch
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        project: elasticsearch
+        provider: fabric8
+        group: io.fabric8.devops.apps
+    template:
+      metadata:
+        annotations:
+          fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=elasticsearch&var-version=2.2.335
+          fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/elasticsearch
+          pod.alpha.kubernetes.io/init-containers: '[{"image":"busybox","imagePullPolicy":"IfNotPresent","name":"fmp-volume-permission","command":["chmod","777","/usr/share/elasticsearch/data"],"volumeMounts":[{"mountPath":"/usr/share/elasticsearch/data","name":"data"}]}]'
+          fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/elasticsearch
+          fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/elasticsearch/src/main/fabric8/icon.png
+          fabric8.io/git-branch: release-v2.2.335
+          fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/elasticsearch
+          fabric8.io/scm-tag: fabric8-devops-2.0.1
+          maven.fabric8.io/source-url: jar:file:/home/jenkins/.mvnrepository/io/fabric8/devops/apps/elasticsearch/2.2.335/elasticsearch-2.2.335.jar!/META-INF/fabric8/kubernetes.yml
+        labels:
+          provider: fabric8
+          project: elasticsearch
+          version: 2.2.335
+          group: io.fabric8.devops.apps
+      spec:
+        containers:
+        - env:
+          - name: SERVICE
+            value: elasticsearch-masters
+          - name: KUBERNETES_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          image: fabric8/elasticsearch-k8s:2.3.4
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            initialDelaySeconds: 30
+            tcpSocket:
+              port: 9300
+          name: elasticsearch
+          readinessProbe:
+            httpGet:
+              path: /_template/logstash
+              port: 9200
+            initialDelaySeconds: 5
+          securityContext:
+            privileged: false
+          volumeMounts:
+          - mountPath: /usr/share/elasticsearch/data
+            name: data
+        - image: fabric8/elasticsearch-logstash-template:2.2.335
+          name: logstash-template
+        volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: es-data
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      configmap.fabric8.io/update-on-change: exposecontroller
+      fabric8.io/git-commit: c3106e3bed60765a6d42a9d9bfbbea4dd0e93a2d
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=exposecontroller-app&var-version=3.0.7
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8-apps/exposecontroller-app.git
+      fabric8.io/scm-url: http://github.com/fabric8-apps/exposecontroller-app
+      fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8-apps/exposecontroller-app/master/src/main/fabric8/icon.png
+      fabric8.io/git-branch: release-v3.0.7
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8-apps/exposecontroller-app.git
+      fabric8.io/scm-tag: exposecontroller-app-1.0.0
+    labels:
+      provider: fabric8
+      project: exposecontroller-app
+      version: 3.0.7
+      group: io.fabric8.apps
+    name: exposecontroller
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        project: exposecontroller-app
+        provider: fabric8
+        group: io.fabric8.apps
+    template:
+      metadata:
+        annotations:
+          fabric8.io/git-commit: c3106e3bed60765a6d42a9d9bfbbea4dd0e93a2d
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=exposecontroller-app&var-version=3.0.7
+          fabric8.io/scm-con-url: scm:git:git@github.com:fabric8-apps/exposecontroller-app.git
+          fabric8.io/scm-url: http://github.com/fabric8-apps/exposecontroller-app
+          fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8-apps/exposecontroller-app/master/src/main/fabric8/icon.png
+          configmap.fabric8.io/update-on-change: exposecontroller
+          fabric8.io/git-branch: release-v3.0.7
+          fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8-apps/exposecontroller-app.git
+          fabric8.io/scm-tag: exposecontroller-app-1.0.0
+        labels:
+          provider: fabric8
+          project: exposecontroller-app
+          version: 3.0.7
+          group: io.fabric8.apps
+      spec:
+        containers:
+        - env:
+          - name: KUBERNETES_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          image: fabric8/exposecontroller:2.3.28
+          livenessProbe:
+            exec:
+              command:
+              - cat
+              - /tmp/restarteveryday
+            initialDelaySeconds: 86164
+          name: exposecontroller
+          volumeMounts:
+          - mountPath: /etc/exposecontroller
+            name: config-volume
+        serviceAccountName: exposecontroller
+        volumes:
+        - configMap:
+            name: exposecontroller
+          name: config-volume
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      configmap.fabric8.io/update-on-change: fabric8
+      fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=fabric8&var-version=4.0.208
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/fabric8
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/fabric8
+      fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-platform/master/apps/fabric8/src/main/fabric8/icon.svg
+      fabric8.io/git-branch: release-v4.0.208
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/fabric8
+      fabric8.io/scm-tag: app-console-2.0.1
+    labels:
+      app: fabric8
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: fabric8
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 2
+    selector:
+      matchLabels:
+        app: fabric8
+        provider: fabric8
+        group: io.fabric8.platform.apps
+    template:
+      metadata:
+        annotations:
+          fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+          pod.beta.kubernetes.io/init-containers: |-
+            [
+            {
+              "name": "wait-for-f8tenant",
+              "image": "fabric8/fabric8-dependency-wait-service:v6632df1",
+              "imagePullPolicy": "IfNotPresent",
+              "command": ["sh", "-c", "fabric8-dependency-wait-service-linux-amd64 http://f8tenant:80/api/status"],
+              "env": [{
+                "name": "DEPENDENCY_POLL_INTERVAL",
+                "value": "1"
+              }, {
+                "name": "DEPENDENCY_LOG_VERBOSE",
+                "value": "true"
+              }]
+            },
+            {
+              "name": "wait-for-auth",
+              "image": "fabric8/fabric8-dependency-wait-service:v6632df1",
+              "imagePullPolicy": "IfNotPresent",
+              "command": ["sh", "-c", "fabric8-dependency-wait-service-linux-amd64 http://auth:80/api/status"],
+              "env": [{
+                "name": "DEPENDENCY_POLL_INTERVAL",
+                "value": "1"
+              }, {
+                "name": "DEPENDENCY_LOG_VERBOSE",
+                "value": "true"
+              }]
+            },
+            {
+              "name": "wait-for-wit",
+              "image": "fabric8/fabric8-dependency-wait-service:v6632df1",
+              "imagePullPolicy": "IfNotPresent",
+              "command": ["sh", "-c", "fabric8-dependency-wait-service-linux-amd64 http://wit:80/api/status"],
+              "env": [{
+                "name": "DEPENDENCY_POLL_INTERVAL",
+                "value": "1"
+              }, {
+                "name": "DEPENDENCY_LOG_VERBOSE",
+                "value": "true"
+              }]
+            }
+            ]
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=fabric8&var-version=4.0.208
+          fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/fabric8
+          fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/fabric8
+          fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-platform/master/apps/fabric8/src/main/fabric8/icon.svg
+          configmap.fabric8.io/update-on-change: fabric8
+          fabric8.io/git-branch: release-v4.0.208
+          fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/fabric8
+          fabric8.io/scm-tag: app-console-2.0.1
+          maven.fabric8.io/source-url: jar:file:/home/jenkins/workspace/8io_fabric8-platform_master-4P5FOSFKYBLAPGDO7GHHNEOGKKERYH26KXBFORI5V7MRVJFY3QWA/apps/fabric8/target/fabric8-4.0.208.jar!/META-INF/fabric8/kubernetes.yml
+          fabric8.io/service-dependencies: f8tenant,auth,wit
+        labels:
+          app: fabric8
+          provider: fabric8
+          version: 4.0.208
+          group: io.fabric8.platform.apps
+      spec:
+        containers:
+        - env:
+          - name: KUBERNETES_MODE
+            value: "true"
+          - name: BRANDING
+            value: fabric8
+          - name: K8S_API_SERVER
+            valueFrom:
+              configMapKeyRef:
+                key: apiserver.host
+                name: fabric8
+          - name: WS_K8S_API_SERVER
+            valueFrom:
+              configMapKeyRef:
+                key: apiserver.host
+                name: fabric8
+          - name: FABRIC8_SSO_API_URL
+            valueFrom:
+              configMapKeyRef:
+                key: keycloak.url
+                name: sso
+          - name: FABRIC8_WIT_API_URL
+            valueFrom:
+              configMapKeyRef:
+                key: wit.api.url
+                name: fabric8
+          - name: FABRIC8_TENANT_API_URL
+            valueFrom:
+              configMapKeyRef:
+                key: f8tenant.api.url
+                name: fabric8
+          - name: FABRIC8_FORGE_API_URL
+            valueFrom:
+              configMapKeyRef:
+                key: forge.api.url
+                name: fabric8
+          - name: OPENSHIFT_CONSOLE_URL
+            valueFrom:
+              configMapKeyRef:
+                key: openshift.console.url
+                name: fabric8
+          - name: FABRIC8_RECOMMENDER_API_URL
+            valueFrom:
+              configMapKeyRef:
+                key: recommender.api.url
+                name: fabric8
+          - name: PROXIED_K8S_API_SERVER
+            valueFrom:
+              configMapKeyRef:
+                key: proxy.pass.server
+                name: fabric8
+          - name: PROXY_PASS_URL
+            valueFrom:
+              configMapKeyRef:
+                key: proxy.pass.url
+                name: fabric8
+          - name: K8S_API_SERVER_PROTOCOL
+            valueFrom:
+              configMapKeyRef:
+                key: apiserver.protocol
+                name: fabric8
+          - name: K8S_API_SERVER_BASE_PATH
+            valueFrom:
+              configMapKeyRef:
+                key: apiserver.base.path
+                name: fabric8
+          - name: WS_K8S_API_SERVER_BASE_PATH
+            valueFrom:
+              configMapKeyRef:
+                key: ws.apiserver.base.path
+                name: fabric8
+          - name: WS_K8S_API_SERVER_PROTOCOL
+            valueFrom:
+              configMapKeyRef:
+                key: ws.apiserver.protocol
+                name: fabric8
+          - name: WS_K8S_API_SERVER
+            valueFrom:
+              configMapKeyRef:
+                key: ws.apiserver.host
+                name: fabric8
+          image: fabric8/fabric8-ui:v318d700
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            initialDelaySeconds: 120
+            tcpSocket:
+              port: 8080
+            timeoutSeconds: 10
+          name: fabric8
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          readinessProbe:
+            initialDelaySeconds: 20
+            tcpSocket:
+              port: 8080
+            timeoutSeconds: 10
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      configmap.fabric8.io/update-on-change: forge
+      fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=forge&var-version=4.0.208
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/forge
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/forge
+      fabric8.io/git-branch: release-v4.0.208
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/forge
+      fabric8.io/scm-tag: app-console-2.0.1
+    labels:
+      app: forge
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: forge
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 2
+    selector:
+      matchLabels:
+        app: forge
+        provider: fabric8
+        group: io.fabric8.platform.apps
+    template:
+      metadata:
+        annotations:
+          fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=forge&var-version=4.0.208
+          fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/forge
+          fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/forge
+          configmap.fabric8.io/update-on-change: forge
+          fabric8.io/git-branch: release-v4.0.208
+          fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/forge
+          fabric8.io/scm-tag: app-console-2.0.1
+          maven.fabric8.io/source-url: jar:file:/home/jenkins/workspace/8io_fabric8-platform_master-4P5FOSFKYBLAPGDO7GHHNEOGKKERYH26KXBFORI5V7MRVJFY3QWA/apps/forge/target/forge-4.0.208.jar!/META-INF/fabric8/kubernetes.yml
+        labels:
+          app: forge
+          provider: fabric8
+          version: 4.0.208
+          group: io.fabric8.platform.apps
+      spec:
+        containers:
+        - env:
+          - name: LAUNCHPAD_BACKEND_CATALOG_GIT_REF
+            value: next
+          - name: OPENSHIFT_API_URL
+            valueFrom:
+              configMapKeyRef:
+                key: apiserver.url
+                name: forge
+          - name: KEYCLOAK_SAAS_URL
+            valueFrom:
+              configMapKeyRef:
+                key: keycloak.url
+                name: forge
+          - name: WIT_URL
+            valueFrom:
+              configMapKeyRef:
+                key: wit.url
+                name: forge
+          - name: KUBERNETES_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: JAVA_OPTIONS
+            value: -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses=true
+          image: fabric8/generator-backend:1.0.84
+          livenessProbe:
+            failureThreshold: 30
+            httpGet:
+              path: forge/version
+              port: 8080
+            initialDelaySeconds: 300
+            timeoutSeconds: 10
+          name: forge
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          - containerPort: 9779
+            name: prometheus
+            protocol: TCP
+          - containerPort: 8778
+            name: jolokia
+            protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: forge/version
+              port: 8080
+            initialDelaySeconds: 3
+            timeoutSeconds: 3
+          workingDir: /home
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      fabric8.io/iconUrl: data:image/svg+xml;charset=UTF-8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE2LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHdpZHRoPSI5N3B4IiBoZWlnaHQ9Ijk3cHgiIHZpZXdCb3g9IjAgMCA5NyA5NyIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgOTcgOTciIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8Zz4KCTxwYXRoIGZpbGw9IiNGMDUxMzMiIGQ9Ik05Mi43MSw0NC40MDhMNTIuNTkxLDQuMjkxYy0yLjMxLTIuMzExLTYuMDU3LTIuMzExLTguMzY5LDBsLTguMzMsOC4zMzJMNDYuNDU5LDIzLjE5CgkJYzIuNDU2LTAuODMsNS4yNzItMC4yNzMsNy4yMjksMS42ODVjMS45NjksMS45NywyLjUyMSw0LjgxLDEuNjcsNy4yNzVsMTAuMTg2LDEwLjE4NWMyLjQ2NS0wLjg1LDUuMzA3LTAuMyw3LjI3NSwxLjY3MQoJCWMyLjc1LDIuNzUsMi43NSw3LjIwNiwwLDkuOTU4Yy0yLjc1MiwyLjc1MS03LjIwOCwyLjc1MS05Ljk2MSwwYy0yLjA2OC0yLjA3LTIuNTgtNS4xMS0xLjUzMS03LjY1OGwtOS41LTkuNDk5djI0Ljk5NwoJCWMwLjY3LDAuMzMyLDEuMzAzLDAuNzc0LDEuODYxLDEuMzMyYzIuNzUsMi43NSwyLjc1LDcuMjA2LDAsOS45NTljLTIuNzUsMi43NDktNy4yMDksMi43NDktOS45NTcsMGMtMi43NS0yLjc1NC0yLjc1LTcuMjEsMC05Ljk1OQoJCWMwLjY4LTAuNjc5LDEuNDY3LTEuMTkzLDIuMzA3LTEuNTM3VjM2LjM2OWMtMC44NC0wLjM0NC0xLjYyNS0wLjg1My0yLjMwNy0xLjUzN2MtMi4wODMtMi4wODItMi41ODQtNS4xNC0xLjUxNi03LjY5OAoJCUwzMS43OTgsMTYuNzE1TDQuMjg4LDQ0LjIyMmMtMi4zMTEsMi4zMTMtMi4zMTEsNi4wNiwwLDguMzcxbDQwLjEyMSw0MC4xMThjMi4zMSwyLjMxMSw2LjA1NiwyLjMxMSw4LjM2OSwwTDkyLjcxLDUyLjc3OQoJCUM5NS4wMjEsNTAuNDY4LDk1LjAyMSw0Ni43MTksOTIuNzEsNDQuNDA4eiIvPgo8L2c+Cjwvc3ZnPgo=
+      fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=git-collector&var-version=2.2.335
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/git-collector
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/git-collector
+      fabric8.io/git-branch: release-v2.2.335
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/git-collector
+      fabric8.io/scm-tag: fabric8-devops-2.0.1
+    labels:
+      provider: fabric8
+      project: git-collector
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: git-collector
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        provider: fabric8
+        project: git-collector
+        group: io.fabric8.devops.apps
+    template:
+      metadata:
+        annotations:
+          fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=git-collector&var-version=2.2.335
+          fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/git-collector
+          fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/git-collector
+          fabric8.io/iconUrl: data:image/svg+xml;charset=UTF-8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE2LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHdpZHRoPSI5N3B4IiBoZWlnaHQ9Ijk3cHgiIHZpZXdCb3g9IjAgMCA5NyA5NyIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgOTcgOTciIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8Zz4KCTxwYXRoIGZpbGw9IiNGMDUxMzMiIGQ9Ik05Mi43MSw0NC40MDhMNTIuNTkxLDQuMjkxYy0yLjMxLTIuMzExLTYuMDU3LTIuMzExLTguMzY5LDBsLTguMzMsOC4zMzJMNDYuNDU5LDIzLjE5CgkJYzIuNDU2LTAuODMsNS4yNzItMC4yNzMsNy4yMjksMS42ODVjMS45NjksMS45NywyLjUyMSw0LjgxLDEuNjcsNy4yNzVsMTAuMTg2LDEwLjE4NWMyLjQ2NS0wLjg1LDUuMzA3LTAuMyw3LjI3NSwxLjY3MQoJCWMyLjc1LDIuNzUsMi43NSw3LjIwNiwwLDkuOTU4Yy0yLjc1MiwyLjc1MS03LjIwOCwyLjc1MS05Ljk2MSwwYy0yLjA2OC0yLjA3LTIuNTgtNS4xMS0xLjUzMS03LjY1OGwtOS41LTkuNDk5djI0Ljk5NwoJCWMwLjY3LDAuMzMyLDEuMzAzLDAuNzc0LDEuODYxLDEuMzMyYzIuNzUsMi43NSwyLjc1LDcuMjA2LDAsOS45NTljLTIuNzUsMi43NDktNy4yMDksMi43NDktOS45NTcsMGMtMi43NS0yLjc1NC0yLjc1LTcuMjEsMC05Ljk1OQoJCWMwLjY4LTAuNjc5LDEuNDY3LTEuMTkzLDIuMzA3LTEuNTM3VjM2LjM2OWMtMC44NC0wLjM0NC0xLjYyNS0wLjg1My0yLjMwNy0xLjUzN2MtMi4wODMtMi4wODItMi41ODQtNS4xNC0xLjUxNi03LjY5OAoJCUwzMS43OTgsMTYuNzE1TDQuMjg4LDQ0LjIyMmMtMi4zMTEsMi4zMTMtMi4zMTEsNi4wNiwwLDguMzcxbDQwLjEyMSw0MC4xMThjMi4zMSwyLjMxMSw2LjA1NiwyLjMxMSw4LjM2OSwwTDkyLjcxLDUyLjc3OQoJCUM5NS4wMjEsNTAuNDY4LDk1LjAyMSw0Ni43MTksOTIuNzEsNDQuNDA4eiIvPgo8L2c+Cjwvc3ZnPgo=
+          fabric8.io/git-branch: release-v2.2.335
+          fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/git-collector
+          fabric8.io/scm-tag: fabric8-devops-2.0.1
+          maven.fabric8.io/source-url: jar:file:/home/jenkins/.mvnrepository/io/fabric8/devops/apps/git-collector/2.2.335/git-collector-2.2.335.jar!/META-INF/fabric8/kubernetes.yml
+        labels:
+          provider: fabric8
+          project: git-collector
+          version: 2.2.335
+          group: io.fabric8.devops.apps
+      spec:
+        containers:
+        - env:
+          - name: KUBERNETES_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          image: fabric8/git-collector:2.2.335
+          imagePullPolicy: IfNotPresent
+          name: git-collector
+          ports:
+          - containerPort: 8778
+            name: jolokia
+          resources:
+            limits:
+              cpu: "0"
+              memory: "0"
+            requests:
+              cpu: "0"
+              memory: "0"
+          securityContext:
+            privileged: false
+        serviceAccountName: fabric8
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=hubot-mattermost&var-version=2.2.335
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/hubot-mattermost
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/hubot-mattermost
+      fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/hubot-mattermost/src/main/fabric8/icon.png
+      fabric8.io/git-branch: release-v2.2.335
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/hubot-mattermost
+      fabric8.io/scm-tag: fabric8-devops-2.0.1
+    labels:
+      name: hubot-mattermost
+      provider: fabric8
+      project: hubot-mattermost
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: hubot-mattermost
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        name: hubot-mattermost
+        project: hubot-mattermost
+        provider: fabric8
+        group: io.fabric8.devops.apps
+    template:
+      metadata:
+        annotations:
+          fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=hubot-mattermost&var-version=2.2.335
+          fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/hubot-mattermost
+          fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/hubot-mattermost
+          fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/hubot-mattermost/src/main/fabric8/icon.png
+          fabric8.io/git-branch: release-v2.2.335
+          fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/hubot-mattermost
+          fabric8.io/scm-tag: fabric8-devops-2.0.1
+        labels:
+          name: hubot-mattermost
+          provider: fabric8
+          project: hubot-mattermost
+          version: 2.2.335
+          group: io.fabric8.devops.apps
+        name: hubot-mattermost
+      spec:
+        containers:
+        - env:
+          - name: HUBOT_GRAFANA_API_KEY
+            valueFrom:
+              configMapKeyRef:
+                key: hubot-grafana-api-key
+                name: hubot-mattermost
+          - name: HUBOT_GRAFANA_HOST
+            valueFrom:
+              configMapKeyRef:
+                key: hubot-grafana-host
+                name: hubot-mattermost
+          - name: HUBOT_JENKINS_URL
+            valueFrom:
+              configMapKeyRef:
+                key: hubot-jenkins-url
+                name: hubot-mattermost
+          image: fabric8/hubot-mattermost:1.0.0
+          name: hubot-mattermost
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/hubot-notifier/src/main/fabric8/icon.png
+      fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=hubot-notifier&var-version=2.2.335
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/hubot-notifier
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/hubot-notifier
+      fabric8.io/git-branch: release-v2.2.335
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/hubot-notifier
+      fabric8.io/scm-tag: fabric8-devops-2.0.1
+    labels:
+      provider: fabric8
+      project: hubot-notifier
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: hubot-notifier
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        provider: fabric8
+        project: hubot-notifier
+        group: io.fabric8.devops.apps
+    template:
+      metadata:
+        annotations:
+          fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=hubot-notifier&var-version=2.2.335
+          fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/hubot-notifier
+          fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/hubot-notifier
+          fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/hubot-notifier/src/main/fabric8/icon.png
+          fabric8.io/git-branch: release-v2.2.335
+          fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/hubot-notifier
+          fabric8.io/scm-tag: fabric8-devops-2.0.1
+          maven.fabric8.io/source-url: jar:file:/home/jenkins/.mvnrepository/io/fabric8/devops/apps/hubot-notifier/2.2.335/hubot-notifier-2.2.335.jar!/META-INF/fabric8/kubernetes.yml
+        labels:
+          provider: fabric8
+          project: hubot-notifier
+          version: 2.2.335
+          group: io.fabric8.devops.apps
+      spec:
+        containers:
+        - env:
+          - name: HUBOT_KUBERNETES_ROOM
+            value: '#fabric8_${namespace}'
+          - name: HUBOT_USERNAME
+            valueFrom:
+              configMapKeyRef:
+                key: hubot-username
+                name: hubot-notifier
+          - name: HUBOT_PASSWORD
+            valueFrom:
+              configMapKeyRef:
+                key: hubot-password
+                name: hubot-notifier
+          - name: KUBERNETES_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: HUBOT_BUILD_ROOM
+            value: '#fabric8_${namespace}'
+          image: fabric8/hubot-notifier:2.2.335
+          imagePullPolicy: IfNotPresent
+          name: hubot-notifier
+          ports:
+          - containerPort: 8778
+            name: jolokia
+          resources:
+            limits:
+              cpu: "0"
+              memory: "0"
+            requests:
+              cpu: "0"
+              memory: "0"
+          securityContext:
+            privileged: false
+        serviceAccountName: fabric8
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      configmap.fabric8.io/update-on-change: f8tenant
+      fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=init-tenant&var-version=4.0.208
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/init-tenant
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/init-tenant
+      fabric8.io/git-branch: release-v4.0.208
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/init-tenant
+      fabric8.io/scm-tag: app-console-2.0.1
+    labels:
+      service: init-tenant
+      app: init-tenant
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: init-tenant
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 2
+    selector:
+      matchLabels:
+        app: init-tenant
+        provider: fabric8
+        group: io.fabric8.platform.apps
+    template:
+      metadata:
+        annotations:
+          fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+          pod.beta.kubernetes.io/init-containers: |-
+            [
+            {
+              "name": "init-dependencyservice1",
+              "image": "fabric8/fabric8-dependency-wait-service:v6632df1",
+              "imagePullPolicy": "IfNotPresent",
+              "command": ["sh", "-c", "fabric8-dependency-wait-service-linux-amd64 postgres://f8tenant@init-tenant-db:5432"],
+              "env": [{
+                "name": "DEPENDENCY_POLL_INTERVAL",
+                "value": "1"
+              }, {
+                "name": "DEPENDENCY_LOG_VERBOSE",
+                "value": "true"
+              }]
+            },
+            {
+              "name": "init-dependencyservice2",
+              "image": "fabric8/fabric8-dependency-wait-service:v6632df1",
+              "imagePullPolicy": "IfNotPresent",
+              "command": ["sh", "-c", "fabric8-dependency-wait-service-linux-amd64 http://keycloak:80"],
+              "env": [{
+                "name": "DEPENDENCY_POLL_INTERVAL",
+                "value": "1"
+              }, {
+                "name": "DEPENDENCY_LOG_VERBOSE",
+                "value": "true"
+              }]
+            }
+            ]
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=init-tenant&var-version=4.0.208
+          fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/init-tenant
+          fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/init-tenant
+          configmap.fabric8.io/update-on-change: f8tenant
+          fabric8.io/git-branch: release-v4.0.208
+          fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/init-tenant
+          fabric8.io/scm-tag: app-console-2.0.1
+          maven.fabric8.io/source-url: jar:file:/home/jenkins/workspace/8io_fabric8-platform_master-4P5FOSFKYBLAPGDO7GHHNEOGKKERYH26KXBFORI5V7MRVJFY3QWA/apps/init-tenant/target/init-tenant-4.0.208.jar!/META-INF/fabric8/kubernetes.yml
+          fabric8.io/service-dependencies: init-tenant-db,keycloak
+        labels:
+          service: init-tenant
+          app: init-tenant
+          provider: fabric8
+          version: 4.0.208
+          group: io.fabric8.platform.apps
+      spec:
+        containers:
+        - env:
+          - name: KUBERNETES_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: F8_KUBERNETES_MODE
+            valueFrom:
+              configMapKeyRef:
+                key: kubernetes.mode
+                name: f8tenant
+          - name: TENANT_EXPOSER
+            valueFrom:
+              configMapKeyRef:
+                key: tenant.exposer
+                name: f8tenant
+          - name: F8_WIT_URL
+            valueFrom:
+              configMapKeyRef:
+                key: wit.url
+                name: f8tenant
+          - name: F8_KEYCLOAK_URL
+            valueFrom:
+              configMapKeyRef:
+                key: keycloak.url
+                name: f8tenant
+          - name: F8_OPENSHIFT_TENANT_MASTERURL
+            valueFrom:
+              configMapKeyRef:
+                key: openshift.tenant.masterurl
+                name: f8tenant
+          - name: F8_OPENSHIFT_USE_CURRENT_CLUSTER
+            valueFrom:
+              configMapKeyRef:
+                key: openshift.use.current.cluster
+                name: f8tenant
+          - name: F8_API_SERVER_INSECURE_SKIP_TLS_VERIFY
+            valueFrom:
+              configMapKeyRef:
+                key: api.server.insecure.skip.tls.verify
+                name: f8tenant
+          - name: F8_POSTGRES_CONNECTION_MAXIDLE
+            valueFrom:
+              configMapKeyRef:
+                key: postgres.connection.maxidle
+                name: f8tenant
+          - name: F8_POSTGRES_CONNECTION_MAXOPEN
+            valueFrom:
+              configMapKeyRef:
+                key: postgres.connection.maxopen
+                name: f8tenant
+          - name: F8_POSTGRES_HOST
+            valueFrom:
+              secretKeyRef:
+                key: postgres.host
+                name: f8tenant
+          - name: F8_POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: postgres.password
+                name: f8tenant
+          - name: F8_POSTGRES_PORT
+            valueFrom:
+              secretKeyRef:
+                key: postgres.port
+                name: f8tenant
+          - name: F8_POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                key: postgres.user
+                name: f8tenant
+          - name: F8_POSTGRES_DATABASE
+            valueFrom:
+              secretKeyRef:
+                key: postgres.database
+                name: f8tenant
+          - name: F8_TEMPLATE_DOMAIN
+            valueFrom:
+              configMapKeyRef:
+                key: template.domain
+                name: f8tenant
+          - name: F8_TEMPLATE_RECOMMENDER_EXTERNAL_NAME
+            valueFrom:
+              configMapKeyRef:
+                key: template.recommender.external.name
+                name: f8tenant
+          - name: F8_TEMPLATE_RECOMMENDER_API_TOKEN
+            valueFrom:
+              secretKeyRef:
+                key: template.recommender.api.token
+                name: f8tenant
+          - name: KEYCLOAK_SKIP_HOST_VERIFY
+            valueFrom:
+              configMapKeyRef:
+                key: keycloak.skip.host.verify
+                name: f8tenant
+          - name: DISABLE_OSO_QUOTAS
+            valueFrom:
+              configMapKeyRef:
+                key: disable.oso.quotas
+                name: f8tenant
+          image: fabric8/fabric8-tenant:v8794468
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /api/status
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: f8tenant
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /api/status
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+        serviceAccountName: init-tenant
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      configmap.fabric8.io/update-on-change: init-tenant
+      fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=init-tenant&var-version=4.0.208
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/init-tenant
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/init-tenant
+      fabric8.io/git-branch: release-v4.0.208
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/init-tenant
+      fabric8.io/scm-tag: app-console-2.0.1
+    labels:
+      service: init-tenant-db
+      app: init-tenant
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: init-tenant-db
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 2
+    selector:
+      matchLabels:
+        app: init-tenant
+        provider: fabric8
+        group: io.fabric8.platform.apps
+    template:
+      metadata:
+        annotations:
+          fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=init-tenant&var-version=4.0.208
+          fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/init-tenant
+          pod.alpha.kubernetes.io/init-containers: '[{"image":"busybox","imagePullPolicy":"IfNotPresent","name":"fmp-volume-permission","command":["chmod","777","/var/lib/pgsql"],"volumeMounts":[{"mountPath":"/var/lib/pgsql","name":"init-tenant-postgresql-data"}]}]'
+          fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/init-tenant
+          configmap.fabric8.io/update-on-change: init-tenant
+          fabric8.io/git-branch: release-v4.0.208
+          fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/init-tenant
+          fabric8.io/scm-tag: app-console-2.0.1
+          maven.fabric8.io/source-url: jar:file:/home/jenkins/workspace/8io_fabric8-platform_master-4P5FOSFKYBLAPGDO7GHHNEOGKKERYH26KXBFORI5V7MRVJFY3QWA/apps/init-tenant/target/init-tenant-4.0.208.jar!/META-INF/fabric8/kubernetes.yml
+        labels:
+          service: init-tenant-db
+          app: init-tenant
+          provider: fabric8
+          version: 4.0.208
+          group: io.fabric8.platform.apps
+      spec:
+        containers:
+        - env:
+          - name: POSTGRESQL_ADMIN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: postgres.password
+                name: f8tenant
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          image: registry.centos.org/postgresql/postgresql:9.6
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - exec pg_isready --host $POD_IP
+            failureThreshold: 6
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+          name: init-tenant-db
+          ports:
+          - containerPort: 5432
+            name: postgresql
+            protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - exec pg_isready --host $POD_IP
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+          volumeMounts:
+          - mountPath: /var/lib/pgsql
+            name: init-tenant-postgresql-data
+            readOnly: false
+        volumes:
+        - name: init-tenant-postgresql-data
+          persistentVolumeClaim:
+            claimName: init-tenant-postgresql-data
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      configmap.fabric8.io/update-on-change: keycloak
+      fabric8.io/target-platform: kubernetes
+      fabric8.io/git-commit: d4290605871d7b4bf131fee69c6c536374f9f4bc
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=keycloak&var-version=1.0.8
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8-apps/keycloak-app.git/keycloak
+      fabric8.io/scm-url: http://github.com/fabric8-apps/keycloak-app/keycloak
+      fabric8.io/git-branch: release-v1.0.8
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8-apps/keycloak-app.git/keycloak
+      fabric8.io/scm-tag: keycloak-app-1.0.0
+    labels:
+      provider: fabric8
+      project: keycloak
+      version: 1.0.8
+      group: io.fabric8.apps
+    name: keycloak
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        project: keycloak
+        provider: fabric8
+        group: io.fabric8.apps
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        annotations:
+          fabric8.io/git-commit: d4290605871d7b4bf131fee69c6c536374f9f4bc
+          pod.beta.kubernetes.io/init-containers: |-
+            [
+            {
+              "name": "envvar-substitution",
+              "image": "fabric8/envsubst-file:1.0.0",
+              "imagePullPolicy": "IfNotPresent",
+              "args": [
+                "fabric8-realm.json"
+              ],
+              "env": [{
+                "name": "AUTH_URL",
+                "valueFrom": {
+                        "configMapKeyRef": {
+                            "name": "keycloak",
+                            "key": "auth.api.url"
+                        }
+                    }
+              },
+              {
+                "name": "WIT_URL",
+                "valueFrom": {
+                        "configMapKeyRef": {
+                            "name": "keycloak",
+                            "key": "wit.api.url"
+                        }
+                    }
+              },
+              {
+                "name": "JENKINS_URL",
+                "valueFrom": {
+                        "configMapKeyRef": {
+                            "name": "keycloak",
+                            "key": "jenkins.url"
+                        }
+                    }
+              },
+              {
+                "name": "KEYCLOAK_URL",
+                "valueFrom": {
+                        "configMapKeyRef": {
+                            "name": "keycloak",
+                            "key": "keycloak.url"
+                        }
+                    }
+              },
+              {
+                "name": "FABRIC8_URL",
+                "valueFrom": {
+                        "configMapKeyRef": {
+                            "name": "keycloak",
+                            "key": "fabric8.url"
+                        }
+                    }
+              },
+              {
+                "name": "KEYCLOAK_PRIVATEKEY",
+                "valueFrom": {
+                        "secretKeyRef": {
+                            "name": "keycloak",
+                            "key": "kc.private.key"
+                        }
+                    }
+              },
+              {
+                "name": "KEYCLOAK_PUBLICKEY",
+                "valueFrom": {
+                        "secretKeyRef": {
+                            "name": "keycloak",
+                            "key": "kc.public.key"
+                        }
+                    }
+              },
+              {
+                "name": "KEYCLOAK_CLIENTID_SECRET",
+                "valueFrom": {
+                        "secretKeyRef": {
+                            "name": "keycloak",
+                            "key": "kc.clientid.secret"
+                        }
+                    }
+              },
+              {
+                "name": "K8S_API_SERVER",
+                "valueFrom": {
+                        "configMapKeyRef": {
+                            "name": "keycloak",
+                            "key": "apiserver.url"
+                        }
+                    }
+              },
+              {
+                "name": "HIDE_OPENSHIFT_BTN",
+                "value": "true"
+              },
+              {
+                "name": "HIDE_GITHUB_BTN",
+                "value": "false"
+              }],
+              "volumeMounts": [
+              {
+                "name": "keycloak-config",
+                "mountPath": "/workdir/fabric8-realm.json",
+                "subPath": "config/fabric8-realm.json"
+              },
+              {
+                "name": "keycloak-subst-config",
+                "mountPath": "/processed"
+              }
+              ]
+            },
+            {
+                "name": "init-dependencyservice",
+                "image": "fabric8/fabric8-dependency-wait-service:v6632df1",
+                "imagePullPolicy": "IfNotPresent",
+                "command": ["sh", "-c", "fabric8-dependency-wait-service-linux-amd64 postgres://keycloak@keycloak-db:5432"],
+                "env": [{
+                  "name": "DEPENDENCY_POLL_INTERVAL",
+                  "value": "1"
+                }, {
+                  "name": "DEPENDENCY_LOG_VERBOSE",
+                  "value": "true"
+                }]
+            }]
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=keycloak&var-version=1.0.8
+          fabric8.io/scm-con-url: scm:git:git@github.com:fabric8-apps/keycloak-app.git/keycloak
+          fabric8.io/scm-url: http://github.com/fabric8-apps/keycloak-app/keycloak
+          configmap.fabric8.io/update-on-change: keycloak
+          fabric8.io/target-platform: kubernetes
+          fabric8.io/git-branch: release-v1.0.8
+          fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8-apps/keycloak-app.git/keycloak
+          fabric8.io/scm-tag: keycloak-app-1.0.0
+          maven.fabric8.io/source-url: jar:file:/home/jenkins/.mvnrepository/io/fabric8/apps/keycloak/1.0.8/keycloak-1.0.8.jar!/META-INF/fabric8/kubernetes.yml
+        labels:
+          provider: fabric8
+          project: keycloak
+          version: 1.0.8
+          group: io.fabric8.apps
+      spec:
+        containers:
+        - args:
+          - -b $(INTERNAL_POD_IP)
+          - -Djgroups.bind_addr=global
+          - -Djboss.node.name=$(INTERNAL_POD_IP)
+          - -Dkeycloak.migration.action=import
+          - -Dkeycloak.migration.provider=singleFile
+          - -Dkeycloak.migration.file=/opt/jboss/keycloak/standalone/configuration/import/fabric8-realm.json
+          - -Dkeycloak.migration.strategy=IGNORE_EXISTING
+          env:
+          - name: POSTGRES_HOSTNAME
+            value: keycloak-db
+          - name: POSTGRES_USER
+            value: keycloak
+          - name: POSTGRES_PASSWORD
+            value: keycloak
+          - name: OPERATING_MODE
+            value: standalone
+          - name: POSTGRES_PORT_5432_TCP_ADDR
+            value: keycloak-db
+          - name: INTERNAL_POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          - name: KEYCLOAK_USER
+            valueFrom:
+              secretKeyRef:
+                key: kc.user
+                name: keycloak
+          - name: KEYCLOAK_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: kc.password
+                name: keycloak
+          - name: KEYCLOAK_CLIENTID_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: kc.clientid.secret
+                name: keycloak
+          - name: KEYCLOAK_PRIVATEKEY
+            valueFrom:
+              secretKeyRef:
+                key: kc.private.key
+                name: keycloak
+          - name: KEYCLOAK_PUBLICKEY
+            valueFrom:
+              secretKeyRef:
+                key: kc.public.key
+                name: keycloak
+          - name: HIDE_OPENSHIFT_BTN
+            value: "true"
+          - name: HIDE_GITHUB_BTN
+            value: "false"
+          image: fabric8/keycloak-postgres:v15751c8
+          livenessProbe:
+            httpGet:
+              path: /auth
+              port: 8080
+            initialDelaySeconds: 120
+            timeoutSeconds: 10
+          name: keycloak
+          readinessProbe:
+            httpGet:
+              path: /auth
+              port: 8080
+            initialDelaySeconds: 120
+            timeoutSeconds: 10
+          volumeMounts:
+          - mountPath: /opt/jboss/keycloak/standalone/configuration/import
+            name: keycloak-subst-config
+          - mountPath: /opt/jboss/keycloak/themes/fabric8
+            name: keycloak-theme
+        volumes:
+        - emptyDir: {}
+          name: keycloak-subst-config
+        - configMap:
+            items:
+            - key: fabric8-realm.json
+              path: config/fabric8-realm.json
+            name: keycloak
+          name: keycloak-config
+        - gitRepo:
+            directory: login
+            repository: https://github.com/fabric8io/fabric8-keycloak-theme.git
+            revision: 61b08f0a2f4be2395bb0bbb6d16a8538f4f2b836
+          name: keycloak-theme
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      fabric8.io/git-commit: d4290605871d7b4bf131fee69c6c536374f9f4bc
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=keycloak-db&var-version=1.0.8
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8-apps/keycloak-app.git/keycloak-db
+      fabric8.io/scm-url: http://github.com/fabric8-apps/keycloak-app/keycloak-db
+      fabric8.io/git-branch: release-v1.0.8
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8-apps/keycloak-app.git/keycloak-db
+      fabric8.io/scm-tag: keycloak-app-1.0.0
+    labels:
+      service: keycloak-db
+      provider: fabric8
+      project: keycloak-db
+      version: 1.0.8
+      group: io.fabric8.apps
+    name: keycloak-db
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        project: keycloak-db
+        provider: fabric8
+        group: io.fabric8.apps
+    template:
+      metadata:
+        annotations:
+          fabric8.io/git-commit: d4290605871d7b4bf131fee69c6c536374f9f4bc
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=keycloak-db&var-version=1.0.8
+          fabric8.io/scm-con-url: scm:git:git@github.com:fabric8-apps/keycloak-app.git/keycloak-db
+          pod.alpha.kubernetes.io/init-containers: '[{"image":"busybox","imagePullPolicy":"IfNotPresent","name":"fmp-volume-permission","command":["chmod","777","/var/lib/pgsql"],"volumeMounts":[{"mountPath":"/var/lib/pgsql","name":"keycloak-db-postgresql-data"}]}]'
+          fabric8.io/scm-url: http://github.com/fabric8-apps/keycloak-app/keycloak-db
+          fabric8.io/git-branch: release-v1.0.8
+          fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8-apps/keycloak-app.git/keycloak-db
+          fabric8.io/scm-tag: keycloak-app-1.0.0
+          maven.fabric8.io/source-url: jar:file:/home/jenkins/.mvnrepository/io/fabric8/apps/keycloak-db/1.0.8/keycloak-db-1.0.8.jar!/META-INF/fabric8/kubernetes.yml
+        labels:
+          service: keycloak-db
+          provider: fabric8
+          project: keycloak-db
+          version: 1.0.8
+          group: io.fabric8.apps
+      spec:
+        containers:
+        - env:
+          - name: POSTGRESQL_DATABASE
+            value: keycloak
+          - name: POSTGRESQL_PASSWORD
+            value: keycloak
+          - name: POSTGRESQL_USER
+            value: keycloak
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          image: registry.centos.org/postgresql/postgresql:9.6
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - exec pg_isready --host $POD_IP
+            failureThreshold: 6
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+          name: keycloak-db
+          ports:
+          - containerPort: 5432
+            name: postgresql
+            protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - exec pg_isready --host $POD_IP
+            initialDelaySeconds: 20
+            periodSeconds: 5
+            timeoutSeconds: 3
+          volumeMounts:
+          - mountPath: /var/lib/pgsql
+            name: keycloak-db-postgresql-data
+            readOnly: false
+        volumes:
+        - name: keycloak-db-postgresql-data
+          persistentVolumeClaim:
+            claimName: keycloak-db-postgresql-data
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=kibana&var-version=2.2.335
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/kibana
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/kibana
+      fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/kibana/src/main/fabric8/icon.svg
+      fabric8.io/git-branch: release-v2.2.335
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/kibana
+      fabric8.io/scm-tag: fabric8-devops-2.0.1
+    labels:
+      provider: fabric8
+      project: kibana
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: kibana
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        project: kibana
+        provider: fabric8
+        group: io.fabric8.devops.apps
+    template:
+      metadata:
+        annotations:
+          fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=kibana&var-version=2.2.335
+          fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/kibana
+          fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/kibana
+          fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/kibana/src/main/fabric8/icon.svg
+          fabric8.io/git-branch: release-v2.2.335
+          fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/kibana
+          fabric8.io/scm-tag: fabric8-devops-2.0.1
+          maven.fabric8.io/source-url: jar:file:/home/jenkins/.mvnrepository/io/fabric8/devops/apps/kibana/2.2.335/kibana-2.2.335.jar!/META-INF/fabric8/kubernetes.yml
+        labels:
+          provider: fabric8
+          project: kibana
+          version: 2.2.335
+          group: io.fabric8.devops.apps
+      spec:
+        containers:
+        - env:
+          - name: ELASTICSEARCH_URL
+            value: http://elasticsearch:9200
+          - name: KUBERNETES_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          image: fabric8/kibana4:v4.5.3
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            initialDelaySeconds: 60
+            tcpSocket:
+              port: 5601
+          name: kibana
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5601
+            initialDelaySeconds: 5
+          securityContext:
+            privileged: false
+        - env:
+          - name: ELASTICSEARCH_URL
+            value: http://elasticsearch:9200
+          image: fabric8/kibana-config:2.2.335
+          name: logstash-template
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=mattermost&var-version=4.0.208
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/mattermost
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/mattermost
+      fabric8.io/git-branch: release-v4.0.208
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/mattermost
+      fabric8.io/scm-tag: app-console-2.0.1
+    labels:
+      app: mattermost
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: mattermost
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 2
+    selector:
+      matchLabels:
+        app: mattermost
+        provider: fabric8
+        group: io.fabric8.platform.apps
+    template:
+      metadata:
+        annotations:
+          fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=mattermost&var-version=4.0.208
+          fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/mattermost
+          pod.alpha.kubernetes.io/init-containers: '[{"image":"busybox","imagePullPolicy":"IfNotPresent","name":"fmp-volume-permission","command":["chmod","777","/mattermost/data/"],"volumeMounts":[{"mountPath":"/mattermost/data/","name":"mattermost-data"}]}]'
+          fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/mattermost
+          fabric8.io/git-branch: release-v4.0.208
+          fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/mattermost
+          fabric8.io/scm-tag: app-console-2.0.1
+          maven.fabric8.io/source-url: jar:file:/home/jenkins/workspace/8io_fabric8-platform_master-4P5FOSFKYBLAPGDO7GHHNEOGKKERYH26KXBFORI5V7MRVJFY3QWA/apps/mattermost/target/mattermost-4.0.208.jar!/META-INF/fabric8/kubernetes.yml
+        labels:
+          app: mattermost
+          tier: app
+          provider: fabric8
+          version: 4.0.208
+          group: io.fabric8.platform.apps
+        name: mattermost-app
+      spec:
+        containers:
+        - env:
+          - name: MM_SQLSETTINGS_DATASOURCE
+            valueFrom:
+              secretKeyRef:
+                key: mm-datasource
+                name: mattermost
+          image: fabric8/mattermost:vad68f0d
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8065
+            initialDelaySeconds: 60
+            timeoutSeconds: 10
+          name: mattermost-app
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8065
+            initialDelaySeconds: 10
+            timeoutSeconds: 10
+          volumeMounts:
+          - mountPath: /mattermost/data/
+            name: mattermost-data
+          - mountPath: /mattermost/config/
+            name: mattermost-config
+        volumes:
+        - name: mattermost-data
+          persistentVolumeClaim:
+            claimName: mattermost-data
+        - configMap:
+            items:
+            - key: config.json
+              path: config.json
+            name: mattermost
+          name: mattermost-config
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=mattermost-db&var-version=4.0.208
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/mattermost-db
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/mattermost-db
+      fabric8.io/git-branch: release-v4.0.208
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/mattermost-db
+      fabric8.io/scm-tag: app-console-2.0.1
+    labels:
+      service: mattermost-db
+      app: mattermost-db
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: mattermost-db
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 2
+    selector:
+      matchLabels:
+        app: mattermost-db
+        provider: fabric8
+        group: io.fabric8.platform.apps
+    template:
+      metadata:
+        annotations:
+          fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=mattermost-db&var-version=4.0.208
+          fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/mattermost-db
+          pod.alpha.kubernetes.io/init-containers: '[{"image":"busybox","imagePullPolicy":"IfNotPresent","name":"fmp-volume-permission","command":["chmod","777","/var/lib/pgsql"],"volumeMounts":[{"mountPath":"/var/lib/pgsql","name":"mattermost-db-postgresql-data"}]}]'
+          fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/mattermost-db
+          fabric8.io/git-branch: release-v4.0.208
+          fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/mattermost-db
+          fabric8.io/scm-tag: app-console-2.0.1
+          maven.fabric8.io/source-url: jar:file:/home/jenkins/workspace/8io_fabric8-platform_master-4P5FOSFKYBLAPGDO7GHHNEOGKKERYH26KXBFORI5V7MRVJFY3QWA/apps/mattermost-db/target/mattermost-db-4.0.208.jar!/META-INF/fabric8/kubernetes.yml
+        labels:
+          service: mattermost-db
+          app: mattermost-db
+          provider: fabric8
+          version: 4.0.208
+          group: io.fabric8.platform.apps
+      spec:
+        containers:
+        - env:
+          - name: POSTGRESQL_DATABASE
+            value: mattermost
+          - name: POSTGRESQL_PASSWORD
+            value: mmuser_password
+          - name: POSTGRESQL_USER
+            value: mmuser
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          image: registry.centos.org/postgresql/postgresql:9.6
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - exec pg_isready --host $POD_IP
+            failureThreshold: 6
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+          name: mattermost-db
+          ports:
+          - containerPort: 5432
+            name: postgresql
+            protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - exec pg_isready --host $POD_IP
+            initialDelaySeconds: 20
+            periodSeconds: 5
+            timeoutSeconds: 3
+          volumeMounts:
+          - mountPath: /var/lib/pgsql
+            name: mattermost-db-postgresql-data
+            readOnly: false
+        volumes:
+        - name: mattermost-db-postgresql-data
+          persistentVolumeClaim:
+            claimName: mattermost-db-postgresql-data
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/nexus/src/main/fabric8/icon.png
+      fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=nexus&var-version=2.2.335
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/nexus
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/nexus
+      fabric8.io/git-branch: release-v2.2.335
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/nexus
+      fabric8.io/scm-tag: fabric8-devops-2.0.1
+    labels:
+      provider: fabric8
+      project: nexus
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: nexus
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        provider: fabric8
+        project: nexus
+        group: io.fabric8.devops.apps
+    template:
+      metadata:
+        annotations:
+          fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=nexus&var-version=2.2.335
+          fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/nexus
+          pod.alpha.kubernetes.io/init-containers: '[{"image":"busybox","imagePullPolicy":"IfNotPresent","name":"fmp-volume-permission","command":["chmod","777","/sonatype-work/storage"],"volumeMounts":[{"mountPath":"/sonatype-work/storage","name":"nexus-storage"}]}]'
+          fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/nexus
+          fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/nexus/src/main/fabric8/icon.png
+          fabric8.io/git-branch: release-v2.2.335
+          fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/nexus
+          fabric8.io/scm-tag: fabric8-devops-2.0.1
+          maven.fabric8.io/source-url: jar:file:/home/jenkins/.mvnrepository/io/fabric8/devops/apps/nexus/2.2.335/nexus-2.2.335.jar!/META-INF/fabric8/kubernetes.yml
+        labels:
+          provider: fabric8
+          project: nexus
+          version: 2.2.335
+          group: io.fabric8.devops.apps
+      spec:
+        containers:
+        - env:
+          - name: KUBERNETES_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          image: fabric8/nexus:2.2.335
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /content/repositories/
+              port: 8081
+            initialDelaySeconds: 180
+            timeoutSeconds: 10
+          name: nexus
+          ports:
+          - containerPort: 8081
+            name: http
+          readinessProbe:
+            failureThreshold: 10
+            httpGet:
+              path: /content/repositories/
+              port: 8081
+            initialDelaySeconds: 60
+            timeoutSeconds: 10
+          resources:
+            limits:
+              cpu: "0"
+              memory: "0"
+            requests:
+              cpu: "0"
+              memory: "0"
+          volumeMounts:
+          - mountPath: /sonatype-work/storage
+            name: nexus-storage
+            readOnly: false
+        volumes:
+        - name: nexus-storage
+          persistentVolumeClaim:
+            claimName: nexus-storage
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/sonarqube/src/main/fabric8/icon.svg
+      fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=sonarqube&var-version=2.2.335
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/sonarqube
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/sonarqube
+      fabric8.io/git-branch: release-v2.2.335
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/sonarqube
+      fabric8.io/scm-tag: fabric8-devops-2.0.1
+    labels:
+      provider: fabric8
+      project: sonarqube
+      version: 2.2.335
+      group: io.fabric8.devops.apps
+    name: sonarqube
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        name: sonarqube
+        project: sonarqube
+        provider: fabric8
+        group: io.fabric8.devops.apps
+    template:
+      metadata:
+        annotations:
+          fabric8.io/git-commit: 3e966ed4dd654367b6b0fff80622fea0e858c2df
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=sonarqube&var-version=2.2.335
+          fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/sonarqube
+          fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/sonarqube
+          fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/sonarqube/src/main/fabric8/icon.svg
+          fabric8.io/git-branch: release-v2.2.335
+          fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/sonarqube
+          fabric8.io/scm-tag: fabric8-devops-2.0.1
+          maven.fabric8.io/source-url: jar:file:/home/jenkins/.mvnrepository/io/fabric8/devops/apps/sonarqube/2.2.335/sonarqube-2.2.335.jar!/META-INF/fabric8/kubernetes.yml
+        labels:
+          name: sonarqube
+          provider: fabric8
+          project: sonarqube
+          version: 2.2.335
+          group: io.fabric8.devops.apps
+      spec:
+        containers:
+        - env:
+          - name: KUBERNETES_MASTER
+            value: https://kubernetes.default
+          image: fabric8/sonarqube:v4c88694
+          name: sonarqube
+          ports:
+          - containerPort: 9000
+            name: sonaqube
+          resources:
+            limits:
+              cpu: "0.5"
+              memory: 512M
+          volumeMounts:
+          - mountPath: /opt/sonarqube/config/
+            name: sonarqube
+        volumes:
+        - configMap:
+            defaultMode: 420
+            name: sonarqube
+          name: sonarqube
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      configmap.fabric8.io/update-on-change: wit
+      fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=wit&var-version=4.0.208
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/wit
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/wit
+      fabric8.io/git-branch: release-v4.0.208
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/wit
+      fabric8.io/scm-tag: app-console-2.0.1
+    labels:
+      service: wit
+      app: wit
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: wit
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 2
+    selector:
+      matchLabels:
+        app: wit
+        provider: fabric8
+        group: io.fabric8.platform.apps
+    template:
+      metadata:
+        annotations:
+          fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+          pod.beta.kubernetes.io/init-containers: |-
+            [
+            {
+              "name": "wait-for-wit-db",
+              "image": "fabric8/fabric8-dependency-wait-service:v6632df1",
+              "imagePullPolicy": "IfNotPresent",
+              "command": ["sh", "-c", "fabric8-dependency-wait-service-linux-amd64 postgres://wit@wit-db:5432"],
+              "env": [{
+                "name": "DEPENDENCY_POLL_INTERVAL",
+                "value": "1"
+              }, {
+                "name": "DEPENDENCY_LOG_VERBOSE",
+                "value": "true"
+              }]
+            },
+            {
+              "name": "wait-for-keycloak",
+              "image": "fabric8/fabric8-dependency-wait-service:v6632df1",
+              "imagePullPolicy": "IfNotPresent",
+              "command": ["sh", "-c", "fabric8-dependency-wait-service-linux-amd64 http://keycloak:80"],
+              "env": [{
+                "name": "DEPENDENCY_POLL_INTERVAL",
+                "value": "1"
+              }, {
+                "name": "DEPENDENCY_LOG_VERBOSE",
+                "value": "true"
+              }]
+            },
+            {
+              "name": "wait-for-f8tenant",
+              "image": "fabric8/fabric8-dependency-wait-service:v6632df1",
+              "imagePullPolicy": "IfNotPresent",
+              "command": ["sh", "-c", "fabric8-dependency-wait-service-linux-amd64 http://f8tenant:80/api/status"],
+              "env": [{
+                "name": "DEPENDENCY_POLL_INTERVAL",
+                "value": "1"
+              }, {
+                "name": "DEPENDENCY_LOG_VERBOSE",
+                "value": "true"
+              }]
+            },
+            {
+              "name": "wait-for-auth",
+              "image": "fabric8/fabric8-dependency-wait-service:v6632df1",
+              "imagePullPolicy": "IfNotPresent",
+              "command": ["sh", "-c", "fabric8-dependency-wait-service-linux-amd64 http://auth:80/api/status"],
+              "env": [{
+                "name": "DEPENDENCY_POLL_INTERVAL",
+                "value": "1"
+              }, {
+                "name": "DEPENDENCY_LOG_VERBOSE",
+                "value": "true"
+              }]
+            }]
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=wit&var-version=4.0.208
+          fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/wit
+          fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/wit
+          configmap.fabric8.io/update-on-change: wit
+          fabric8.io/git-branch: release-v4.0.208
+          fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/wit
+          fabric8.io/scm-tag: app-console-2.0.1
+          maven.fabric8.io/source-url: jar:file:/home/jenkins/workspace/8io_fabric8-platform_master-4P5FOSFKYBLAPGDO7GHHNEOGKKERYH26KXBFORI5V7MRVJFY3QWA/apps/wit/target/wit-4.0.208.jar!/META-INF/fabric8/kubernetes.yml
+          fabric8.io/service-dependencies: wit-db,keycloak,f8tenant,auth
+        labels:
+          service: wit
+          app: wit
+          provider: fabric8
+          version: 4.0.208
+          group: io.fabric8.platform.apps
+      spec:
+        containers:
+        - env:
+          - name: F8_POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                key: db.user
+                name: wit
+          - name: F8_POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: db.password
+                name: wit
+          - name: F8_KEYCLOAK_REALM
+            valueFrom:
+              secretKeyRef:
+                key: keycloak.realm
+                name: wit
+          - name: F8_TOKEN_PUBLICKEY
+            valueFrom:
+              secretKeyRef:
+                key: token.publickey
+                name: wit
+          - name: F8_AUTH_URL
+            valueFrom:
+              configMapKeyRef:
+                key: auth.url
+                name: wit
+          - name: F8_AUTHZ_ENABLED
+            valueFrom:
+              configMapKeyRef:
+                key: authz.enabled
+                name: wit
+          - name: F8_KEYCLOAK_URL
+            valueFrom:
+              configMapKeyRef:
+                key: keycloak.url
+                name: wit
+          - name: F8_KEYCLOAK_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: keycloak.secret
+                name: wit
+          - name: F8_POSTGRES_HOST
+            valueFrom:
+              configMapKeyRef:
+                key: db.host
+                name: wit
+          - name: F8_POSTGRES_PORT
+            valueFrom:
+              configMapKeyRef:
+                key: db.port
+                name: wit
+          - name: F8_POSTGRES_SSLMODE
+            valueFrom:
+              configMapKeyRef:
+                key: postgres.sslmode
+                name: wit
+          - name: F8_POSTGRES_CONNECTION_MAXIDLE
+            valueFrom:
+              configMapKeyRef:
+                key: postgres.connection.maxidle
+                name: wit
+          - name: F8_POSTGRES_CONNECTION_MAXOPEN
+            valueFrom:
+              configMapKeyRef:
+                key: postgres.connection.maxopen
+                name: wit
+          - name: F8_AUTH_NOTAPPROVED_REDIRECT
+            valueFrom:
+              configMapKeyRef:
+                key: auth_notapproved_redirect
+                name: wit
+          - name: F8_TENANT_SERVICEURL
+            valueFrom:
+              secretKeyRef:
+                key: tenantsvc.url
+                name: wit
+          - name: F8_CHESTARTERURL
+            valueFrom:
+              configMapKeyRef:
+                key: chestarter.url
+                name: wit
+          - name: F8_REDIRECT_VALID
+            valueFrom:
+              configMapKeyRef:
+                key: redirect.valid
+                name: wit
+          - name: F8_OPENSHIFT_TENANT_MASTERURL
+            valueFrom:
+              configMapKeyRef:
+                key: openshift.tenant.masterurl
+                name: wit
+          image: fabric8/fabric8-wit:v02c04ef
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /api/status
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: wit
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /api/status
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      configmap.fabric8.io/update-on-change: wit
+      fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=wit&var-version=4.0.208
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/wit
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/wit
+      fabric8.io/git-branch: release-v4.0.208
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/wit
+      fabric8.io/scm-tag: app-console-2.0.1
+    labels:
+      service: wit-db
+      app: wit
+      provider: fabric8
+      version: 4.0.208
+      group: io.fabric8.platform.apps
+    name: wit-db
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 2
+    selector:
+      matchLabels:
+        app: wit
+        provider: fabric8
+        group: io.fabric8.platform.apps
+    template:
+      metadata:
+        annotations:
+          fabric8.io/git-commit: d537a75a59f2305791c3e5adc838cb04f0329b18
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=wit&var-version=4.0.208
+          fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/wit
+          pod.alpha.kubernetes.io/init-containers: '[{"image":"busybox","imagePullPolicy":"IfNotPresent","name":"fmp-volume-permission","command":["chmod","777","/var/lib/pgsql"],"volumeMounts":[{"mountPath":"/var/lib/pgsql","name":"wit-postgresql-data"}]}]'
+          fabric8.io/scm-url: http://github.com/fabric8io/fabric8-platform/apps/wit
+          configmap.fabric8.io/update-on-change: wit
+          fabric8.io/git-branch: release-v4.0.208
+          fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-platform.git/apps/wit
+          fabric8.io/scm-tag: app-console-2.0.1
+          maven.fabric8.io/source-url: jar:file:/home/jenkins/workspace/8io_fabric8-platform_master-4P5FOSFKYBLAPGDO7GHHNEOGKKERYH26KXBFORI5V7MRVJFY3QWA/apps/wit/target/wit-4.0.208.jar!/META-INF/fabric8/kubernetes.yml
+        labels:
+          service: wit-db
+          app: wit
+          provider: fabric8
+          version: 4.0.208
+          group: io.fabric8.platform.apps
+      spec:
+        containers:
+        - env:
+          - name: POSTGRESQL_ADMIN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: db.password
+                name: wit
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          image: registry.centos.org/postgresql/postgresql:9.6
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - exec pg_isready --host $POD_IP
+            failureThreshold: 6
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+          name: wit-db
+          ports:
+          - containerPort: 5432
+            name: postgresql
+            protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - exec pg_isready --host $POD_IP
+            initialDelaySeconds: 20
+            periodSeconds: 5
+            timeoutSeconds: 3
+          volumeMounts:
+          - mountPath: /var/lib/pgsql
+            name: wit-postgresql-data
+            readOnly: false
+        volumes:
+        - name: wit-postgresql-data
+          persistentVolumeClaim:
+            claimName: wit-postgresql-data
+parameters:
+- name: APISERVER_HOSTPORT
+- name: NODE_IP
+- name: EXPOSER
+  value: Route
+- name: GITHUB_OAUTH_CLIENT_SECRET
+- name: GITHUB_OAUTH_CLIENT_ID
