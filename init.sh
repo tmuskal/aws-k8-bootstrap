@@ -373,6 +373,10 @@ then
 	$helm install --name sugarcrm --set sugarcrmPassword="$PASSWD",sugarcrmHost=sugarcrm.$DOMAIN stable/sugarcrm
 fi
 
+if enabled "consul"
+then
+	$helm install --name consul --set ui.enabled=true stable/consul
+fi
 
 if enabled "nexus"
 then
