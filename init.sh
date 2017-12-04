@@ -39,6 +39,7 @@ fi
 # TODO: add email server and workspace
 # TODO: s3 email integration
 # TODO: email server and web client
+# TODO: nothing should be on default namespace
 # TODO: multiple clusters: https://medium.com/@alejandro.ramirez.ch/reserving-a-kubernetes-node-for-specific-nodes-e75dc8297076
 
 if [ "$PREFIX" == "" ] 
@@ -102,6 +103,7 @@ then
 		metabase "metabase" on \
 		orangehrm "Orange HRM" on \
 		heapster "Deploy Heapster" on \
+		logging "logging" on \
 		gitlab "Setup GitLab" on \
 		freeipa "FreeIPA" on \
 		chartmuseum "chartmuseum" on \
@@ -118,7 +120,7 @@ then
 		hadoop "hadoop" on \
 		social "Social components" on \
 		sugarcrm "sugarcrm" on \
-		che "Che" on \
+		# che "Che" on \
 		airflow "Airflow" on \
 		fabric8 "fabric8" off`
 		# taiga "Taiga" on \
@@ -154,6 +156,9 @@ ZONES_TMP=(`$aws ec2 describe-availability-zones | $jq '.AvailabilityZones[].Zon
 ZONES=$(printf ",%s" "${ZONES_TMP[@]}")
 ZONES=${ZONES:1}
 
+function setRoute53SingleDomain(){
+	$kubectl annotate service --namespace $2 $3 "external-dns.alpha.kubernetes.io/hostname=$1.$DOMAIN."
+}
 # Create Cluster
 if enabled "clusters"
 then
@@ -208,6 +213,11 @@ if enabled "helm"
 then
 	$helm init
 	$helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com/
+	$helm repo add atlas http://atlas.cnct.io
+	$helm repo add mojanalytics https://ministryofjustice.github.io/analytics-platform-helm-charts/charts/
+	$helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
+	$helm repo add gitlab https://charts.gitlab.io
+	$helm repo update
 fi
 
 
@@ -326,20 +336,24 @@ fi
 if enabled "kubeaws"
 then	
 	$helm install --name kube2iam stable/kube2iam
-	$helm install --set awsRegion=$THE_REGION --name fluentd-cloudwatch incubator/fluentd-cloudwatch
-	$helm install stable/cluster-autoscaler --name awsautoscaler --set "autoscalingGroups[0].name=nodes.$NAME,autoscalingGroups[0].maxSize=10,autoscalingGroups[0].minSize=4"
+	# $helm install --set awsRegion=$THE_REGION,imageTag=v0.12.33-cloudwatch,image=fluent/fluentd-kubernetes-daemonset --name fluentd-cloudwatch incubator/fluentd-cloudwatch
+	# $helm install stable/cluster-autoscaler --name awsautoscaler --set "autoscalingGroups[0].name=nodes.$NAME,autoscalingGroups[0].maxSize=10,autoscalingGroups[0].minSize=4"
 	$kubectl apply -f manifests/kube-node-labeller.ds.yaml
 fi
 
 if enabled "grafana"
 then
-	$helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
-	$helm install --name grafana --set server.adminPassword="$PASSWD" incubator/grafana
+	$helm install --name grafana --set server.adminPassword="$PASSWD" incubator/grafana	
 fi
 
 if enabled "che"
 then
-	$kubectl apply -f http://central.maven.org/maven2/io/fabric8/online/apps/che/1.0.54/che-1.0.54-kubernetes.yml	
+	docker run -p 80:8080 -e CHE_DOCKER_PRIVILEGED=true -e CHE_PORT=8080 -e CHE_MULTIUSER=true -e CHE_SINGLE_PORT=true --rm -v /var/run/docker.sock:/var/run/docker.sock -v /tmp/data:/data -i --name chestart eclipse/che:5.20.1 start
+
+
+	$kubectl apply -f /manifests/che.yaml
+	LB_HOSTNAME=`$kubectl get svc --namespace deault che -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'`	
+	setRoute53 '*.che.'$DOMAIN $LB_HOSTNAME $DOMAIN.
 fi
 
 if enabled "airflow"
@@ -491,8 +505,7 @@ function submit_resource_record_change_set() {
 }
 
 if enabled "gitlab"
-then	
-	$helm repo add gitlab https://charts.gitlab.io
+then		
 	echo Deploying gitlab	
 	set +e	
 	# $helm del --purge gitlab
@@ -500,7 +513,7 @@ then
 	# EMAIL=`dlg --title 'Email' --inputbox 'Enter your email' 0 0 admin@$DOMAIN`
 	EMAIL=admin@$DOMAIN
 	set +e	
-	$helm install --name gitlab --set gitlabDataStorageClass=standard,gitlabRegistryStorageClass=standard,gitlabConfigStorageClass=standard,postgresStorageClass=standard,redisStorageClass=standard,legoEmail=$EMAIL,provider=,gitlabRootPassword="$PASSWD",baseDomain=ci.$DOMAIN gitlab/gitlab-omnibus
+	$helm install --name gitlab --set gitlabDataStorageClass=standard,gitlabRegistryStorageClass=standard,gitlabConfigStorageClass=standard,postgresStorageClass=standard,redisStorageClass=standard,legoEmail=$EMAIL,provider=,gitlabRootPassword=$PASSWD,baseDomain=ci.$DOMAIN gitlab/gitlab-omnibus
 	set -e
 	sleep 10
 	GITLAB_LB_HOSTNAME=`$kubectl get svc --namespace nginx-ingress nginx  -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'`	
@@ -524,7 +537,28 @@ fi
 
 if enabled "heapster"
 then
-	echo Deploying heapster		
+	echo Deploying heapster	
+	cd manifests
+	git clone https://github.com/kubernetes/heapster.git ./manifests/heapster	
+	$kubectl create -f /manifests/heapster/deploy/kube-config/influxdb/
+	$kubectl create -f /manifests/heapster/deploy/kube-config/rbac/heapster-rbac.yaml
+	$kubectl patch --namespace kube-system service monitoring-grafana -p '{"spec":{"type": "LoadBalancer"}}'
+	setRoute53SingleDomain kube-system monitoring-grafana grafana
+	# https://github.com/kubernetes/heapster/blob/master/docs/influxdb.md
+fi
+
+if enabled "logging"
+then
+	echo Deploying elk
+	# git clone https://github.com/kayrus/elk-kubernetes.git 
+	# cd elk-kubernetes
+	# ./deploy.sh
+	# cd ../..
+	git clone https://github.com/clockworksoul/helm-elasticsearch.git elasticsearch
+	$helm install  --name elk --namespace=kube-system elasticsearch
+	$kubectl apply -f /manifests/fluentd-daemonset-elasticsearch.yaml
+	kubectl patch storageclass default -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+	setRoute53SingleDomain kube-system elk-elasticsearch-kibana kibana
 	# https://github.com/kubernetes/heapster/blob/master/docs/influxdb.md
 fi
 
