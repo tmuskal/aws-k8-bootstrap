@@ -19,6 +19,16 @@ spec:
               configMapKeyRef:
                 name: clusterconfiguration
                 key: domain
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: secrets
+                key: AWS_ACCESS_KEY_ID
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: secrets
+                key: AWS_SECRET_ACCESS_KEY     
         args:
         - --source=service
         - --source=ingress
